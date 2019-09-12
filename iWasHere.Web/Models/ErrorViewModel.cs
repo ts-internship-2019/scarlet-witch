@@ -7,5 +7,8 @@ namespace iWasHere.Web.Models
         public string RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
+
+        //nu cred ca trebuia sa scriu ceva aici...
     }
 }
