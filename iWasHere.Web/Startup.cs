@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using iWasHere.Domain.Model;
 using iWasHere.Domain.Service;
 
+// git comment 12345
 namespace iWasHere.Web
 {
     public class Startup
@@ -25,6 +26,7 @@ namespace iWasHere.Web
             Configuration = configuration;
         }
 
+        //Alice Test 1st Day
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
