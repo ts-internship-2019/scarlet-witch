@@ -1,0 +1,32 @@
+﻿    @model IEnumerable<iWasHere.Domain.DTOs.DictionaryCurrencyModel>
+
+    @{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <h1>Moneda</h1>
+
+    @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCurrencyModel>()
+        .Name("Currency")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.CurrencyId);
+            columns.Bound(c => c.CurrencyName).Width(140);
+            columns.Bound(c => c.CurrencyCode).Width(190);
+            columns.Bound(c => c.CurrencyExchange);
+        })
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("Currencies_Read", "DictionaryCurrency"))
+        )
+    )
+
