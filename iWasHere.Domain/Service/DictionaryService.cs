@@ -10,28 +10,34 @@ namespace iWasHere.Domain.Service
 {
     public class DictionaryService
     {
-        
-        private readonly ScarletWitchContext _scwContext;
+        private readonly ScarletWitchContext _dbContext;
 
-        public DictionaryService( ScarletWitchContext scarletWitchContext)
-        {          
-            _scwContext = scarletWitchContext;
-        }
-
-        public List<DictionaryCurrencyModel> GetDictionaryCurrencyModels()
+        public DictionaryService(ScarletWitchContext databaseContext)
         {
-            List<DictionaryCurrencyModel> dictionaryCurrencyModels = _scwContext.DictionaryCurrency.Select(b => new DictionaryCurrencyModel()
-            {
-                CurrencyId = b.CurrencyId,
-                CurrencyName = b.CurrencyName,
-                CurrencyCode = b.CurrencyCode,
-                CurrencyExchange = Convert.ToDecimal(b.CurrencyExchange)
-                
-            }).ToList();
+            _dbContext = databaseContext;
 
-        
-            return dictionaryCurrencyModels;
-            
+        }
+     
+        //public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
+        //{
+        //    List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+        //    {
+        //        Id = a.DictionaryItemId,
+        //        Name = a.DictionaryItemName
+        //    }).ToList();
+
+        //    return dictionaryLandmarkTypeModels;
+        //}
+
+                public List<DictionaryCityModel> GetDictionaryCities()
+        {
+            List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+            {
+                Id = a.CityId,
+                Name = a.CityName
+            }
+            ).ToList();
+            return dictionaryCities;
         }
     }
 }
