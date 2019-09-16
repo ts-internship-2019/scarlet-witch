@@ -1,0 +1,34 @@
+﻿@model IEnumerable<iWasHere.Domain.DTOs.DictionaryCountryModel>
+
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h1>Moneda</h1>
+
+
+
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountryModel>()
+    .Name("Country")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.CountryName).Width(140);
+    })
+    .HtmlAttributes(new { style = "height: 380px;" })
+    .Scrollable()
+    .Groupable()
+    .Sortable()
+    .Pageable(pageable => pageable
+        .Refresh(true)
+        .PageSizes(true)
+        .ButtonCount(5))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("Countries_Read", "DictionaryCountry"))
+    )
+)

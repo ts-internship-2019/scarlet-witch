@@ -1,5 +1,6 @@
 ﻿using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Model;
+using iWasHere.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,21 +10,22 @@ namespace iWasHere.Domain.Service
 {
     public class DictionaryService
     {
-        private readonly DatabaseContext _dbContext;
-        public DictionaryService(DatabaseContext databaseContext)
+        private readonly ScarletWitchContext _dbContext2;
+        public DictionaryService(ScarletWitchContext dataBaseContext2)
         {
-            _dbContext = databaseContext;
+            _dbContext2 = dataBaseContext2;
         }
 
-        public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
+        public List<DictionaryCountryModel> GetDictionaryCountryModels()
         {
-            List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+            List<DictionaryCountryModel> dictionaryCountryModels = _dbContext2.DictionaryCountry.Select(b => new DictionaryCountryModel()
             {
-                Id = a.DictionaryItemId,
-                Name = a.DictionaryItemName
+                CountryId = b.CountryId,
+                LanguageId = b.LanguageId,
+                CountryName = b.CountryName
             }).ToList();
 
-            return dictionaryLandmarkTypeModels;
+            return dictionaryCountryModels;
         }
     }
 }
