@@ -29,5 +29,11 @@ namespace iWasHere.Web.Controllers
             var list = _dictionaryService.GetDictionaryCountryModels();
             return View(list);
         }
+
+        public IActionResult AddCountry()
+        {
+            var list = _dictionaryService.GetDictionaryCountryModels();
+            return View(list);
+        }
     }
 }
