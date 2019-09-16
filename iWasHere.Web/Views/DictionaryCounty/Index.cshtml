@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+@* Varianta 1
+        @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountyModel>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.CountyId).Width(140);
+                columns.Bound(c => c.CountyName).Width(190);
+            })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Action("ReadCounties", "DictionaryCounty"))
+            )
+    )*@
+
+
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountyModel>()
+    .Name("Grid")
+    .HtmlAttributes(new { style="height: 380px;"})
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.CountyId).Width(140).Title("Id Judet");
+        columns.Bound(c => c.CountyName).Width(190).Title("Nume Judet");
+    })
+    .Groupable()
+    .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+    .Sortable()
+    .Scrollable(scr => scr.Height(430))
+    .Filterable()    
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(5)
+        .ServerOperation(false)
+        .Read(read => read.Action("ReadCounties","DictionaryCounty"))
+     )
+)
