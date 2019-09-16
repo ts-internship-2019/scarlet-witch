@@ -69,12 +69,44 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
+                      
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <div id="dictionaries">
+                                @(Html.Kendo().Menu()
+                              .Name("Menu")
+                              .Items(items =>
+                              {
+                                items.Add().Text("Home").Action("Index", "Home", new { area = "" });
+                              items.Add()
+                                      .Text("Dictionaries")
+                                      .Items(children =>
+                                      {
+                                          children.Add().Text("Cities").Action("Index", "DictionaryCity", new { area = "" });
+
+                                          children.Add().Text("Counties").Action("Index", "DictionaryCounty", new { area = "" });
+
+                                          children.Add().Text("Countries").Action("Index", "DictionaryCountry", new { area = "" });
+
+                                          children.Add().Text("Landmark Types").Action("Index", "DictionaryLandmarkType", new { area = "" });
+
+                                          children.Add().Text("Languages").Action("Index", "DictionaryLanguage", new { area = "" });
+
+                                          children.Add().Text("Currencies").Action("Index", "DictionaryCurrency", new { area = "" });
+
+                                          children.Add().Text("Ticket Types").Action("Index", "DictionaryTicketType", new { area = "" });
+
+                                          children.Add().Text("Interval Types").Action("Index", "DictionaryInterval", new { area = "" });
+
+                                      });
+ 
+                              
+                               })
+                                )
+
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                  
                     </ul>
                 </div>
             </div>
