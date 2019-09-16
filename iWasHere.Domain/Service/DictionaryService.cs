@@ -17,27 +17,21 @@ namespace iWasHere.Domain.Service
             _dbContext = databaseContext;
 
         }
-     
-        //public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
-        //{
-        //    List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
-        //    {
-        //        Id = a.DictionaryItemId,
-        //        Name = a.DictionaryItemName
-        //    }).ToList();
 
-        //    return dictionaryLandmarkTypeModels;
-        //}
-
-                public List<DictionaryCityModel> GetDictionaryCities()
+        public List<DictionaryCurrencyModel> GetDictionaryCurrencyModels()
         {
-            List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+            List<DictionaryCurrencyModel> dictionaryCurrencyModels = _scwContext.DictionaryCurrency.Select(b => new DictionaryCurrencyModel()
             {
-                Id = a.CityId,
-                Name = a.CityName
-            }
-            ).ToList();
-            return dictionaryCities;
+                CurrencyId = b.CurrencyId,
+                CurrencyName = b.CurrencyName,
+                CurrencyCode = b.CurrencyCode,
+                CurrencyExchange = Convert.ToDecimal(b.CurrencyExchange)
+                
+            }).ToList();
+
+        
+            return dictionaryCurrencyModels;
+            
         }
     }
 }
