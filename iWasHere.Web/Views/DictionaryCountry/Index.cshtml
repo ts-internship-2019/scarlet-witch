@@ -3,7 +3,7 @@
 
 
 @{
-    ViewData["Title"] = "CountryAdd";
+    ViewData["Title"] = "Country";
     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
 }
 <!-- items.Add().Text("Add").Action("AddCountry", "DictionaryCountry", new { area = "" });-->
@@ -17,7 +17,6 @@
     function foo()
     {
         window.location.href = '@Url.Action("AddCountry", "DictionaryCountry")';
-        alert("hai ca merge");
     }
 </script>
 
@@ -33,6 +32,7 @@
     .Scrollable()
     .Groupable()
     .Sortable()
+    .Filterable()
     .Pageable(pageable => pageable
         .Refresh(true)
         .PageSizes(true)

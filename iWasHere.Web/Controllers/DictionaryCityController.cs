@@ -23,9 +23,9 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult Index()
         {
-
             return View();
         }
+
         public ActionResult GetDictionaryCities([DataSourceRequest] DataSourceRequest request)
         {
             var xc = _dictionaryCityService.GetDictionaryCities().ToDataSourceResult(request);

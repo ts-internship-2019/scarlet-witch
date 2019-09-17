@@ -8,6 +8,6 @@ namespace iWasHere.Domain.DTOs
     {
         public int CountyId { get; set; }
         public string CountyName { get; set; }
-
+        public string CountryName { get; set; }
     }
 }
