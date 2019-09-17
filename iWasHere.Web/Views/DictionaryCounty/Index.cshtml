@@ -13,6 +13,7 @@
     {
         columns.Bound(c => c.CountyId).Width(140).Title("Id Judet");
         columns.Bound(c => c.CountyName).Width(190).Title("Nume Judet");
+        columns.Bound(c => c.CountryName).Width(250).Title("Nume Tara");
     })
     .Groupable()
     .Pageable(pageable => pageable

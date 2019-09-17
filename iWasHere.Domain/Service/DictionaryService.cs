@@ -44,12 +44,15 @@ namespace iWasHere.Domain.Service
         {
             List<DictionaryCountyModel> dictionaryCounties = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
             {
-               CountyId = a.CountyId,
-               CountyName = a.CountyName
+                CountyId = a.CountyId,
+                CountyName = a.CountyName,
+                CountryName = _dbContext.DictionaryCountry.Where(c => c.CountryId == a.CountryId).Select(c => c.CountryName).FirstOrDefault().ToString()
+
             }
-            ).ToList();
+           ).ToList();
             return dictionaryCounties;
         }
+
         public List<DictionaryCurrencyModel> GetDictionaryCurrencyModels()
         {
 
