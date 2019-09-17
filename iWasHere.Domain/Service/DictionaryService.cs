@@ -59,11 +59,21 @@ namespace iWasHere.Domain.Service
                 CurrencyName = b.CurrencyName,
                 CurrencyCode = b.CurrencyCode,
                 CurrencyExchange = Convert.ToDecimal(b.CurrencyExchange)
-
+                
             }).ToList();
 
             return dictionaryCurrencyModels;
+            
+        }
+        public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
+        {
+            List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+            {
+                LandmarkTypeCode = a.LandmarkTypeCode,
+                Description = a.Description
+            }).ToList();
 
+            return dictionaryLandmarkTypeModels;
         }
     }
 }

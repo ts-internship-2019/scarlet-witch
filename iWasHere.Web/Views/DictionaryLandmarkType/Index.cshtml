@@ -3,5 +3,27 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Landmark types</h1>
+
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLandmarkTypeModel>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.LandmarkTypeCode).Width(140);
+            columns.Bound(c => c.Description).Width(190);
+
+        })
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("Landmark_Types_Read", "DictionaryLandmarkType"))
+        )
+)
 
