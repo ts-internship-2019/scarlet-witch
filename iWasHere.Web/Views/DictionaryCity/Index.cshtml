@@ -1,0 +1,46 @@
+﻿
+@{
+      ViewData["Title"] = "CountryAdd";
+     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
+}
+
+@*@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCityModel>()
+        .Name("grida")
+            .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Width(140);
+            columns.Bound(c => c.Name).Width(190);
+        })
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Pageable(pageable => pageable
+            .Refresh(true)
+
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetDictionaryCities", "DictionaryCity")))
+)*@
+
+
+
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCityModel>()
+        .Name("grid")
+    
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .NoRecords(true)
+        .Filterable()
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(5)
+    
+            
+            .Read(read => read.Action("GetDictionaryCities", "DictionaryCity"))
+        )
+)

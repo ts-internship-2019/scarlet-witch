@@ -1,0 +1,24 @@
+﻿@{
+       ViewData["Title"] = "CountryAdd";
+     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
+}
+
+<h1>Languages</h1>
+
+
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLanguageModel>()
+        .Name("grid")
+        .HtmlAttributes(new { style = "height: 500px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Filterable()
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("Languages_Read", "DictionaryLanguage"))
+        )
+)

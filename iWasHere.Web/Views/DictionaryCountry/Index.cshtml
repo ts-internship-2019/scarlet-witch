@@ -1,0 +1,28 @@
+﻿@model IEnumerable<iWasHere.Domain.DTOs.DictionaryCountryModel>
+
+
+
+@{
+     ViewData["Title"] = "CountryAdd";
+     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
+}
+
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountryModel>()
+    .Name("Country")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.CountryName).Width(140);
+    })
+    .HtmlAttributes(new { style = "height: 380px;" })
+    .Scrollable()
+    .Groupable()
+    .Sortable()
+    .Pageable(pageable => pageable
+        .Refresh(true)
+        .PageSizes(true)
+        .ButtonCount(5))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("Countries_Read", "DictionaryCountry"))
+    )
+)
