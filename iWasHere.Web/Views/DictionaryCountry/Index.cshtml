@@ -3,9 +3,24 @@
 
 
 @{
-     ViewData["Title"] = "CountryAdd";
-     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
+    ViewData["Title"] = "Country";
+    Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
 }
+<!-- items.Add().Text("Add").Action("AddCountry", "DictionaryCountry", new { area = "" });-->
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("foo"))
+)
+<script>
+    function foo()
+    {
+        window.location.href = '@Url.Action("AddCountry", "DictionaryCountry")';
+    }
+</script>
+
+<!-- Html.ActionLink("AddCountry", "DictionaryCountry", new { /* id=item.PrimaryKey */ })-->
 
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountryModel>()
     .Name("Country")
@@ -17,6 +32,7 @@
     .Scrollable()
     .Groupable()
     .Sortable()
+    .Filterable()
     .Pageable(pageable => pageable
         .Refresh(true)
         .PageSizes(true)
