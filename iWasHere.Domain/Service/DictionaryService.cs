@@ -17,25 +17,43 @@ namespace iWasHere.Domain.Service
             _dbContext = databaseContext;
         }
 
-        //public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
-        //{
-        //    List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
-        //    {
-        //        Id = a.DictionaryItemId,
-        //        Name = a.DictionaryItemName
-        //    }).ToList();
-        //    return dictionaryLandmarkTypeModels;
-        //}
-
-        public List<DictionaryCountyModel> GetDictionaryCounties()
+        public List<DictionaryCountryModel> GetDictionaryCountryModels()
         {
-            List<DictionaryCountyModel> dictionaryCounties = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
+            List<DictionaryCountryModel> dictionaryCountryModels = _dbContext.DictionaryCountry.Select(b => new DictionaryCountryModel()
             {
-                CountyId = a.CountyId,
-                CountyName = a.CountyName
+                CountryId = b.CountryId,
+                LanguageId = b.LanguageId,
+                CountryName = b.CountryName
+            }).ToList();
+
+            return dictionaryCountryModels;
+        }
+
+        public List<DictionaryCityModel> GetDictionaryCities()
+        {
+            List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+            {
+                Id = a.CityId,
+                Name = a.CityName
             }
             ).ToList();
-            return dictionaryCounties;
+            return dictionaryCities;
+        }
+    
+    public List<DictionaryCurrencyModel> GetDictionaryCurrencyModels()
+        {
+           
+            List<DictionaryCurrencyModel> dictionaryCurrencyModels = _dbContext.DictionaryCurrency.Select(b => new DictionaryCurrencyModel()
+            { 
+                CurrencyId = b.CurrencyId,
+                CurrencyName = b.CurrencyName,
+                CurrencyCode = b.CurrencyCode,
+                CurrencyExchange = Convert.ToDecimal(b.CurrencyExchange)
+                
+            }).ToList();
+        
+            return dictionaryCurrencyModels;
+            
         }
     }
 }
