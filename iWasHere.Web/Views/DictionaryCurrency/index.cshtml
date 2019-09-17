@@ -1,33 +1,29 @@
-﻿    @model IEnumerable<iWasHere.Domain.DTOs.DictionaryCurrencyModel>
+﻿@{
+    ViewData["Title"] = "Currency";
+    Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
+}
 
-    @{
-         ViewData["Title"] = "Currency";
-     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
-    }
+<h1>Currencies</h1>
 
-    <h1>Moneda</h1>
 
-    @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCurrencyModel>()
-        .Name("Currency")
-        .Columns(columns =>
-        {
-            columns.Bound(c => c.CurrencyId);
-            columns.Bound(c => c.CurrencyName).Width(140);
-            columns.Bound(c => c.CurrencyCode).Width(190);
-            columns.Bound(c => c.CurrencyExchange);
-        })
-        .HtmlAttributes(new { style = "height: 380px;" })
-        .Scrollable()
-        .Groupable()
-        .Sortable()
-        .Filterable()
-        .Pageable(pageable => pageable
-            .Refresh(true)
-            .PageSizes(true)
-            .ButtonCount(5))
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .Read(read => read.Action("Currencies_Read", "DictionaryCurrency"))
-        )
+
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCurrencyModel>()
+        .Name("Grid")
+    .EnableCustomBinding(true)
+    .Columns(columns =>
+        {            
+        columns.Bound(c => c.CurrencyId);
+        columns.Bound(c => c.CurrencyName).Width(140);
+        columns.Bound(c => c.CurrencyCode).Width(190);
+        columns.Bound(c => c.CurrencyExchange);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read("Currencies_Read", "DictionaryCurrency")
     )
+)
+
 
