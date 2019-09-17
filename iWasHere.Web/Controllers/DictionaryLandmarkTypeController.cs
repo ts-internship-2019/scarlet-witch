@@ -46,6 +46,29 @@ namespace iWasHere.Web.Controllers
             }
         }
 
-     
+        public ActionResult LandmarkType_Read([DataSourceRequest]DataSourceRequest request)
+        {
+            IQueryable<DictionaryLandmarkType> landmarkTypes = new ScarletWitchContext().DictionaryLandmarkType;
+
+            landmarkTypes = landmarkTypes.OrderBy(o => o.LandmarkTypeId);
+
+
+            var total = landmarkTypes.Count();
+
+            if (request.Page > 0)
+            {
+                landmarkTypes = landmarkTypes.Skip((request.Page - 1) * request.PageSize);
+            }
+            landmarkTypes = landmarkTypes.Take(request.PageSize);
+
+            var result = new DataSourceResult()
+            {
+                Data = landmarkTypes,
+                Total = total
+            };
+
+            return Json(result);
+        }
+
     }
 }
