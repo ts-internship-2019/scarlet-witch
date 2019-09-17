@@ -28,14 +28,9 @@ namespace iWasHere.Web.Controllers
         }
         public ActionResult GetDictionaryCities([DataSourceRequest] DataSourceRequest request)
         {
-            var xc = _dictionaryCityService.GetDictionaryCounties().ToDataSourceResult(request);
+            var xc = _dictionaryCityService.GetDictionaryCities().ToDataSourceResult(request);
             return Json(xc);
         }
-
-
-
-
-
 
     }
 }
