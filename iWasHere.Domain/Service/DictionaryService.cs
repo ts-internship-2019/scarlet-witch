@@ -11,7 +11,7 @@ namespace iWasHere.Domain.Service
     public class DictionaryService
     {
         private readonly ScarletWitchContext _dbContext;
-
+       
         public DictionaryService(ScarletWitchContext databaseContext)
         {
             _dbContext = databaseContext;
@@ -44,15 +44,12 @@ namespace iWasHere.Domain.Service
         {
             List<DictionaryCountyModel> dictionaryCounties = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
             {
-                CountyId = a.CountyId,
-                CountyName = a.CountyName,
-                CountryName = _dbContext.DictionaryCountry.Where(c => c.CountryId == a.CountryId).Select(c => c.CountryName).FirstOrDefault().ToString()
-
+               CountyId = a.CountyId,
+               CountyName = a.CountyName
             }
-           ).ToList();
+            ).ToList();
             return dictionaryCounties;
         }
-
         public List<DictionaryCurrencyModel> GetDictionaryCurrencyModels()
         {
 
@@ -78,6 +75,5 @@ namespace iWasHere.Domain.Service
 
             return dictionaryLandmarkTypeModels;
         }
-
     }
 }
