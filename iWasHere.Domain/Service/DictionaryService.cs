@@ -15,9 +15,8 @@ namespace iWasHere.Domain.Service
         public DictionaryService(ScarletWitchContext databaseContext)
         {
             _dbContext = databaseContext;
-
         }
-     
+
         //public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
         //{
         //    List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
@@ -25,19 +24,18 @@ namespace iWasHere.Domain.Service
         //        Id = a.DictionaryItemId,
         //        Name = a.DictionaryItemName
         //    }).ToList();
-
         //    return dictionaryLandmarkTypeModels;
         //}
 
-                public List<DictionaryCityModel> GetDictionaryCities()
+        public List<DictionaryCountyModel> GetDictionaryCounties()
         {
-            List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+            List<DictionaryCountyModel> dictionaryCounties = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
             {
-                Id = a.CityId,
-                Name = a.CityName
+                CountyId = a.CountyId,
+                CountyName = a.CountyName
             }
             ).ToList();
-            return dictionaryCities;
+            return dictionaryCounties;
         }
     }
 }
