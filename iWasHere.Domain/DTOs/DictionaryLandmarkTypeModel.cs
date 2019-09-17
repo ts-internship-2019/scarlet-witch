@@ -4,9 +4,9 @@ using System.Text;
 
 namespace iWasHere.Domain.DTOs
 {
-   public  class DictionaryLandmarkTypeModel
+   public partial class DictionaryLandmarkTypeModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public string LandmarkTypeCode { get; set; }
+        public string Description { get; set; }
     }
 }
