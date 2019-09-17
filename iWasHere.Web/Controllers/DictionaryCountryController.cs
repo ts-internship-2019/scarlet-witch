@@ -31,9 +31,8 @@ namespace iWasHere.Web.Controllers
         }
 
         public IActionResult AddCountry()
-        {
-            var list = _dictionaryService.GetDictionaryCountryModels();
-            return View(list);
+        {   
+            return View();
         }
     }
 }
