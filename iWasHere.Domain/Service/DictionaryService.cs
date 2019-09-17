@@ -39,21 +39,41 @@ namespace iWasHere.Domain.Service
             ).ToList();
             return dictionaryCities;
         }
-    
-    public List<DictionaryCurrencyModel> GetDictionaryCurrencyModels()
+
+        public List<DictionaryCountyModel> GetDictionaryCounties()
         {
-           
+            List<DictionaryCountyModel> dictionaryCounties = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
+            {
+               CountyId = a.CountyId,
+               CountyName = a.CountyName
+            }
+            ).ToList();
+            return dictionaryCounties;
+        }
+        public List<DictionaryCurrencyModel> GetDictionaryCurrencyModels()
+        {
+
             List<DictionaryCurrencyModel> dictionaryCurrencyModels = _dbContext.DictionaryCurrency.Select(b => new DictionaryCurrencyModel()
-            { 
+            {
                 CurrencyId = b.CurrencyId,
                 CurrencyName = b.CurrencyName,
                 CurrencyCode = b.CurrencyCode,
                 CurrencyExchange = Convert.ToDecimal(b.CurrencyExchange)
                 
             }).ToList();
-        
+
             return dictionaryCurrencyModels;
             
+        }
+        public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
+        {
+            List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+            {
+                LandmarkTypeCode = a.LandmarkTypeCode,
+                Description = a.Description
+            }).ToList();
+
+            return dictionaryLandmarkTypeModels;
         }
     }
 }

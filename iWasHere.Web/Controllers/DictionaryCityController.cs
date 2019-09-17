@@ -32,10 +32,5 @@ namespace iWasHere.Web.Controllers
             return Json(xc);
         }
 
-
-
-
-
-
     }
 }
