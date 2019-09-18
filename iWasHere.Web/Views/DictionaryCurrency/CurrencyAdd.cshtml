@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewData["Title"] = "CurrencyAdd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>CurrencyAdd</h1>
+
+
+<div class="form-group">
+    <h4>Add Currency</h4>
+
+    @(Html.Kendo().TextBox()
+         .Name("CurrencyCode")
+         .Value("CurrencyCode")
+         .HtmlAttributes(new { style = "width: 25%" })
+    )
+
+    @(Html.Kendo().TextBox()
+       .Name("CurrencyName")
+       .Value("CurrencyName")
+       .HtmlAttributes(new { style = "width: 25%" })
+    )
+
+        @(Html.Kendo().TextBox()
+       .Name("CurrencyExchange")
+       .Value("CurrencyExchange")
+       .HtmlAttributes(new { style = "width: 25%" })
+    )
+
+    @(Html.Kendo().DropDownList()
+          .Name("DictionaryCountry")
+          .DataTextField("CountryName")
+          .DataValueField("CountryId")
+          .DataSource(source =>
+                  {
+              source.Read(read =>
+              {
+                  read.Action("GetCountry", "DictionaryCurrency");
+              });
+          })
+          .HtmlAttributes(new { style = "width: 25%" })
+    )
+</div>
+

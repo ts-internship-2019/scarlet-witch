@@ -10,8 +10,9 @@
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLanguageModel>()
         .Name("Grid")
     .EnableCustomBinding(true)
-    .Columns(columns => {
-        columns.Bound(o => o.LanguageCode);
+    .Columns(columns =>
+        {
+            columns.Bound(o => o.LanguageCode);
         columns.Bound(o => o.LanguageName);
     })
     .Pageable()
