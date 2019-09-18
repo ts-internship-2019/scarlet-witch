@@ -1,57 +1,69 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "CurrencyAdd";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Add a Country</h1>
+<h1>CurrencyAdd</h1>
 
 <script>
 
-    function Add()
+
+    function AddCty()
     {
-        window.location.href = '@Url.Action("AddCountryToDb", "DictionaryCountry")';
+        var e = document.getElementById("combo");
+        var result = e.value;
+        alert(result); //ID002
+
+         $.ajax({
+                        type: 'PUT',
+                    url: '@Url.Action("SaveCountry", "DictionaryCountry")',
+             data: {
+                 countryName: document.getElementById("CountryName").value,
+                 languageId: document.getElementById("combo").value,
+                   },
+                        success: function (response) {
+                            alert("merge daca e");
+
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+         })
+
     }
-
-    function AddNew()
-    {
-
-    }
-
 </script>
 
-@*<div class="demo-section k-content">
-    <h4>add a country</h4>
 
-    @(html.kendo().button()
-        .name("primarytextbutton")
-        .htmlattributes(new { type = "button", @class = "k-primary" })
-        .content("add")
-        .events(ev => ev.click("add"))
+
+<div class="form-group">
+    <h4>Add Currency</h4>
+
+    @(Html.Kendo().TextBox()
+         .Name("CountryName")
+         .Value("CountryName")
+         .HtmlAttributes(new { style = "width: 25%" })
     )
 
-    @(html.kendo().button()
-        .name("secondarytextbutton")
-        .htmlattributes(new { type = "button", @class = "k-primary" })
-        .content("add new")
-        .events(ev => ev.click("addnew"))
-    )
-
-    @(html.kendo().textbox()
-         .name("countryname")
-         .htmlattributes(new { style = "width: 15%" })
-    )
-
-    @(html.kendo().dropdownlist()
-          .name("dictionarycountry")
-          .datatextfield("languagename")
-          .datavaluefield("languageid")
-          .datasource(source =>
-       {
-           source.read(read =>
-           {
-              source.read(read.action("getlanguage", "dictionarycountry");
+    @(Html.Kendo().DropDownList()
+          .Name("DictionaryLanguage")
+          .DataTextField("LanguageName")
+          .DataValueField("LanguageId")
+          .DataSource(source =>
+                  {
+              source.Read(read =>
+              {
+                  read.Action("GetLanguageAdd", "DictionaryCountry");
               });
           })
-          .htmlattributes(new { style = "width: 15%" })
-          )
-</div>*@
+          .HtmlAttributes(new { @id = "combo" })
+    )
+
+    @(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("AddCty"))
+    )
+</div>
+

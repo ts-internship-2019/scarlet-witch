@@ -5,6 +5,12 @@
 
 <h1>Countries</h1>
 
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("foo"))
+)
 
 <script type="text/javascript">
 
@@ -17,6 +23,11 @@
 
     function refreshGrid() {
         $("#countryGrid").data("kendoGrid").dataSource.read();
+    }
+
+     function foo()
+    {
+        window.location.href = '@Url.Action("AddCountry", "DictionaryCountry")';
     }
 </script>
 @(Html.Kendo().TextBox()

@@ -109,8 +109,34 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
 
+        public ActionResult SaveCountry(string countryName, int languageId)
+        {
+            ScarletWitchContext gf = new ScarletWitchContext();
+            gf.DictionaryCountry.Add(new DictionaryCountry
+            {
+                CountryName = countryName,
+                LanguageId = languageId
+            });
+            return Json(gf.SaveChanges());
+        }
+        public ActionResult GetLanguageAdd(string text)
+        {
+            var jk = new ScarletWitchContext();
 
+            var lngs = jk.DictionaryLanguage.Select(lng => new DictionaryLanguageModel
+            {
+                LanguageId = lng.LanguageId,
+                LanguageName = lng.LanguageName
 
+            });
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                lngs = lngs.Where(c => c.LanguageName.Contains(text));
+            }
+
+            return Json(lngs);
+        }
 
     }
 }
