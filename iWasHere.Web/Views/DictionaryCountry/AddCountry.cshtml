@@ -1,12 +1,29 @@
-﻿
-@{
-    ViewData["Title"] = "AddCountry";
+﻿@{
+    ViewData["Title"] = "CurrencyAdd";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>AddCountry</h1>
+<h1>Add a Country</h1>
 
-@(Html.Kendo().TextBox()
-    .Name("NameTextBox")
-    .Value("Country Name")
-)
+<div class="demo-section k-content">
+    <h4>Add a Country</h4>
+
+    @(Html.Kendo().TextBox()
+         .Name("CountryName")
+         .HtmlAttributes(new { style = "width: 15%" })
+    )
+
+    @(Html.Kendo().DropDownList()
+          .Name("DictionaryCountry")
+          .DataTextField("LanguageName")
+          .DataValueField("LanguageId")
+          .DataSource(source =>
+           {
+              source.Read(read =>
+              {
+                  read.Action("GetLanguage", "DictionaryCountry");
+              });
+          })
+          .HtmlAttributes(new { style = "width: 15%" })
+          )
+</div>

@@ -6,20 +6,53 @@
 <h1>Languages</h1>
 
 
+<script type="text/javascript">
 
-@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLanguageModel>()
-        .Name("Grid")
-    .EnableCustomBinding(true)
-    .Columns(columns => {
-        columns.Bound(o => o.LanguageCode);
-        columns.Bound(o => o.LanguageName);
-        
-    })
-    .Pageable()
-    .Sortable()
-    .Scrollable()
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .Read("Languages_Read", "DictionaryLanguage")
-    )
+    function filter(e) {
+        var languageName = document.getElementById("languageTextBox").value;
+        var filter = {};
+        filter["languageName"] = languageName;
+        return filter;
+    }
+
+    function refreshGrid() {
+        $("#languageGrid").data("kendoGrid").dataSource.read();
+    }
+</script>
+@(Html.Kendo().TextBox()
+.Name("languageTextBox")
+.HtmlAttributes(new { @id = "languageTextBox" })
 )
+
+@(Html.Kendo().Button()
+.Name("textButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Filter")
+.Events(ev => ev.Click("refreshGrid"))
+)
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLanguageModel>()
+        .Name("grid")
+
+
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Sortable()
+        .NoRecords(true)
+        .Filterable()
+        .HtmlAttributes(new { @id = "languageGrid" })
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.LanguageCode);
+            columns.Bound(o => o.LanguageName);
+        })
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(10))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .Read(read => read.Action("GetDictionaryLanguagesFiltered", "DictionaryLanguage").Data("filter"))
+
+        )
+) 
