@@ -6,27 +6,69 @@
 
 <h1>Judete</h1>
 
+
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("openAddCountyPage"))
+           )
+
+
+@(Html.Kendo().TextBox()
+.Name("countyTextBox")
+.HtmlAttributes(new { @id = "countyTextBox" })
+)
+
+@(Html.Kendo().Button()
+.Name("textButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Filtreaza")
+.Events(ev => ev.Click("filter"))
+)
+
+
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountyModel>()
-    .Name("Grid")
-    .HtmlAttributes(new { style="height: 380px;"})
-    .Columns(columns =>
-    {
-        columns.Bound(c => c.CountyId).Width(140).Title("Id Judet");
-        columns.Bound(c => c.CountyName).Width(190).Title("Nume Judet");
-        columns.Bound(c => c.CountryName).Width(250).Title("Nume Tara");
-    })
-    .Groupable()
-    .Pageable(pageable => pageable
+        .Name("grid")
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.CountyId).Hidden();
+            columns.Bound(o => o.CountyName);
+            columns.Bound(o => o.CountryName);
+
+        })
+        .NoRecords(true)
+        .Filterable()
+        .HtmlAttributes(new { @id = "countyGrid" })
+        .Pageable(pageable => pageable
             .Refresh(true)
             .PageSizes(true)
             .ButtonCount(5))
-    .Sortable()
-    .Scrollable(scr => scr.Height(430))
-    .Filterable()    
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .PageSize(5)
-        .ServerOperation(false)
-        .Read(read => read.Action("GetDictionaryCounties","DictionaryCounty"))
-     )
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .Read(read => read.Action("GetDictionaryCountiesByName", "DictionaryCounty").Data("countyFilter"))
+
+        )
 )
+
+<script type="text/javascript">
+    function openAddCountyPage()
+    {
+        window.location.href = '@Url.Action("AddCounty", "DictionaryCounty")';
+    }
+
+    function filter() {
+        var countyName = document.getElementById("countyTextBox").value;
+        if (countyName != "") {
+
+        } else {
+            $("#countyGrid").data("kendoGrid").dataSource.read();
+            $("#countyGrid").data("kendoGrid").dataSource.page(1);
+        }
+    }
+</script>
