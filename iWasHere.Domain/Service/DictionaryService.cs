@@ -102,6 +102,34 @@ namespace iWasHere.Domain.Service
         }
 
 
-       
+        public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
+        {
+            if (languageName == null)
+            {
+                IQueryable<DictionaryLanguageModel> dictionaryLanguage = _dbContext.DictionaryLanguage.Select(a => new DictionaryLanguageModel()
+                {
+                    LanguageId = a.LanguageId,
+                    LanguageCode=a.LanguageCode,
+                    LanguageName=a.LanguageName
+                });
+                return dictionaryLanguage;
+            }
+            else
+            {
+                IQueryable<DictionaryLanguageModel> dictionaryLanguage = _dbContext.DictionaryLanguage.Select(a => new DictionaryLanguageModel()
+                {
+                    LanguageId = a.LanguageId,
+                    LanguageCode = a.LanguageCode,
+                    LanguageName = a.LanguageName
+                }
+                ).Where(c => c.LanguageName.Contains(languageName));
+                return dictionaryLanguage;
+            }
+
+
+        }
+
+
+
     }
 }

@@ -73,5 +73,30 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
 
+
+        public ActionResult GetDictionaryLanguagesFiltered([DataSourceRequest] DataSourceRequest request, String languageName)
+        {
+            IQueryable<DictionaryLanguageModel> languages =_dictionaryService.GetDictionaryLanguagesFiltered(languageName);
+
+            languages = languages.OrderBy(o => o.LanguageId);
+
+
+            var total = languages.Count();
+
+            if (request.Page > 0)
+            {
+                languages = languages.Skip((request.Page - 1) * request.PageSize);
+            }
+            languages = languages.Take(request.PageSize);
+
+            var result = new DataSourceResult()
+            {
+                Data = languages,
+                Total = total
+            };
+
+            return Json(result);
+        }
+
     }
 }
