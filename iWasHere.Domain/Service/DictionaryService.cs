@@ -65,15 +65,29 @@ namespace iWasHere.Domain.Service
             return dictionaryCurrencyModels;
             
         }
-        public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
+        public IQueryable<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypesFiltered(String landmarkTypeName)
         {
-            List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+            if (landmarkTypeName == null)
             {
-                LandmarkTypeCode = a.LandmarkTypeCode,
-                Description = a.Description
-            }).ToList();
+                IQueryable<DictionaryLandmarkTypeModel> dictionaryLandmarkTypes = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+                {
+                    LandmarkTypeCode = a.LandmarkTypeCode,
+                    Description = a.Description
+                });
+                return dictionaryLandmarkTypes;
+            }
+            else
+            {
+                IQueryable<DictionaryLandmarkTypeModel> dictionaryLandmarkTypes = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+                {
+                    LandmarkTypeCode = a.LandmarkTypeCode,
+                    Description = a.Description
+                }
+                ).Where(c => c.LandmarkTypeCode.Contains(landmarkTypeName));
+                return dictionaryLandmarkTypes;
+            }
 
-            return dictionaryLandmarkTypeModels;
+
         }
 
         public IQueryable<DictionaryCityModel> GetDictionaryCitiesFiltered(String cityName)
