@@ -148,7 +148,8 @@ namespace iWasHere.Domain.Service
                 IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
                 {
                     Id = a.CityId,
-                    Name = a.CityName
+                    Name = a.CityName,
+                    County = _dbContext.DictionaryCounty.Where(c => c.CountyId == a.CountyId).Select(c => c.CountyName).FirstOrDefault().ToString()
                 });
                 return dictionaryCities;
             }
@@ -157,7 +158,8 @@ namespace iWasHere.Domain.Service
                 IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
                 {
                     Id = a.CityId,
-                    Name = a.CityName
+                    Name = a.CityName,
+                    County = _dbContext.DictionaryCounty.Where(c => c.CountyId == a.CountyId).Select(c => c.CountyName).FirstOrDefault().ToString()
                 }
                 ).Where(c => c.Name == cityName);
                 return dictionaryCities;
@@ -165,6 +167,26 @@ namespace iWasHere.Domain.Service
          
           
         }
+
+        public void DeleteUsuarios(int id)
+        {
+            DictionaryCity city = new DictionaryCity() { CityId = id };
+
+        _dbContext.DictionaryCity.Remove(city);
+          _dbContext.SaveChanges();
+
+
+        }
+
+        public void DeleteLanguages(int id)
+        {
+            DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
+
+            _dbContext.DictionaryLanguage.Remove(language);
+            _dbContext.SaveChanges();
+
+        }
+
 
 
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
@@ -218,6 +240,35 @@ namespace iWasHere.Domain.Service
                 }
                 ).Where(c => c.CountryName.Contains(countryName));
                 return dictionaryCountry;
+            }
+
+
+        }
+
+        public IQueryable<DictionaryCurrencyModel> GetDictionaryCurrencyFiltered(String currencyName)
+        {
+            if (currencyName == null)
+            {
+                IQueryable<DictionaryCurrencyModel> dictionaryCurrency = _dbContext.DictionaryCurrency.Select(c => new DictionaryCurrencyModel()
+                {
+                    CurrencyId = c.CurrencyId,
+                    CurrencyCode = c.CurrencyCode,
+                    CurrencyName = c.CurrencyName,
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+                });
+                return dictionaryCurrency;
+            }
+            else
+            {
+                IQueryable<DictionaryCurrencyModel> dictionaryCurrency = _dbContext.DictionaryCurrency.Select(c => new DictionaryCurrencyModel()
+                {
+                    CurrencyId = c.CurrencyId,
+                    CurrencyCode = c.CurrencyCode,
+                    CurrencyName = c.CurrencyName,
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+                }
+                ).Where(c => c.CurrencyName.Contains(currencyName));
+                return dictionaryCurrency;
             }
 
 
