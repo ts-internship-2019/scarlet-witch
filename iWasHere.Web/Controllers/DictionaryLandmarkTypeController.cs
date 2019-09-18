@@ -23,9 +23,9 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult Index()
         {
-            List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dictionaryService.GetDictionaryLandmarkTypeModels();
+            //List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dictionaryService.GetDictionaryLandmarkTypeModels();
 
-            return View(dictionaryLandmarkTypeModels);
+            return View();
         }
 
         public IActionResult Landmark_Types_Read([DataSourceRequest] DataSourceRequest request)
@@ -69,6 +69,32 @@ namespace iWasHere.Web.Controllers
 
             return Json(result);
         }
+
+        public ActionResult GetDictionaryLandmarkTypesFiltered([DataSourceRequest] DataSourceRequest request, String landmarkTypeName)
+        {
+            IQueryable<DictionaryLandmarkTypeModel> landmarks = _dictionaryService.GetDictionaryLandmarkTypesFiltered(landmarkTypeName);
+            landmarks.ToDataSourceResult(request);
+            landmarks = landmarks.OrderBy(o => o.LandmarkTypeId);
+            var total = landmarks.Count();
+            if (request.Page > 0)
+            {
+                landmarks = landmarks.Skip((request.Page - 1) * request.PageSize);
+            }
+            landmarks = landmarks.Take(request.PageSize);
+
+
+
+            var result = new DataSourceResult()
+            {
+                Data = landmarks,
+                Total = total
+            };
+
+            return Json(result);
+
+        }
+
+      
 
     }
 }

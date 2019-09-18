@@ -14,6 +14,7 @@ namespace iWasHere.Web.Controllers
     public class DictionaryCountyController : Controller
     {
         private readonly DictionaryService _dictionaryCountyService;
+        private readonly DictionaryCountryController _dictionaryCountryController;
 
         public DictionaryCountyController(DictionaryService dictionaryCountyService)
         {
@@ -27,8 +28,70 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult GetDictionaryCounties([DataSourceRequest] DataSourceRequest request)
         {
-            var xc = _dictionaryCountyService.GetDictionaryCounties().ToDataSourceResult(request);
+            IQueryable<DictionaryCountyModel> counties = _dictionaryCountyService.GetDictionaryCounties();
+            counties = counties.OrderBy(o => o.CountyId);
+            var total = counties.Count();
+            if (request.Page > 0)
+            {
+                counties = counties.Skip((request.Page - 1) * request.PageSize);
+            }
+            counties = counties.Take(request.PageSize);
+            var result = new DataSourceResult()
+            {
+                Data = counties,
+                Total = total
+            };
+            return Json(result);
+        }
+
+        public ActionResult GetDictionaryCountiesByName([DataSourceRequest] DataSourceRequest request, string countyName)
+        {
+            IQueryable<DictionaryCountyModel> counties = _dictionaryCountyService.GetDictionaryCountiesByName(countyName);
+            counties = counties.OrderBy(o => o.CountyId);
+            var total = counties.Count();
+            if (request.Page > 0)
+            {
+                counties = counties.Skip((request.Page - 1) * request.PageSize);
+            }
+            counties = counties.Take(request.PageSize);
+            var result = new DataSourceResult()
+            {
+                Data = counties,
+                Total = total
+            };
+            return Json(result);
+        }
+
+        public ActionResult GetDictionaryCountiesByCountry([DataSourceRequest] DataSourceRequest request, string countryName)
+        {
+            var xc = _dictionaryCountyService.GetDictionaryCountiesByCountry(countryName).ToDataSourceResult(request);
             return Json(xc);
+        }
+
+        public ActionResult GetAllCountries(string countyName)
+        {
+            var context = new ScarletWitchContext();
+            var cnts = context.DictionaryCountry.Select(cnt => new DictionaryCountryModel
+            {
+                CountryId = cnt.CountryId,
+                CountryName = cnt.CountryName
+            });
+            if (!string.IsNullOrEmpty(countyName))
+            {
+                cnts = cnts.Where(c => c.CountryName.Contains(countyName));
+            }
+            return Json(cnts);
+        }
+
+        public IActionResult AddCounty()
+        {
+            return View();
         }
     }
 }
+
+
+
+
+
+

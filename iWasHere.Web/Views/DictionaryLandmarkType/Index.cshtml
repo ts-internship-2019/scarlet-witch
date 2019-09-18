@@ -5,20 +5,53 @@
 
 <h1>Landmark types</h1>
 
+<script type="text/javascript">
+
+    function filter(e) {
+        var landmarkTypeName = document.getElementById("landmarkTextBox").value;
+        var filter = {};
+        filter["landmarkTypeName"] = landmarkTypeName;
+        return filter;
+    }
+
+    function refreshGrid() {
+        $("#landmarkGrid").data("kendoGrid").dataSource.read();
+    }
+</script>
+@(Html.Kendo().TextBox()
+.Name("landmarkTextBox")
+.HtmlAttributes(new { @id = "landmarkTextBox" })
+)
+
+@(Html.Kendo().Button()
+.Name("textButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Filter")
+.Events(ev => ev.Click("refreshGrid"))
+)
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLandmarkTypeModel>()
-        .Name("Grid")
-    .EnableCustomBinding(true)
-    .Columns(columns =>
+        .Name("grid")
+        .Columns(columns =>
         {
             columns.Bound(o => o.LandmarkTypeCode);
         columns.Bound(o => o.Description);
     })
-    .Pageable()
-    .Sortable()
-    .Scrollable()
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .Read("LandmarkType_Read", "DictionaryLandmarkType")
-    )
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .NoRecords(true)
+        .Filterable()
+        .HtmlAttributes(new { @id = "landmarkGrid" })
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(10))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .Read(read => read.Action("GetDictionaryLandmarkTypesFiltered", "DictionaryLandmarkType").Data("filter"))
+
+        )
 )
 

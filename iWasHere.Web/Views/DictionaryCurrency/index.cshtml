@@ -5,17 +5,30 @@
 
 <h1>Currencies</h1>
 
-
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("foo"))
+)
+<script>
+    function foo()
+    {
+        window.location.href = '@Url.Action("CurrencyAdd", "DictionaryCurrency")';
+    }
+</script>
 
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCurrencyModel>()
         .Name("Grid")
     .EnableCustomBinding(true)
     .Columns(columns =>
-        {            
-        columns.Bound(c => c.CurrencyId);
-        columns.Bound(c => c.CurrencyName).Width(140);
-        columns.Bound(c => c.CurrencyCode).Width(190);
-        columns.Bound(c => c.CurrencyExchange);
+    {
+        {
+            columns.Bound(c => c.CurrencyId);
+            columns.Bound(c => c.CurrencyName).Width(140);
+            columns.Bound(c => c.CurrencyCode).Width(190);
+            columns.Bound(c => c.CurrencyExchange);
+        }
     })
     .Pageable()
     .Sortable()
