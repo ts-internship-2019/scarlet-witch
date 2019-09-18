@@ -9,25 +9,37 @@
 <script>
 
 
-    function AddLang()
-    {
-         $.ajax({
-                        type: 'PUT',
-                    url: '@Url.Action("SaveLanguage", "DictionaryLanguage")',
-             data: {
-                 lgCode: document.getElementById("LanguageCode").value,
-                 lgName: document.getElementById("LanguageName").value
-                   },
-                        success: function (response) {
-                            alert("merge daca e");
+    function AddLang() {
+        $.ajax({
+            type: 'PUT',
+            url: '@Url.Action("SaveLanguage", "DictionaryLanguage")',
+            data: {
+                lgCode: document.getElementById("LanguageCode").value,
+                lgName: document.getElementById("LanguageName").value
+            },
+            success: function (response) {
+                alert("merge daca e");
 
-                    },
-                        error: function (response) {
-                        alert("hai ca nu merge");
-                    }
-         })
-
+            },
+            error: function (response) {
+                alert("hai ca nu merge");
+            }
+        })
     }
+
+        function cancelAdd() {
+            window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
+        }
+
+    function AddLangRef() {
+            AddLang();
+           window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
+        }
+
+        function AddNew() {
+            AddLang();
+            window.location.href = '@Url.Action("LanguageAdd", "DictionaryLanguage")';
+        }
 
 
 </script>
@@ -53,7 +65,19 @@
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
-           .Events(ev => ev.Click("AddLang"))
+           .Events(ev => ev.Click("AddLangRef"))
+    )
+    @(Html.Kendo().Button()
+          .Name("addNewButton")
+          .HtmlAttributes(new { type = "button", @class = "k-primary" })
+          .Content("Add New")
+          .Events(ev => ev.Click("AddNew"))
+    )
+    @(Html.Kendo().Button()
+          .Name("cancelButton")
+          .HtmlAttributes(new { type = "button", @class = "k-primary" })
+          .Content("Cancel")
+          .Events(ev => ev.Click("cancelAdd"))
     )
 
 </div>

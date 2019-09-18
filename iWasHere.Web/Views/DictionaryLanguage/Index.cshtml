@@ -29,6 +29,22 @@
         return filter;
     }
 
+    function deleteRowLang(id) {
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeleteLanguage", "DictionaryLanguage")',
+                    data: { id: id },
+                 success: function (response) {
+                     alert("hai ca merge");
+                     alert(id);
+                        $("#languageGrid").data("kendoGrid").dataSource.read();
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+    }
+
     function refreshGrid() {
         $("#languageGrid").data("kendoGrid").dataSource.read();
         $("#languageGrid").data("kendoGrid").dataSource.page(1);
@@ -57,8 +73,10 @@
         .HtmlAttributes(new { @id = "languageGrid" })
         .Columns(columns =>
         {
+            columns.Bound(o => o.LanguageId);//.Hidden();
             columns.Bound(o => o.LanguageCode);
             columns.Bound(o => o.LanguageName);
+            columns.Template("<button id=\"deleteButton\" onclick=\"deleteRowLang(#=LanguageId#)\">Delete</button>");
         })
         .Pageable(pageable => pageable
             .Refresh(true)
@@ -68,6 +86,6 @@
             .Ajax()
             .PageSize(10)
             .Read(read => read.Action("GetDictionaryLanguagesFiltered", "DictionaryLanguage").Data("filter"))
-
+            .Destroy(d => d.Action("DeleteLanguage", "DictionaryLanguage")))
         )
 ) 
