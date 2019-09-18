@@ -29,14 +29,14 @@ namespace iWasHere.Domain.Service
             return dictionaryCountryModels;
         }
 
-        public List<DictionaryCityModel> GetDictionaryCities()
+        public IQueryable<DictionaryCityModel> GetDictionaryCities()
         {
-            List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+            IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
             {
                 Id = a.CityId,
                 Name = a.CityName
             }
-            ).ToList();
+            );
             return dictionaryCities;
         }
 
@@ -75,5 +75,33 @@ namespace iWasHere.Domain.Service
 
             return dictionaryLandmarkTypeModels;
         }
+
+        public IQueryable<DictionaryCityModel> GetDictionaryCitiesFiltered(String cityName)
+        {
+            if (cityName==null)
+            {
+                IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+                {
+                    Id = a.CityId,
+                    Name = a.CityName
+                });
+                return dictionaryCities;
+            }
+            else
+            {
+                IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+                {
+                    Id = a.CityId,
+                    Name = a.CityName
+                }
+                ).Where(c => c.Name == cityName);
+                return dictionaryCities;
+            }
+         
+          
+        }
+
+
+       
     }
 }
