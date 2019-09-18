@@ -88,6 +88,19 @@ namespace iWasHere.Domain.Service
 
             return dictionaryCounties;
         }
+
+        public List<DictionaryCountryModel> GetDictionaryCountriesByLanguage(string languageName)
+        {
+            List<DictionaryCountryModel> dictionaryCountries = _dbContext.DictionaryCountry.Select(a => new DictionaryCountryModel()
+            {
+                CountryId = a.CountryId,
+                CountryName = a.CountryName,
+                LanguageName = _dbContext.DictionaryLanguage.Where(c => c.LanguageId == a.LanguageId).Select(c => c.LanguageName).FirstOrDefault().ToString()
+            }
+            ).Where(d => d.LanguageName == languageName).ToList();
+
+            return dictionaryCountries;
+        }
         public List<DictionaryCurrencyModel> GetDictionaryCurrencyModels()
         {
 
@@ -185,19 +198,23 @@ namespace iWasHere.Domain.Service
         {
             if (countryName == null)
             {
-                IQueryable<DictionaryCountryModel> dictionaryCountry = _dbContext.DictionaryCountry.Select(a => new DictionaryCountryModel()
+                IQueryable<DictionaryCountryModel> dictionaryCountries = _dbContext.DictionaryCountry.Select(a => new DictionaryCountryModel()
                 {
                     LanguageId = a.LanguageId,
-                    CountryName = a.CountryName
+                    CountryId = a.CountryId,
+                    CountryName = a.CountryName,
+                    //LanguageName = _dbContext.DictionaryLanguage.Where(c => c.LanguageId == a.LanguageId).Select(c => c.LanguageName).FirstOrDefault().ToString()
                 });
-                return dictionaryCountry;
+                return dictionaryCountries;
             }
             else
             {
                 IQueryable<DictionaryCountryModel> dictionaryCountry = _dbContext.DictionaryCountry.Select(a => new DictionaryCountryModel()
                 {
                     LanguageId = a.LanguageId,
-                    CountryName = a.CountryName
+                    CountryId = a.CountryId,
+                    CountryName = a.CountryName,
+                    //LanguageName = _dbContext.DictionaryLanguage.Where(c => c.LanguageId == a.LanguageId).Select(c => c.LanguageName).FirstOrDefault().ToString()
                 }
                 ).Where(c => c.CountryName.Contains(countryName));
                 return dictionaryCountry;
