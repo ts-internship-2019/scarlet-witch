@@ -1,37 +1,90 @@
-﻿
-@{
-      ViewData["Title"] = "City";
-     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
+﻿@{
+    ViewData["Title"] = "CountryAdd";
+    Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
+    ViewData["Title"] = "City";
+    Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
 }
 
-@*@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCityModel>()
-        .Name("grida")
-            .Columns(columns =>
-        {
-            columns.Bound(c => c.Id).Width(140);
-            columns.Bound(c => c.Name).Width(190);
-        })
-        .HtmlAttributes(new { style = "height: 380px;" })
-        .Pageable(pageable => pageable
-            .Refresh(true)
-
-            .ButtonCount(5))
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .Read(read => read.Action("GetDictionaryCities", "DictionaryCity")))
-)*@
 
 
 
+@*function cityFilter() {
+            if (document.getElementById("cityTextBox").value != "") {
+
+                    $.ajax({
+                        type: 'GET',
+                        headers: {
+                            'Cache-Control': 'no-cache'
+                    },
+                    url: '@Url.Action("Languages_Read", "DictionaryCity")',
+                    data: { cityName: document.getElementById("cityTextBox").value },
+                        success: function (response) {
+                            alert(response.Data);
+                    $("#cityGrid").data("kendoGrid").setDataSource(response.Data);
+                    },
+                        error: function (response) {
+                            alert(response.Data);
+                        alert("hai ca nu merge");
+                    }
+                })
+            }
+            else
+                    {
+                  $.ajax({
+                      type: 'GET',
+                           headers: {
+                            'Cache-Control': 'no-cache'
+                    },
+                    url: '@Url.Action("Languages_ReadNoFilter", "DictionaryCity")',
+                    success: function (response) {
+                    $("#cityGrid").data("kendoGrid").setDataSource(response.Data);
+                    },
+                      error: function (response) {
+                          alert(response.Data);
+                        alert("hai ca nu merge");
+                    }
+                })
+
+            }
+
+    )*@
+
+
+<script type="text/javascript">
+
+    function filter(e) {
+        var cityName = document.getElementById("cityTextBox").value;
+        var filter = {};
+        filter["cityName"] = cityName;
+        return filter;
+    }
+
+    function refreshGrid() {
+        $("#cityGrid").data("kendoGrid").dataSource.read();
+    }
+</script>
+@(Html.Kendo().TextBox()
+.Name("cityTextBox")
+.HtmlAttributes(new { @id = "cityTextBox" })
+)
+
+@(Html.Kendo().Button()
+.Name("textButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Filter")
+.Events(ev => ev.Click("refreshGrid"))
+)
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCityModel>()
         .Name("grid")
-    
+
+
         .HtmlAttributes(new { style = "height: 380px;" })
         .Scrollable()
         .Groupable()
         .Sortable()
         .NoRecords(true)
         .Filterable()
+        .HtmlAttributes(new { @id = "cityGrid" })
         .Pageable(pageable => pageable
             .Refresh(true)
             .PageSizes(true)
@@ -39,8 +92,7 @@
         .DataSource(dataSource => dataSource
             .Ajax()
             .PageSize(5)
-    
-            
-            .Read(read => read.Action("GetDictionaryCities", "DictionaryCity"))
+            .Read(read => read.Action("GetDictionaryCitiesFiltered", "DictionaryCity").Data("filter"))
+
         )
-)
+) 
