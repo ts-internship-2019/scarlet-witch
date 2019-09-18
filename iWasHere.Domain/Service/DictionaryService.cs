@@ -101,17 +101,31 @@ namespace iWasHere.Domain.Service
             }).ToList();
 
             return dictionaryCurrencyModels;
+            
         }
-
-        public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
+        public IQueryable<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypesFiltered(String landmarkTypeName)
         {
-            List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+            if (landmarkTypeName == null)
             {
-                LandmarkTypeCode = a.LandmarkTypeCode,
-                Description = a.Description
-            }).ToList();
+                IQueryable<DictionaryLandmarkTypeModel> dictionaryLandmarkTypes = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+                {
+                    LandmarkTypeCode = a.LandmarkTypeCode,
+                    Description = a.Description
+                });
+                return dictionaryLandmarkTypes;
+            }
+            else
+            {
+                IQueryable<DictionaryLandmarkTypeModel> dictionaryLandmarkTypes = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+                {
+                    LandmarkTypeCode = a.LandmarkTypeCode,
+                    Description = a.Description
+                }
+                ).Where(c => c.LandmarkTypeCode.Contains(landmarkTypeName));
+                return dictionaryLandmarkTypes;
+            }
 
-            return dictionaryLandmarkTypeModels;
+
         }
 
         public IQueryable<DictionaryCityModel> GetDictionaryCitiesFiltered(String cityName)
@@ -140,6 +154,34 @@ namespace iWasHere.Domain.Service
         }
 
 
-       
+        public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
+        {
+            if (languageName == null)
+            {
+                IQueryable<DictionaryLanguageModel> dictionaryLanguage = _dbContext.DictionaryLanguage.Select(a => new DictionaryLanguageModel()
+                {
+                    LanguageId = a.LanguageId,
+                    LanguageCode=a.LanguageCode,
+                    LanguageName=a.LanguageName
+                });
+                return dictionaryLanguage;
+            }
+            else
+            {
+                IQueryable<DictionaryLanguageModel> dictionaryLanguage = _dbContext.DictionaryLanguage.Select(a => new DictionaryLanguageModel()
+                {
+                    LanguageId = a.LanguageId,
+                    LanguageCode = a.LanguageCode,
+                    LanguageName = a.LanguageName
+                }
+                ).Where(c => c.LanguageName.Contains(languageName));
+                return dictionaryLanguage;
+            }
+
+
+        }
+
+
+
     }
 }
