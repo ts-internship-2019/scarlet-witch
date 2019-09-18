@@ -58,5 +58,33 @@ namespace iWasHere.Web.Controllers
         {   
             return View();
         }
+
+        public ActionResult GetLanguage(string text)
+        {
+            var jk = new ScarletWitchContext();
+
+
+            var cnts = jk.DictionaryLanguage.Select(cnt => new DictionaryLanguageModel
+            {
+                LanguageId = cnt.LanguageId,
+                LanguageName = cnt.LanguageName
+
+            });
+
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                cnts = cnts.Where(c => c.LanguageName.Contains(text));
+            }
+
+
+            return Json(cnts);
+        }
+
+
+
+
+
+
     }
 }
