@@ -76,19 +76,24 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
-        public ActionResult SaveCurrency(DictionaryCurrencyModel dd)
+        public ActionResult SaveCurrency(int ctId,string crCode,string crName,decimal crExc)
         {
             ScarletWitchContext gf = new ScarletWitchContext();
             gf.DictionaryCurrency.Add(new DictionaryCurrency
             {
-                CountryId = dd.CountryId,
-                CurrencyName = dd.CurrencyName,
-                CurrencyCode = dd.CurrencyCode,
-                CurrencyExchange = dd.CurrencyExchange
+                CountryId = ctId,
+                CurrencyName = crName,
+                CurrencyCode = crCode,
+                CurrencyExchange = crExc
 
-            });
-            gf.SaveChanges();
-            return Json(gf);
+            });            
+            return Json(gf.SaveChanges());
+        }
+
+
+        public IActionResult CurrencyAdd()
+        {
+            return View();
         }
 
     }
