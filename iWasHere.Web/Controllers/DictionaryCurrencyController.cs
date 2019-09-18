@@ -23,28 +23,28 @@ namespace iWasHere.Web.Controllers
 
 
 
-        public IActionResult Currencies_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            return Json(_dictionaryService.GetDictionaryCurrencyModels().ToDataSourceResult(request));
-        }
+        //public IActionResult Currencies_Read([DataSourceRequest] DataSourceRequest request)
+        //{
+        //    return Json(_dictionaryService.GetDictionaryCurrencyModels().ToDataSourceResult(request));
+        //}
 
-        private static IEnumerable<DictionaryCurrencyModel> GetDictionaryCurrencyModels()
-        {
-            using (var northwind = new ScarletWitchContext())
-            {
-                return northwind.DictionaryCurrency.Select(c => new DictionaryCurrencyModel
-                {
-                    CurrencyId = c.CurrencyId,
-                    CurrencyCode = c.CurrencyCode,
-                    CurrencyName = c.CurrencyName,
-                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+        //private static IEnumerable<DictionaryCurrencyModel> GetDictionaryCurrencyModels()
+        //{
+        //    using (var northwind = new ScarletWitchContext())
+        //    {
+        //        return northwind.DictionaryCurrency.Select(c => new DictionaryCurrencyModel
+        //        {
+        //            CurrencyId = c.CurrencyId,
+        //            CurrencyCode = c.CurrencyCode,
+        //            CurrencyName = c.CurrencyName,
+        //            CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
 
-                }).ToList();
+        //        }).ToList();
 
 
 
-            }
-        }
+        //    }
+        //}
 
         public IActionResult Index([DataSourceRequest] DataSourceRequest request)
         {
@@ -52,7 +52,32 @@ namespace iWasHere.Web.Controllers
 
             return View(dictionaryCurrencyModels);
 
-            
+
+        }
+
+
+        public ActionResult Currencies_Read([DataSourceRequest]DataSourceRequest request)
+        {
+            IQueryable<DictionaryCurrency> currencies = new ScarletWitchContext().DictionaryCurrency;
+
+            currencies = currencies.OrderBy(o => o.CurrencyId);
+
+
+            var total = currencies.Count();
+
+            if (request.Page > 0)
+            {
+                currencies = currencies.Skip((request.Page - 1) * request.PageSize);
+            }
+            currencies = currencies.Take(request.PageSize);
+
+            var result = new DataSourceResult()
+            {
+                Data = currencies,
+                Total = total
+            };
+
+            return Json(result);
         }
 
     }

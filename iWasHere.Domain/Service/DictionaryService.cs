@@ -11,7 +11,7 @@ namespace iWasHere.Domain.Service
     public class DictionaryService
     {
         private readonly ScarletWitchContext _dbContext;
-
+       
         public DictionaryService(ScarletWitchContext databaseContext)
         {
             _dbContext = databaseContext;

@@ -1,29 +1,24 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Landmark Type";
 }
 
 <h1>Landmark types</h1>
 
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLandmarkTypeModel>()
-        .Name("grid")
-        .Columns(columns =>
+        .Name("Grid")
+    .EnableCustomBinding(true)
+    .Columns(columns =>
         {
-            columns.Bound(c => c.LandmarkTypeCode).Width(140);
-            columns.Bound(c => c.Description).Width(190);
-
-        })
-        .HtmlAttributes(new { style = "height: 380px;" })
-        .Scrollable()
-        .Groupable()
-        .Sortable()
-        .Pageable(pageable => pageable
-            .Refresh(true)
-            .PageSizes(true)
-            .ButtonCount(5))
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .Read(read => read.Action("Landmark_Types_Read", "DictionaryLandmarkType"))
-        )
+            columns.Bound(o => o.LandmarkTypeCode);
+        columns.Bound(o => o.Description);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read("LandmarkType_Read", "DictionaryLandmarkType")
+    )
 )
 

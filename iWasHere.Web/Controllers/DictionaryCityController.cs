@@ -23,52 +23,7 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult Index()
         {
-
             return View();
-        }
-
-        public ActionResult Languages_Read([DataSourceRequest]DataSourceRequest request, String cityName)
-        {
-            //IQueryable<DictionaryLanguage> languages = new ScarletWitchContext().DictionaryLanguage;
-            IQueryable<DictionaryCityModel> cities = _dictionaryCityService.GetDictionaryCitiesFiltered(cityName);
-            cities.ToDataSourceResult(request);
-            cities = cities.OrderBy(o => o.Id);
-            var total = cities.Count();
-            if (request.Page > 0)
-            {
-                cities = cities.Skip((request.Page - 1) * request.PageSize);
-            }
-            cities = cities.Take(request.PageSize);
-
-            DataSourceResult result = new DataSourceResult()
-            {
-                Data = cities,
-                Total = total
-            };
-
-            return Json(result);
-        }
-
-        public ActionResult Languages_ReadNoFilter([DataSourceRequest]DataSourceRequest request)
-        {
-            //IQueryable<DictionaryLanguage> languages = new ScarletWitchContext().DictionaryLanguage;
-            IQueryable<DictionaryCityModel> cities = _dictionaryCityService.GetDictionaryCities();
-            cities = cities.OrderBy(o => o.Id);
-            var total = cities.Count();
-            if (request.Page > 0)
-            {
-                cities = cities.Skip((request.Page - 1) * request.PageSize);
-            }
-            cities = cities.Take(request.PageSize);
-      
-            DataSourceResult result = new DataSourceResult()
-            {
-                Data = cities,
-                Total = total
-            };
-            
-
-            return Json(result);
         }
 
         public ActionResult GetDictionaryCities([DataSourceRequest] DataSourceRequest request)
@@ -76,15 +31,6 @@ namespace iWasHere.Web.Controllers
             var xc = _dictionaryCityService.GetDictionaryCities().ToDataSourceResult(request);
             return Json(xc);
         }
-
-        public ActionResult GetDictionaryCitiesFiltered([DataSourceRequest] DataSourceRequest request, String cityName)
-        {
-            var xc = _dictionaryCityService.GetDictionaryCitiesFiltered(cityName).ToDataSourceResult(request);
-            return Json(xc);
-            
-            
-        }
-
 
     }
 }

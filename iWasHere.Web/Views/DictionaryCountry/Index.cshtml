@@ -1,44 +1,38 @@
-﻿@model IEnumerable<iWasHere.Domain.DTOs.DictionaryCountryModel>
-
-
-
-@{
-    ViewData["Title"] = "CountryAdd";
+﻿@{
+    ViewData["Title"] = "Country";
     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
 }
-<!-- items.Add().Text("Add").Action("AddCountry", "DictionaryCountry", new { area = "" });-->
+
+<h1>Countries</h1>
+
 @(Html.Kendo().Button()
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
            .Events(ev => ev.Click("foo"))
 )
+
 <script>
     function foo()
     {
         window.location.href = '@Url.Action("AddCountry", "DictionaryCountry")';
-        alert("hai ca merge");
     }
 </script>
 
-<!-- Html.ActionLink("AddCountry", "DictionaryCountry", new { /* id=item.PrimaryKey */ })-->
-
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountryModel>()
-    .Name("Country")
+        .Name("Grid")
+    .EnableCustomBinding(true)
     .Columns(columns =>
-    {
-        columns.Bound(c => c.CountryName).Width(140);
-    })
-    .HtmlAttributes(new { style = "height: 380px;" })
-    .Scrollable()
-    .Groupable()
-    .Sortable()
-    .Pageable(pageable => pageable
-        .Refresh(true)
-        .PageSizes(true)
-        .ButtonCount(5))
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .Read(read => read.Action("Countries_Read", "DictionaryCountry"))
-    )
+        {
+            columns.Bound(o => o.CountryId);
+            columns.Bound(o => o.CountryName);
+            columns.Bound(o => o.LanguageId);
+        })
+        .Pageable()
+        .Sortable()
+        .Scrollable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read("Countries_Paging", "DictionaryCountry")
+        )
 )
