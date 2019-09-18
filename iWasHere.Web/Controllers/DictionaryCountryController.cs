@@ -59,6 +59,11 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
+        public IActionResult AddCountryToDb()
+        {
+            return View();
+        }
+
         public ActionResult GetLanguage(string text)
         {
             var jk = new ScarletWitchContext();
@@ -71,7 +76,6 @@ namespace iWasHere.Web.Controllers
 
             });
 
-
             if (!string.IsNullOrEmpty(text))
             {
                 cnts = cnts.Where(c => c.LanguageName.Contains(text));
@@ -81,10 +85,58 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
+        public ActionResult GetDictionaryCountriesFiltered([DataSourceRequest] DataSourceRequest request, String countryName)
+        {
+            IQueryable<DictionaryCountryModel> countries = _dictionaryService.GetDictionaryCountriesFiltered(countryName);
+
+            countries = countries.OrderBy(o => o.CountryId);
 
 
+            var total = countries.Count();
 
+            if (request.Page > 0)
+            {
+                countries = countries.Skip((request.Page - 1) * request.PageSize);
+            }
+            countries = countries.Take(request.PageSize);
 
+            var result = new DataSourceResult()
+            {
+                Data = countries,
+                Total = total
+            };
+
+            return Json(result);
+        }
+
+        public ActionResult SaveCountry(string countryName, int languageId)
+        {
+            ScarletWitchContext gf = new ScarletWitchContext();
+            gf.DictionaryCountry.Add(new DictionaryCountry
+            {
+                CountryName = countryName,
+                LanguageId = languageId
+            });
+            return Json(gf.SaveChanges());
+        }
+        public ActionResult GetLanguageAdd(string text)
+        {
+            var jk = new ScarletWitchContext();
+
+            var lngs = jk.DictionaryLanguage.Select(lng => new DictionaryLanguageModel
+            {
+                LanguageId = lng.LanguageId,
+                LanguageName = lng.LanguageName
+
+            });
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                lngs = lngs.Where(c => c.LanguageName.Contains(text));
+            }
+
+            return Json(lngs);
+        }
 
     }
 }

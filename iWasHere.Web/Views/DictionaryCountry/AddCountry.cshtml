@@ -1,29 +1,69 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "CurrencyAdd";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Add a Country</h1>
+<h1>CurrencyAdd</h1>
 
-<div class="demo-section k-content">
-    <h4>Add a Country</h4>
+<script>
+
+
+    function AddCty()
+    {
+        var e = document.getElementById("combo");
+        var result = e.value;
+        alert(result); //ID002
+
+         $.ajax({
+                        type: 'PUT',
+                    url: '@Url.Action("SaveCountry", "DictionaryCountry")',
+             data: {
+                 countryName: document.getElementById("CountryName").value,
+                 languageId: document.getElementById("combo").value,
+                   },
+                        success: function (response) {
+                            alert("merge daca e");
+
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+         })
+
+    }
+</script>
+
+
+
+<div class="form-group">
+    <h4>Add Currency</h4>
 
     @(Html.Kendo().TextBox()
          .Name("CountryName")
-         .HtmlAttributes(new { style = "width: 15%" })
+         .Value("CountryName")
+         .HtmlAttributes(new { style = "width: 25%" })
     )
 
     @(Html.Kendo().DropDownList()
-          .Name("DictionaryCountry")
+          .Name("DictionaryLanguage")
           .DataTextField("LanguageName")
           .DataValueField("LanguageId")
           .DataSource(source =>
-           {
+                  {
               source.Read(read =>
               {
-                  read.Action("GetLanguage", "DictionaryCountry");
+                  read.Action("GetLanguageAdd", "DictionaryCountry");
               });
           })
-          .HtmlAttributes(new { style = "width: 15%" })
-          )
+          .HtmlAttributes(new { @id = "combo" })
+    )
+
+    @(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("AddCty"))
+    )
 </div>
+

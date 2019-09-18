@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Country";
+    ViewData["Title"] = "Countries";
     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
 }
 
@@ -12,27 +12,58 @@
            .Events(ev => ev.Click("foo"))
 )
 
-<script>
-    function foo()
+<script type="text/javascript">
+
+    function filter(e) {
+        var countryName = document.getElementById("countryTextBox").value;
+        var filter = {};
+        filter["countryName"] = countryName;
+        return filter;
+    }
+
+    function refreshGrid() {
+        $("#countryGrid").data("kendoGrid").dataSource.read();
+    }
+
+     function foo()
     {
         window.location.href = '@Url.Action("AddCountry", "DictionaryCountry")';
     }
 </script>
+@(Html.Kendo().TextBox()
+.Name("countryTextBox")
+.HtmlAttributes(new { @id = "countryTextBox" })
+)
 
+@(Html.Kendo().Button()
+.Name("textButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Filter")
+.Events(ev => ev.Click("refreshGrid"))
+)
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountryModel>()
-        .Name("Grid")
-    .EnableCustomBinding(true)
-    .Columns(columns =>
+        .Name("grid")
+
+
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Sortable()
+        .NoRecords(true)
+        .Filterable()
+        .HtmlAttributes(new { @id = "countryGrid" })
+        .Columns(columns =>
         {
-            columns.Bound(o => o.CountryId);
             columns.Bound(o => o.CountryName);
             columns.Bound(o => o.LanguageId);
         })
-        .Pageable()
-        .Sortable()
-        .Scrollable()
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(10))
         .DataSource(dataSource => dataSource
             .Ajax()
-            .Read("Countries_Paging", "DictionaryCountry")
+            .PageSize(10)
+            .Read(read => read.Action("GetDictionaryCountriesFiltered", "DictionaryCountry").Data("filter"))
+
         )
-)
+) 
