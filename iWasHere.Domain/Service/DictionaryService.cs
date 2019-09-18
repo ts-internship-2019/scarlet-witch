@@ -225,7 +225,7 @@ namespace iWasHere.Domain.Service
                     LanguageId = a.LanguageId,
                     CountryId = a.CountryId,
                     CountryName = a.CountryName,
-                    //LanguageName = _dbContext.DictionaryLanguage.Where(c => c.LanguageId == a.LanguageId).Select(c => c.LanguageName).FirstOrDefault().ToString()
+                    LanguageName = _dbContext.CountryXlanguage.Where(c => c.CountryId == a.CountryId).Where(d => d.LanguageId = c.LanguageId).Select(c => c.LanguageName).FirstOrDefault().ToString()
                 });
                 return dictionaryCountries;
             }
