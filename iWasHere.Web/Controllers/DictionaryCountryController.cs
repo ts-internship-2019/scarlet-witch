@@ -30,9 +30,61 @@ namespace iWasHere.Web.Controllers
             return View(list);
         }
 
+        public ActionResult Countries_Paging([DataSourceRequest]DataSourceRequest request)
+        {
+            IQueryable<DictionaryCountry> countries = new ScarletWitchContext().DictionaryCountry;
+
+            countries = countries.OrderBy(o => o.CountryId);
+
+
+            var total = countries.Count();
+
+            if (request.Page > 0)
+            {
+                countries = countries.Skip((request.Page - 1) * request.PageSize);
+            }
+            countries = countries.Take(request.PageSize);
+
+            var result = new DataSourceResult()
+            {
+                Data = countries,
+                Total = total
+            };
+
+            return Json(result);
+        }
+
         public IActionResult AddCountry()
         {   
             return View();
         }
+
+        public ActionResult GetLanguage(string text)
+        {
+            var jk = new ScarletWitchContext();
+
+
+            var cnts = jk.DictionaryLanguage.Select(cnt => new DictionaryLanguageModel
+            {
+                LanguageId = cnt.LanguageId,
+                LanguageName = cnt.LanguageName
+
+            });
+
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                cnts = cnts.Where(c => c.LanguageName.Contains(text));
+            }
+
+
+            return Json(cnts);
+        }
+
+
+
+
+
+
     }
 }
