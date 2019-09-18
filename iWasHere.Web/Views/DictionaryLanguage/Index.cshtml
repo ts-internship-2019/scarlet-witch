@@ -5,6 +5,20 @@
 
 <h1>Languages</h1>
 
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("foo"))
+)
+<script>
+    function foo()
+    {
+        window.location.href = '@Url.Action("LanguageAdd", "DictionaryLanguage")';
+    }
+</script>
+
+
 
 <script type="text/javascript">
 
@@ -17,6 +31,7 @@
 
     function refreshGrid() {
         $("#languageGrid").data("kendoGrid").dataSource.read();
+        $("#languageGrid").data("kendoGrid").dataSource.page(1);
     }
 </script>
 @(Html.Kendo().TextBox()

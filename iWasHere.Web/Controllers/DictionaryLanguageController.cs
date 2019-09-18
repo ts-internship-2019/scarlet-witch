@@ -98,5 +98,21 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
 
+        public IActionResult LanguageAdd()
+        {
+            return View();
+        }
+
+        public ActionResult SaveLanguage(string lgCode, string lgName)
+        {
+            ScarletWitchContext gf = new ScarletWitchContext();
+            gf.DictionaryLanguage.Add(new DictionaryLanguage
+            {
+                LanguageName = lgName,
+                LanguageCode = lgCode
+            });
+            return Json(gf.SaveChanges());
+        }
+
     }
 }
