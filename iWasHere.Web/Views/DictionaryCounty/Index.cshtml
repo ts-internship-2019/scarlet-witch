@@ -6,69 +6,87 @@
 
 <h1>Judete</h1>
 
-
 @(Html.Kendo().Button()
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
            .Events(ev => ev.Click("openAddCountyPage"))
-           )
-
+)
 
 @(Html.Kendo().TextBox()
-.Name("countyTextBox")
-.HtmlAttributes(new { @id = "countyTextBox" })
+        .Name("countyTextBox")
+        .HtmlAttributes(new { @id = "countyTextBox" })
+)
+
+@(Html.Kendo().DropDownList()
+        .Value("Select Country")
+             .Name("DictionaryCountry")
+             .DataTextField("CountryName")
+             .DataValueField("CountryId")
+             .DataSource(source =>
+                     {
+                 source.Read(read =>
+                 {
+                     read.Action("GetAllCountries", "DictionaryCounty");
+                 });
+             })
+             .HtmlAttributes(new { style = "width: 25%" })
 )
 
 @(Html.Kendo().Button()
-.Name("textButton")
-.HtmlAttributes(new { type = "button" })
-.Content("Filtreaza")
-.Events(ev => ev.Click("filter"))
+        .Name("textButton")
+        .HtmlAttributes(new { type = "button" })
+        .Content("Filtreaza")
+        .Events(ev => ev.Click("refreshGrid"))
 )
 
-
-@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountyModel>()
-        .Name("grid")
-        .HtmlAttributes(new { style = "height: 380px;" })
-        .Scrollable()
-        .Groupable()
-        .Sortable()
-        .Columns(columns =>
-        {
-            columns.Bound(o => o.CountyId).Hidden();
-            columns.Bound(o => o.CountyName);
-            columns.Bound(o => o.CountryName);
-
-        })
-        .NoRecords(true)
-        .Filterable()
-        .HtmlAttributes(new { @id = "countyGrid" })
-        .Pageable(pageable => pageable
-            .Refresh(true)
-            .PageSizes(true)
-            .ButtonCount(5))
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .PageSize(10)
-            .Read(read => read.Action("GetDictionaryCountiesByName", "DictionaryCounty").Data("countyFilter"))
-
-        )
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountyModel>
+    ()
+    .Name("grid")
+    .HtmlAttributes(new { style = "height: 380px;" })
+    .Scrollable()
+    .Groupable()
+    .Sortable()
+    .Columns(columns =>
+    {
+    columns.Bound(o => o.CountyId).Hidden();
+    columns.Bound(o => o.CountyName);
+    columns.Bound(o => o.CountryName);
+    columns.Command(command => command.Destroy()).Width(120);
+    columns.Command(command => command.Edit()).Width(120);
+    })
+    .NoRecords(true)
+    .Filterable()
+    .HtmlAttributes(new { @id = "countyGrid" })
+    .Pageable(pageable => pageable
+    .Refresh(true)
+    .PageSizes(true)
+    .ButtonCount(5))
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(10)
+    .Read(read => read.Action("GetDictionaryCountiesByName", "DictionaryCounty").Data("filter"))
+    .Destroy(d => d.Action("DeleteDictionaryCounty", "DictionaryCounty"))
+    )
+    .Events(events => events.Edit("openAddCountyPage"))
 )
 
 <script type="text/javascript">
-    function openAddCountyPage()
-    {
+    function openAddCountyPage(e) {
         window.location.href = '@Url.Action("AddCounty", "DictionaryCounty")';
+
+        var row = $('#countyGrid').data("kendoGrid").cancelRow();//asa cica luam row ul pe care am dat edit
     }
 
-    function filter() {
+    function filter(e) {
         var countyName = document.getElementById("countyTextBox").value;
-        if (countyName != "") {
+        var filter = {};
+        filter["countyName"] = countyName;
+        return filter;
+    }
 
-        } else {
-            $("#countyGrid").data("kendoGrid").dataSource.read();
-            $("#countyGrid").data("kendoGrid").dataSource.page(1);
-        }
+     function refreshGrid() {
+         $("#countyGrid").data("kendoGrid").dataSource.read();
+         $("#countyGrid").data("kendoGrid").dataSource.page(1);
     }
 </script>

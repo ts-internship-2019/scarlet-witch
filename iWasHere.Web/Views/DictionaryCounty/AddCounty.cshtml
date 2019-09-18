@@ -3,11 +3,101 @@
     ViewData["Title"] = "AddCounty";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+    <div class="form-group">
+        <h4>Add County</h4>
 
-<h1>AddCounty</h1>
+        @(Html.Kendo().TextBox()
+           .Name("CountyName")
+           .Value("Addd County Name")
+           .HtmlAttributes(new { style = "width: 25%" })
+        )
+
+        @(Html.Kendo().DropDownList()
+              .Name("DictionaryCountry")
+              .DataTextField("CountryName")
+              .DataValueField("CountryId")
+              .DataSource(source =>
+                      {
+                  source.Read(read =>
+                  {
+                      read.Action("GetAllCountries", "DictionaryCounty");
+                  });
+              })
+              .HtmlAttributes(new { style = "width: 25%", @id = "combo" })
+        )
+        <p></p>
+    <div>
+        @(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Save")
+           .Events(ev => ev.Click("add"))
+        )
+
+        @(Html.Kendo().Button()
+               .Name("addNewButton")
+               .HtmlAttributes(new { type = "button", @class = "k-primary" })
+               .Content("Add New")
+               .Events(ev => ev.Click("addNew"))
+        )
+        @(Html.Kendo().Button()
+              .Name("cancelButton")
+              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .Content("Cancel")
+              .Events(ev => ev.Click("cancelAdd"))
+        )
+    </div>
 
 
-@(Html.Kendo().TextBox()
-    .Name("NameTextBox")
-    .Value("County Name")
-)
+    </div>
+
+    <script type="text/javascript">
+        function add() {
+            var e = document.getElementById("combo");
+            var result = e.value;
+            alert(result); //ID002
+
+            $.ajax({
+                type: 'PUT',
+                url: '@Url.Action("SaveCounty", "DictionaryCounty")',
+                data: {
+                    ctId: document.getElementById("combo").value,
+                    cyName: document.getElementById("CountyName").value
+                },
+                success: function (response) {
+                    alert("merge daca e");
+
+                },
+                error: function (response) {
+                    alert("hai ca nu merge");
+                }
+            })
+            window.location.href = '@Url.Action("Index", "DictionaryCounty")';
+        }
+
+        function addNew() {
+            var e = document.getElementById("combo");
+            var result = e.value;
+            alert(result); //ID002
+
+            $.ajax({
+                type: 'PUT',
+                url: '@Url.Action("SaveCounty", "DictionaryCounty")',
+                data: {
+                    ctId: document.getElementById("combo").value,
+                    cyName: document.getElementById("CountyName").value
+                },
+                success: function (response) {
+                    alert("merge daca e");
+                    window.location.href = '@Url.Action("AddCounty", "DictionaryCounty")';
+                },
+                error: function (response) {
+                    alert("hai ca nu merge");
+                }
+            })
+        }
+        function cancelAdd() {
+            window.location.href = '@Url.Action("Index", "DictionaryCounty")';
+        }
+
+    </script>

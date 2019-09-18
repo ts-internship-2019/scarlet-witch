@@ -14,6 +14,7 @@ namespace iWasHere.Web.Controllers
     public class DictionaryCountyController : Controller
     {
         private readonly DictionaryService _dictionaryCountyService;
+        private readonly DictionaryCountryController _dictionaryCountryController;
 
         public DictionaryCountyController(DictionaryService dictionaryCountyService)
         {
@@ -66,9 +67,36 @@ namespace iWasHere.Web.Controllers
             var xc = _dictionaryCountyService.GetDictionaryCountiesByCountry(countryName).ToDataSourceResult(request);
             return Json(xc);
         }
+
+        public ActionResult GetAllCountries(string countyName)
+        {
+            var context = new ScarletWitchContext();
+            var cnts = context.DictionaryCountry.Select(cnt => new DictionaryCountryModel
+            {
+                CountryId = cnt.CountryId,
+                CountryName = cnt.CountryName
+            });
+            if (!string.IsNullOrEmpty(countyName))
+            {
+                cnts = cnts.Where(c => c.CountryName.Contains(countyName));
+            }
+            return Json(cnts);
+        }
+
         public IActionResult AddCounty()
         {
             return View();
+        }
+
+        public ActionResult SaveCounty(int ctId, string cyName)
+        {
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.DictionaryCounty.Add(new DictionaryCounty
+            {
+                CountryId = ctId,
+                CountyName = cyName,
+            });
+            return Json(context.SaveChanges());
         }
     }
 }
