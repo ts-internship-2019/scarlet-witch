@@ -71,7 +71,7 @@ namespace iWasHere.Domain.Service
                     CountyName = a.CountyName,
                     CountryName = _dbContext.DictionaryCountry.Where(c => c.CountryId == a.CountryId).Select(c => c.CountryName).FirstOrDefault().ToString()
                 }
-                ).Where(d => d.CountyName == nameFilter);
+                ).Where(c => c.CountyName.Contains(nameFilter));
                 return dictionaryCounties;
             }
         }
