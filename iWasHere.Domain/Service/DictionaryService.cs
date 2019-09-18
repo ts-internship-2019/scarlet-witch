@@ -83,7 +83,8 @@ namespace iWasHere.Domain.Service
                 IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
                 {
                     Id = a.CityId,
-                    Name = a.CityName
+                    Name = a.CityName,
+                    County = _dbContext.DictionaryCounty.Where(c => c.CountyId == a.CountyId).Select(c => c.CountyName).FirstOrDefault().ToString()
                 });
                 return dictionaryCities;
             }
@@ -92,7 +93,8 @@ namespace iWasHere.Domain.Service
                 IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
                 {
                     Id = a.CityId,
-                    Name = a.CityName
+                    Name = a.CityName,
+                    County = _dbContext.DictionaryCounty.Where(c => c.CountyId == a.CountyId).Select(c => c.CountyName).FirstOrDefault().ToString()
                 }
                 ).Where(c => c.Name == cityName);
                 return dictionaryCities;
@@ -101,7 +103,18 @@ namespace iWasHere.Domain.Service
           
         }
 
+        public void DeleteUsuarios(int id)
+        {
+            DictionaryCity city = new DictionaryCity() { CityId = id };
 
-       
+        _dbContext.DictionaryCity.Remove(city);
+          _dbContext.SaveChanges();
+
+
+        }
+
+
+
+
     }
 }

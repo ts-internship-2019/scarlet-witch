@@ -27,9 +27,8 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public ActionResult Languages_Read([DataSourceRequest]DataSourceRequest request, String cityName)
+        public ActionResult GetDictionaryCityPagingFilter([DataSourceRequest]DataSourceRequest request, String cityName)
         {
-            //IQueryable<DictionaryLanguage> languages = new ScarletWitchContext().DictionaryLanguage;
             IQueryable<DictionaryCityModel> cities = _dictionaryCityService.GetDictionaryCitiesFiltered(cityName);
             cities.ToDataSourceResult(request);
             cities = cities.OrderBy(o => o.Id);
@@ -40,12 +39,12 @@ namespace iWasHere.Web.Controllers
             }
             cities = cities.Take(request.PageSize);
 
-            DataSourceResult result = new DataSourceResult()
+            var result = new DataSourceResult()
             {
                 Data = cities,
                 Total = total
             };
-
+            
             return Json(result);
         }
 
@@ -82,6 +81,16 @@ namespace iWasHere.Web.Controllers
             var xc = _dictionaryCityService.GetDictionaryCitiesFiltered(cityName).ToDataSourceResult(request);
             return Json(xc);
 
+        }
+
+        public ActionResult Delete([DataSourceRequest] DataSourceRequest request, int id )
+        {
+            if (id!= -1)
+            {
+                _dictionaryCityService.DeleteUsuarios(id);
+            }
+
+            return Json(ModelState.ToDataSourceResult());
         }
 
 
