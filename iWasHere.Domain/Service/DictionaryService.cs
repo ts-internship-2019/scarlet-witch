@@ -181,6 +181,35 @@ namespace iWasHere.Domain.Service
 
         }
 
+        public IQueryable<DictionaryCurrencyModel> GetDictionaryCurrencyFiltered(String currencyName)
+        {
+            if (currencyName == null)
+            {
+                IQueryable<DictionaryCurrencyModel> dictionaryCurrency = _dbContext.DictionaryCurrency.Select(c => new DictionaryCurrencyModel()
+                {
+                    CurrencyId = c.CurrencyId,
+                    CurrencyCode = c.CurrencyCode,
+                    CurrencyName = c.CurrencyName,
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+                });
+                return dictionaryCurrency;
+            }
+            else
+            {
+                IQueryable<DictionaryCurrencyModel> dictionaryCurrency = _dbContext.DictionaryCurrency.Select(c => new DictionaryCurrencyModel()
+                {
+                    CurrencyId = c.CurrencyId,
+                    CurrencyCode = c.CurrencyCode,
+                    CurrencyName = c.CurrencyName,
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+                }
+                ).Where(c => c.CurrencyName.Contains(currencyName));
+                return dictionaryCurrency;
+            }
+
+
+        }
+
 
 
     }
