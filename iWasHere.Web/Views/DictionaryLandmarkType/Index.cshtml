@@ -5,6 +5,19 @@
 
 <h1>Landmark types</h1>
 
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("foo"))
+)
+<script>
+    function foo()
+    {
+        window.location.href = '@Url.Action("LandmarkTypeAdd", "DictionaryLandmarkType")';
+    }
+</script>
+
 <script type="text/javascript">
 
     function filter(e) {
@@ -16,6 +29,7 @@
 
     function refreshGrid() {
         $("#landmarkGrid").data("kendoGrid").dataSource.read();
+        $("#landmarkGrid").data("kendoGrid").dataSource.page(1);
     }
 </script>
 @(Html.Kendo().TextBox()

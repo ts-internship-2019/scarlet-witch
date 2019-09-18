@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewData["Title"] = "LandmarkTypeAdd";
+}
+
+<h1>LandmarkTypeAdd</h1>
+
+<script>
+
+
+    function AddLandmarkTpy()
+    {
+ 
+
+         $.ajax({
+                        type: 'PUT',
+                    url: '@Url.Action("SaveLandmarkType", "DictionaryLandmarkType")',
+             data: {
+                 landmarkCode: document.getElementById("LandmarkTypeCode").value,
+                 description: document.getElementById("Description").value
+                   },
+                        success: function (response) {
+                            alert("merge daca e");
+
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+         })
+
+    }
+
+    function cancelAdd() {
+        window.location.href = '@Url.Action("Index", "DictionaryLandmarkType")';
+    }
+
+
+    function AddNew() {
+        AddLandmarkTpy();
+        window.location.href = '@Url.Action("LandmarkTypeAdd", "DictionaryLandmarkType")';
+    }
+
+    
+
+
+</script>
+
+
+
+<div class="form-group">
+
+
+    @(Html.Kendo().TextBox()
+         .Name("LandmarkTypeCode")
+         .Value("LandmarkTypeCode")
+         .HtmlAttributes(new { style = "width: 25%", @maxlength = "10" })
+    )
+
+    @(Html.Kendo().TextBox()
+       .Name("Description")
+       .Value("Description")
+       .HtmlAttributes(new { style = "width: 25%" })
+    )
+
+    @(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("AddLandmarkTpy"))
+    )
+    @(Html.Kendo().Button()
+          .Name("addNewButton")
+          .HtmlAttributes(new { type = "button", @class = "k-primary" })
+          .Content("Add New")
+          .Events(ev => ev.Click("AddNew"))
+    )
+    @(Html.Kendo().Button()
+          .Name("cancelButton")
+          .HtmlAttributes(new { type = "button", @class = "k-primary" })
+          .Content("Cancel")
+          .Events(ev => ev.Click("cancelAdd"))
+    )
+
+</div>
