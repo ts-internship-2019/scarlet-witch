@@ -59,8 +59,24 @@
         return filter;
     }
 
+    function deleteRow(id) {
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("Delete", "DictionaryCity")',
+                    data: { id: id },
+                 success: function (response) {
+                     alert("hai ca merge");
+                     alert(id);
+                        $("#cityGrid").data("kendoGrid").dataSource.read();
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+    }
     function refreshGrid() {
-        $("#cityGrid").data("kendoGrid").dataSource.read();
+        $("#cityGrid").data("kendoGrid").dataSource.read();  
+        $("#cityGrid").data("kendoGrid").dataSource.page(1); 
     }
 </script>
 @(Html.Kendo().TextBox()
@@ -76,12 +92,18 @@
 )
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCityModel>()
         .Name("grid")
-
-
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.Id).Hidden();
+            columns.Bound(o => o.Name).Title("Oras");
+            columns.Bound(o => o.County).Title("Judet");
+            columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=Id#)\">Delete</button>");
+        })
         .HtmlAttributes(new { style = "height: 380px;" })
         .Scrollable()
         .Groupable()
         .Sortable()
+        .Selectable()
         .NoRecords(true)
         .Filterable()
         .HtmlAttributes(new { @id = "cityGrid" })
@@ -89,10 +111,13 @@
             .Refresh(true)
             .PageSizes(true)
             .ButtonCount(5))
+        
         .DataSource(dataSource => dataSource
             .Ajax()
             .PageSize(5)
-            .Read(read => read.Action("GetDictionaryCitiesFiltered", "DictionaryCity").Data("filter"))
+            .Read(read => read.Action("GetDictionaryCityPagingFilter", "DictionaryCity").Data("filter"))
+            .Destroy(d => d.Action("Delete", "DictionaryCity")))
+        //.Events(events => events.Edit(""))
+    
+)
 
-        )
-) 
