@@ -181,6 +181,31 @@ namespace iWasHere.Domain.Service
 
         }
 
+        public IQueryable<DictionaryCountryModel> GetDictionaryCountriesFiltered(String countryName)
+        {
+            if (countryName == null)
+            {
+                IQueryable<DictionaryCountryModel> dictionaryCountry = _dbContext.DictionaryCountry.Select(a => new DictionaryCountryModel()
+                {
+                    LanguageId = a.LanguageId,
+                    CountryName = a.CountryName
+                });
+                return dictionaryCountry;
+            }
+            else
+            {
+                IQueryable<DictionaryCountryModel> dictionaryCountry = _dbContext.DictionaryCountry.Select(a => new DictionaryCountryModel()
+                {
+                    LanguageId = a.LanguageId,
+                    CountryName = a.CountryName
+                }
+                ).Where(c => c.CountryName.Contains(countryName));
+                return dictionaryCountry;
+            }
+
+
+        }
+
 
 
     }
