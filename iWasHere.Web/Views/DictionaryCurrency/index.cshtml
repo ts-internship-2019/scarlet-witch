@@ -3,40 +3,73 @@
     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
 }
 
-<h1>Currencies</h1>
+<h1>Currency</h1>
 
-@(Html.Kendo().Button()
-           .Name("primaryTextButton")
-           .HtmlAttributes(new { type = "button", @class = "k-primary" })
-           .Content("Add")
-           .Events(ev => ev.Click("foo"))
-)
-<script>
-    function foo()
-    {
-        window.location.href = '@Url.Action("CurrencyAdd", "DictionaryCurrency")';
+
+<script type="text/javascript">
+
+    function filter(e) {
+        var currencyName = document.getElementById("currencyTextBox").value;
+        var filter = {};
+        filter["currencyName"] = currencyName;
+        return filter;
+    }
+
+    function refreshGrid() {
+        $("#currencyGrid").data("kendoGrid").dataSource.read();
+        $("#currencyGrid").data("kendoGrid").dataSource.page(1);
     }
 </script>
-
-@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCurrencyModel>()
-        .Name("Grid")
-    .EnableCustomBinding(true)
-    .Columns(columns =>
-    {
-        {
-            columns.Bound(c => c.CurrencyId);
-            columns.Bound(c => c.CurrencyName).Width(140);
-            columns.Bound(c => c.CurrencyCode).Width(190);
-            columns.Bound(c => c.CurrencyExchange);
-        }
-    })
-    .Pageable()
-    .Sortable()
-    .Scrollable()
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .Read("Currencies_Read", "DictionaryCurrency")
+@(Html.Kendo().Button()
+               .Name("primaryTextButton")
+               .HtmlAttributes(new { type = "button", @class = "k-primary" })
+               .Content("Add")
+               .Events(ev => ev.Click("foo"))
     )
+    <script>
+        function foo()
+        {
+            window.location.href = '@Url.Action("CurrencyAdd", "DictionaryCurrency")';
+        }
+    </script>
+@(Html.Kendo().TextBox()
+.Name("currencyTextBox")
+.HtmlAttributes(new { @id = "currencyTextBox" })
+)
+
+@(Html.Kendo().Button()
+.Name("textButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Filter")
+.Events(ev => ev.Click("refreshGrid"))
+)
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCurrencyModel>()
+        .Name("grid")
+
+
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Sortable()
+        .NoRecords(true)
+        .Filterable()
+        .HtmlAttributes(new { @id = "currencyGrid" })
+        .Columns(columns =>
+        {
+
+            columns.Bound(o => o.CurrencyCode);
+            columns.Bound(o => o.CurrencyName);
+            columns.Bound(o => o.CurrencyExchange);
+        })
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(10))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .Read(read => read.Action("GetDictionaryCurrencyFiltered", "DictionaryCurrency").Data("filter"))
+
+        )
 )
 
 

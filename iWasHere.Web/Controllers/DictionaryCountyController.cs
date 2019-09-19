@@ -87,6 +87,17 @@ namespace iWasHere.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult SaveCounty(int ctId, string cyName)
+        {
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.DictionaryCounty.Add(new DictionaryCounty
+            {
+                CountryId = ctId,
+                CountyName = cyName,
+            });
+            return Json(context.SaveChanges());
+        }
     }
 }
 
