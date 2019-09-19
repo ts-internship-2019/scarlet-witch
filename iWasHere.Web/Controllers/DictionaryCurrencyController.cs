@@ -85,11 +85,32 @@ namespace iWasHere.Web.Controllers
                 CurrencyName = crName,
                 CurrencyCode = crCode,
                 CurrencyExchange = crExc
-
             });            
             return Json(gf.SaveChanges());
         }
+        public ActionResult GetDictionaryCurrencyFiltered([DataSourceRequest] DataSourceRequest request, String currencyName)
+        {
+            IQueryable<DictionaryCurrencyModel> currency = _dictionaryService.GetDictionaryCurrencyFiltered(currencyName);
 
+            currency = currency.OrderBy(o => o.CurrencyId);
+
+
+            var total = currency.Count();
+
+            if (request.Page > 0)
+            {
+                currency = currency.Skip((request.Page - 1) * request.PageSize);
+            }
+            currency = currency.Take(request.PageSize);
+
+            var result = new DataSourceResult()
+            {
+                Data = currency,
+                Total = total
+            };
+
+            return Json(result);
+        }
 
         public IActionResult CurrencyAdd()
         {
