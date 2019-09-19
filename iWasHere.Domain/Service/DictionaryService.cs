@@ -123,6 +123,7 @@ namespace iWasHere.Domain.Service
             {
                 IQueryable<DictionaryLandmarkTypeModel> dictionaryLandmarkTypes = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
                 {
+                    LandmarkTypeId = a.LandmarkTypeId,
                     LandmarkTypeCode = a.LandmarkTypeCode,
                     Description = a.Description
                 });
@@ -132,6 +133,7 @@ namespace iWasHere.Domain.Service
             {
                 IQueryable<DictionaryLandmarkTypeModel> dictionaryLandmarkTypes = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
                 {
+                    LandmarkTypeId = a.LandmarkTypeId,
                     LandmarkTypeCode = a.LandmarkTypeCode,
                     Description = a.Description
                 }
@@ -193,6 +195,8 @@ namespace iWasHere.Domain.Service
             }
         }
 
+
+
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
         {
             if (languageName == null)
@@ -250,7 +254,9 @@ namespace iWasHere.Domain.Service
                 CountyName = b.CountyName
 
             }).ToList();
+
             return dictionaryCurrencyModels;
+
         }
 
         public DictionaryCityModel GetDataToEdit(int id)
@@ -262,7 +268,9 @@ namespace iWasHere.Domain.Service
                 County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString()
 
             }).Where(a => a.Id == id).FirstOrDefault();
+
             return city;
+
         }
 
         public IQueryable<DictionaryCurrencyModel> GetDictionaryCurrencyFiltered(String currencyName)
@@ -292,4 +300,6 @@ namespace iWasHere.Domain.Service
             }
         }
     }
+
 }
+
