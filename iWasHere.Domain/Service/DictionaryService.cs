@@ -47,7 +47,7 @@ namespace iWasHere.Domain.Service
                 CountyId = a.CountyId,
                 CountyName = a.CountyName,
                 CountryName = _dbContext.DictionaryCountry.Where(c => c.CountryId == a.CountryId).Select(c => c.CountryName).FirstOrDefault().ToString()
-            } );
+            });
             return dictionaryCounties;
         }
 
@@ -110,18 +110,20 @@ namespace iWasHere.Domain.Service
                 CurrencyName = b.CurrencyName,
                 CurrencyCode = b.CurrencyCode,
                 CurrencyExchange = Convert.ToDecimal(b.CurrencyExchange)
-                
+
             }).ToList();
 
             return dictionaryCurrencyModels;
-            
+
         }
+
         public IQueryable<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypesFiltered(String landmarkTypeName)
         {
             if (landmarkTypeName == null)
             {
                 IQueryable<DictionaryLandmarkTypeModel> dictionaryLandmarkTypes = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
                 {
+                    LandmarkTypeId = a.LandmarkTypeId,
                     LandmarkTypeCode = a.LandmarkTypeCode,
                     Description = a.Description
                 });
@@ -131,6 +133,7 @@ namespace iWasHere.Domain.Service
             {
                 IQueryable<DictionaryLandmarkTypeModel> dictionaryLandmarkTypes = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
                 {
+                    LandmarkTypeId = a.LandmarkTypeId,
                     LandmarkTypeCode = a.LandmarkTypeCode,
                     Description = a.Description
                 }
@@ -143,7 +146,7 @@ namespace iWasHere.Domain.Service
 
         public IQueryable<DictionaryCityModel> GetDictionaryCitiesFiltered(String cityName)
         {
-            if (cityName==null)
+            if (cityName == null)
             {
                 IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
                 {
@@ -164,30 +167,33 @@ namespace iWasHere.Domain.Service
                 ).Where(c => c.Name == cityName);
                 return dictionaryCities;
             }
-         
-          
         }
 
         public void DeleteUsuarios(int id)
         {
             DictionaryCity city = new DictionaryCity() { CityId = id };
 
-        _dbContext.DictionaryCity.Remove(city);
-          _dbContext.SaveChanges();
-
-
-        }
-
-        public void DeleteLanguages(int id)
-        {
-            DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
-
-            _dbContext.DictionaryLanguage.Remove(language);
+            _dbContext.DictionaryCity.Remove(city);
             _dbContext.SaveChanges();
-
         }
 
-
+        public int DeleteCounty(int id)
+        {
+            int sters = 0;
+            try
+            {
+                DictionaryCounty c = new DictionaryCounty() { CountyId = id };
+                _dbContext.DictionaryCounty.Remove(c);
+                _dbContext.SaveChanges();
+                sters = 1;
+                return sters;
+            }
+            catch (Exception ex)
+            {
+                sters = 0;
+                return sters;
+            }
+        }
 
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
         {
@@ -196,8 +202,8 @@ namespace iWasHere.Domain.Service
                 IQueryable<DictionaryLanguageModel> dictionaryLanguage = _dbContext.DictionaryLanguage.Select(a => new DictionaryLanguageModel()
                 {
                     LanguageId = a.LanguageId,
-                    LanguageCode=a.LanguageCode,
-                    LanguageName=a.LanguageName
+                    LanguageCode = a.LanguageCode,
+                    LanguageName = a.LanguageName
                 });
                 return dictionaryLanguage;
             }
@@ -212,8 +218,6 @@ namespace iWasHere.Domain.Service
                 ).Where(c => c.LanguageName.Contains(languageName));
                 return dictionaryLanguage;
             }
-
-
         }
 
         public IQueryable<DictionaryCountryModel> GetDictionaryCountriesFiltered(String countryName)
@@ -225,7 +229,6 @@ namespace iWasHere.Domain.Service
                     LanguageId = a.LanguageId,
                     CountryId = a.CountryId,
                     CountryName = a.CountryName,
-                    //LanguageName = _dbContext.CountryXlanguage.Where(c => c.CountryId == a.CountryId).Where(d => d.LanguageId = c.LanguageId).Select(c => c.LanguageName).FirstOrDefault().ToString()
                 });
                 return dictionaryCountries;
             }
@@ -236,27 +239,20 @@ namespace iWasHere.Domain.Service
                     LanguageId = a.LanguageId,
                     CountryId = a.CountryId,
                     CountryName = a.CountryName,
-                    //LanguageName = _dbContext.DictionaryLanguage.Where(c => c.LanguageId == a.LanguageId).Select(c => c.LanguageName).FirstOrDefault().ToString()
-                }
-                ).Where(c => c.CountryName.Contains(countryName));
+                }).Where(c => c.CountryName.Contains(countryName));
                 return dictionaryCountry;
             }
-
-
         }
 
         public List<DictionaryCountyModel> PopulateCountyCombo()
         {
-
             List<DictionaryCountyModel> dictionaryCurrencyModels = _dbContext.DictionaryCounty.Select(b => new DictionaryCountyModel()
             {
                 CountyId = b.CountyId,
                 CountyName = b.CountyName
 
             }).ToList();
-
             return dictionaryCurrencyModels;
-
         }
 
         public DictionaryCityModel GetDataToEdit(int id)
@@ -268,8 +264,20 @@ namespace iWasHere.Domain.Service
                 County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString()
 
             }).Where(a => a.Id == id).FirstOrDefault();
-
             return city;
+        }
+
+        public DictionaryLandmarkTypeModel GetDataToEditLandmarkType(int id)
+        {
+            DictionaryLandmarkTypeModel landmark = _dbContext.DictionaryLandmarkType.Select(c => new DictionaryLandmarkTypeModel()
+            {
+                LandmarkTypeId = c.LandmarkTypeId,
+                LandmarkTypeCode = c.LandmarkTypeCode,
+                Description = c.Description
+
+            }).Where(a => a.LandmarkTypeId == id).FirstOrDefault();
+
+            return landmark;
 
         }
 
@@ -323,11 +331,60 @@ namespace iWasHere.Domain.Service
                 ).Where(c => c.CurrencyName.Contains(currencyName));
                 return dictionaryCurrency;
             }
+        }
+
+        public void DeleteLanguages(int id)
+        {
+            DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
+
+
+
+            _dbContext.DictionaryLanguage.Remove(language);
+            _dbContext.SaveChanges();
+
 
 
         }
 
+        public void DeleteLandmarkType(int id)
+        {
+            DictionaryLandmarkType landmark = new DictionaryLandmarkType() { LandmarkTypeId = id };
 
 
+
+            _dbContext.DictionaryLandmarkType.Remove(landmark);
+            _dbContext.SaveChanges();
+
+
+
+        }
+
+        public void DeleteLandmarkType(int id)
+        {
+            DictionaryLandmarkType landmark = new DictionaryLandmarkType() { LandmarkTypeId = id };
+            _dbContext.DictionaryLandmarkType.Remove(landmark);
+            _dbContext.SaveChanges();
+        }
+
+        public void DeleteLanguages(int id)
+        {
+            DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
+            _dbContext.DictionaryLanguage.Remove(language);
+            _dbContext.SaveChanges();
+
+        }
+
+
+        public DictionaryCountyModel GetCountyToEdit(int id)
+        {
+            DictionaryCountyModel x = _dbContext.DictionaryCounty.Select(c => new DictionaryCountyModel()
+            {
+                CountyId = c.CountyId,
+                CountyName = c.CountyName,
+                CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+
+            }).Where(a => a.CountyId == id).FirstOrDefault();
+            return x;
+        }
     }
 }
