@@ -27,6 +27,22 @@
         return filter;
     }
 
+     function deleteRow(id) {
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("Delete", "DictionaryLandmarkType")',
+                    data: { id: id },
+                 success: function (response) {
+                     alert("hai ca merge");
+                     alert(id);
+                        $("#landmarkGrid").data("kendoGrid").dataSource.read();
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+    }
+
     function refreshGrid() {
         $("#landmarkGrid").data("kendoGrid").dataSource.read();
         $("#landmarkGrid").data("kendoGrid").dataSource.page(1);
@@ -47,8 +63,10 @@
         .Name("grid")
         .Columns(columns =>
         {
+            columns.Bound(o => o.LandmarkTypeId).Hidden();
             columns.Bound(o => o.LandmarkTypeCode);
-        columns.Bound(o => o.Description);
+            columns.Bound(o => o.Description);
+            columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkTypeId#)\">Delete</button>");
     })
         .HtmlAttributes(new { style = "height: 380px;" })
         .Scrollable()

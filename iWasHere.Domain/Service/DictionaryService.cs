@@ -122,6 +122,7 @@ namespace iWasHere.Domain.Service
             {
                 IQueryable<DictionaryLandmarkTypeModel> dictionaryLandmarkTypes = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
                 {
+                    LandmarkTypeId = a.LandmarkTypeId,
                     LandmarkTypeCode = a.LandmarkTypeCode,
                     Description = a.Description
                 });
@@ -131,6 +132,7 @@ namespace iWasHere.Domain.Service
             {
                 IQueryable<DictionaryLandmarkTypeModel> dictionaryLandmarkTypes = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
                 {
+                    LandmarkTypeId = a.LandmarkTypeId,
                     LandmarkTypeCode = a.LandmarkTypeCode,
                     Description = a.Description
                 }
@@ -178,6 +180,16 @@ namespace iWasHere.Domain.Service
 
         }
 
+        public void DeleteLandmarkType(int id)
+        {
+            DictionaryLandmarkType landmark = new DictionaryLandmarkType() { LandmarkTypeId = id };
+
+            _dbContext.DictionaryLandmarkType.Remove(landmark);
+            _dbContext.SaveChanges();
+
+
+        }
+
         public void DeleteLanguages(int id)
         {
             DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
@@ -189,7 +201,12 @@ namespace iWasHere.Domain.Service
 
 
 
-        public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
+
+    }
+
+
+
+    public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
         {
             if (languageName == null)
             {

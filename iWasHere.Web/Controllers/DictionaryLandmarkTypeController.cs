@@ -113,6 +113,16 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
+        public ActionResult Delete([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != -1)
+            {
+                _dictionaryService.DeleteLandmarkType(id);
+            }
+
+            return Json(ModelState.ToDataSourceResult());
+        }
+
 
 
     }
