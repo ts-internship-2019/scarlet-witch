@@ -85,7 +85,6 @@ namespace iWasHere.Web.Controllers
                 CurrencyName = crName,
                 CurrencyCode = crCode,
                 CurrencyExchange = crExc
-
             });            
             return Json(gf.SaveChanges());
         }

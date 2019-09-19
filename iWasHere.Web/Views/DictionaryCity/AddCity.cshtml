@@ -1,0 +1,165 @@
+﻿
+@{
+
+    ViewData["Title"] = "AddCity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>AddCity</h1>
+<script>
+    let fromUpdate = false;
+    
+    function AddCity() {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+            $.ajax({
+            type: 'POST',
+            url: '@Url.Action("EditCity", "DictionaryCity")',
+            data: {
+                cityName: document.getElementById("cityName").value,
+                countyId: document.getElementById("combo").value,
+                cityId: document.getElementById("cityId").value
+                
+            },
+            success: function (response) {
+                 
+                 window.location.href = '@Url.Action("Index", "DictionaryCity")';
+            },
+            error: function (response) {
+                //alert("hai ca nu merge");
+            }
+        })
+        }
+        else {
+            $.ajax({
+            type: 'PUT',
+            url: '@Url.Action("SaveCity", "DictionaryCity")',
+            data: {
+                cityName: document.getElementById("cityName").value,
+                countyId: document.getElementById("combo").value,
+                
+            },
+                success: function (response) {
+                    if (fromUpdate) {
+                        document.getElementById("cityName").value = "";
+                        $("#combo").val("").data("kendoDropDownList").text("");
+                        fromUpdate = false;
+                    }
+                    else {
+                        window.location.href = '@Url.Action("Index", "DictionaryCity")';
+                    }
+                
+            },
+            error: function (response) {
+                //alert("hai ca nu merge");
+            }
+        })
+        }
+        
+    }
+
+    function onLoadEdit() {
+
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        document.getElementById("cityId").style.visibility = "hidden";
+  
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+            //alert("din edit");
+                  document.getElementById("buttonId").innerText = "Update";
+        }
+        else {
+            //alert("din add");
+        }
+        
+    }
+
+    function cancelAdd() {
+        window.location.href = '@Url.Action("Index", "DictionaryCity")';
+    }
+
+ 
+
+    
+    function AddNew() {
+          fromUpdate = true;
+        AddCity();
+       // window.location.href = 'Url.Action("AddCity", "DictionaryCity")';
+      
+    
+    }
+
+
+</script>
+@model  iWasHere.Domain.DTOs.DictionaryCityModel;
+
+<body onload="onLoadEdit()">
+
+    
+        <ul style="list-style-type:none">
+            <li>
+               
+                    <label>City Name</label>             
+                
+            </li>
+            <li>
+                @(Html.Kendo().TextBoxFor(model => model.Name)
+                                    .HtmlAttributes(new { @id = "cityName", style = "margin:10px" })
+
+                )
+                @(Html.Kendo().TextBoxFor(model => model.Id)
+                    .HtmlAttributes(new { @id = "cityId", style = "margin:10px" })
+                )
+            </li>
+            <li>
+                
+                    <label>County</label>
+                    
+               
+            </li>
+            <li>
+                @(Html.Kendo().DropDownListFor(model => model.County)
+                      .DataTextField("CountyName")
+                      .DataValueField("CountyId")
+                      .DataSource(source =>
+                              {
+                          source.Read(read =>
+                          {
+                              read.Action("PopulateCountyCombo", "DictionaryCity");
+                          });
+                      })
+                      .HtmlAttributes(new { @id = "combo", style = "margin:10px" })
+                )
+            </li>
+    </ul>
+
+
+    
+
+        <div>
+            @(Html.Kendo().Button()
+                      .Name("primaryTextButton")
+                      .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId", style = "margin:10px" })
+                      .Content("Add")
+                      .Events(ev => ev.Click("AddCity"))
+            )
+            @(Html.Kendo().Button()
+              .Name("addNewButton")
+              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .Content("Add New")
+              .Events(ev => ev.Click("AddNew"))
+            )
+            @(Html.Kendo().Button()
+                  .Name("cancelButton")
+                  .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                  .Content("Cancel")
+                  .Events(ev => ev.Click("cancelAdd"))
+            )
+        </div>
+
+
+</body>

@@ -75,8 +75,17 @@
                 })
     }
     function refreshGrid() {
-        $("#cityGrid").data("kendoGrid").dataSource.read();  
-        $("#cityGrid").data("kendoGrid").dataSource.page(1); 
+        $("#cityGrid").data("kendoGrid").dataSource.read();
+        $("#cityGrid").data("kendoGrid").dataSource.page(1);
+    }
+       function redirectToAddContext()
+    {
+            window.location.href = 'DictionaryCity/AddCity/?id=' + 0;
+    }
+
+    function redirectToEditContext(id)
+    {
+        window.location.href = 'DictionaryCity/AddCity/?id=' + id;
     }
 </script>
 @(Html.Kendo().TextBox()
@@ -90,6 +99,12 @@
 .Content("Filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("redirectToAddContext"))
+)
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCityModel>()
         .Name("grid")
         .Columns(columns =>
@@ -97,7 +112,8 @@
             columns.Bound(o => o.Id).Hidden();
             columns.Bound(o => o.Name).Title("Oras");
             columns.Bound(o => o.County).Title("Judet");
-            columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=Id#)\">Delete</button>");
+            columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=Id#)\">Delete</button>");
+            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=Id#)\"> Edit </button>");
         })
         .HtmlAttributes(new { style = "height: 380px;" })
         .Scrollable()
@@ -111,13 +127,13 @@
             .Refresh(true)
             .PageSizes(true)
             .ButtonCount(5))
-        
+
         .DataSource(dataSource => dataSource
             .Ajax()
             .PageSize(5)
             .Read(read => read.Action("GetDictionaryCityPagingFilter", "DictionaryCity").Data("filter"))
             .Destroy(d => d.Action("Delete", "DictionaryCity")))
         //.Events(events => events.Edit(""))
-    
+
 )
 
