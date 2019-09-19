@@ -284,6 +284,20 @@ namespace iWasHere.Domain.Service
 
         }
 
+        public DictionaryLandmarkTypeModel GetDataToEditLandmarkType(int id)
+        {
+            DictionaryLandmarkTypeModel landmark = _dbContext.DictionaryLandmarkType.Select(c => new DictionaryLandmarkTypeModel()
+            {
+                LandmarkTypeId = c.LandmarkTypeId,
+                LandmarkTypeCode = c.LandmarkTypeCode,
+                Description = c.Description
+
+            }).Where(a => a.LandmarkTypeId == id).FirstOrDefault();
+
+            return landmark;
+
+        }
+
         public IQueryable<DictionaryCurrencyModel> GetDictionaryCurrencyFiltered(String currencyName)
         {
             if (currencyName == null)
