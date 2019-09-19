@@ -114,7 +114,7 @@ namespace iWasHere.Domain.Service
             }).ToList();
 
             return dictionaryCurrencyModels;
-            
+
         }
 
         public IQueryable<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypesFiltered(String landmarkTypeName)
@@ -175,15 +175,9 @@ namespace iWasHere.Domain.Service
             _dbContext.SaveChanges();
         }
 
-
-        }
-
         public int DeleteCounty(int id)
         {
             int sters = 0;
-            //    int nrOrase = VerifyCitiesInCounty(id);
-            //    if (nrOrase == 0)
-            //    {
             try
             {
                 DictionaryCounty c = new DictionaryCounty() { CountyId = id };
@@ -197,19 +191,7 @@ namespace iWasHere.Domain.Service
                 sters = 0;
                 return sters;
             }
-            // sters = true;
-            //}
-            //else
-            //{
-            //   // nrOrase = VerifyCitiesInCounty(id);
-            //    sters = false;
-            //}
-            //return sters;
         }
-
-        }
-
-
 
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
         {
@@ -218,8 +200,8 @@ namespace iWasHere.Domain.Service
                 IQueryable<DictionaryLanguageModel> dictionaryLanguage = _dbContext.DictionaryLanguage.Select(a => new DictionaryLanguageModel()
                 {
                     LanguageId = a.LanguageId,
-                    LanguageCode=a.LanguageCode,
-                    LanguageName=a.LanguageName
+                    LanguageCode = a.LanguageCode,
+                    LanguageName = a.LanguageName
                 });
                 return dictionaryLanguage;
             }
@@ -234,8 +216,6 @@ namespace iWasHere.Domain.Service
                 ).Where(c => c.LanguageName.Contains(languageName));
                 return dictionaryLanguage;
             }
-
-
         }
 
         public IQueryable<DictionaryCountryModel> GetDictionaryCountriesFiltered(String countryName)
@@ -247,7 +227,6 @@ namespace iWasHere.Domain.Service
                     LanguageId = a.LanguageId,
                     CountryId = a.CountryId,
                     CountryName = a.CountryName,
-                    //LanguageName = _dbContext.CountryXlanguage.Where(c => c.CountryId == a.CountryId).Where(d => d.LanguageId = c.LanguageId).Select(c => c.LanguageName).FirstOrDefault().ToString()
                 });
                 return dictionaryCountries;
             }
@@ -258,27 +237,20 @@ namespace iWasHere.Domain.Service
                     LanguageId = a.LanguageId,
                     CountryId = a.CountryId,
                     CountryName = a.CountryName,
-                    //LanguageName = _dbContext.DictionaryLanguage.Where(c => c.LanguageId == a.LanguageId).Select(c => c.LanguageName).FirstOrDefault().ToString()
-                }
-                ).Where(c => c.CountryName.Contains(countryName));
+                }).Where(c => c.CountryName.Contains(countryName));
                 return dictionaryCountry;
             }
-
-
         }
 
         public List<DictionaryCountyModel> PopulateCountyCombo()
         {
-
             List<DictionaryCountyModel> dictionaryCurrencyModels = _dbContext.DictionaryCounty.Select(b => new DictionaryCountyModel()
             {
                 CountyId = b.CountyId,
                 CountyName = b.CountyName
 
             }).ToList();
-
             return dictionaryCurrencyModels;
-
         }
 
         public DictionaryCityModel GetDataToEdit(int id)
@@ -290,9 +262,7 @@ namespace iWasHere.Domain.Service
                 County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString()
 
             }).Where(a => a.Id == id).FirstOrDefault();
-
             return city;
-
         }
 
         public IQueryable<DictionaryCurrencyModel> GetDictionaryCurrencyFiltered(String currencyName)
@@ -320,11 +290,6 @@ namespace iWasHere.Domain.Service
                 ).Where(c => c.CurrencyName.Contains(currencyName));
                 return dictionaryCurrency;
             }
-
-
         }
-
-
-
     }
 }
