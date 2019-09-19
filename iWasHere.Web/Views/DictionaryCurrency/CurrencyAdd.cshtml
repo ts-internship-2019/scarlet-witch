@@ -6,17 +6,19 @@
 
 <h1>CurrencyAdd</h1>
 
+
 <script>
+
 
 
     function AddCry()
     {
-        var e = document.getElementById("combo");
-        var result = e.value;
-        alert(result); //ID002
+        //var e = document.getElementById("combo");
+        //var result = e.value;
+        //alert(result); //ID002
 
          $.ajax({
-                        type: 'PUT',                       
+                        type: 'PUT',
                     url: '@Url.Action("SaveCurrency", "DictionaryCurrency")',
              data: {
                  ctId: document.getElementById("combo").value,
@@ -25,14 +27,15 @@
                  crExc: document.getElementById("CurrencyExchange").value
                    },
                         success: function (response) {
-                            alert("merge daca e");
-                    
+                        alert("Added succesfully")
                     },
-                        error: function (response) {                            
+                        error: function (response) {
                         alert("hai ca nu merge");
                     }
          })
-   
+
+         window.location.href = '@Url.Action("Index", "DictionaryCurrency")';
+
     }
 
 
@@ -45,20 +48,20 @@
 
     @(Html.Kendo().TextBox()
          .Name("CurrencyCode")
-         .Value("CurrencyCode")
+         .Value("")         
          .HtmlAttributes(new { style = "width: 25%" })
     )
 
     @(Html.Kendo().TextBox()
        .Name("CurrencyName")
-       .Value("CurrencyName")
+       .Value("")
        .HtmlAttributes(new { style = "width: 25%" })
     )
 
-        @(Html.Kendo().TextBox()
-       .Name("CurrencyExchange")
-       .Value("CurrencyExchange")
-       .HtmlAttributes(new { style = "width: 25%" })
+    @(Html.Kendo().TextBox()
+   .Name("CurrencyExchange")
+   .Value("")
+   .HtmlAttributes(new { style = "width: 25%" })
     )
 
     @(Html.Kendo().DropDownList()
@@ -72,7 +75,7 @@
                   read.Action("GetCountry", "DictionaryCurrency");
               });
           })
-          .HtmlAttributes(new {@id="combo" })
+          .HtmlAttributes(new { @id = "combo" })
     )
 
     @(Html.Kendo().Button()
@@ -80,6 +83,6 @@
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
            .Events(ev => ev.Click("AddCry"))
-)
+    )
 </div>
 

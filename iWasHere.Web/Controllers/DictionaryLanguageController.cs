@@ -114,5 +114,15 @@ namespace iWasHere.Web.Controllers
             return Json(gf.SaveChanges());
         }
 
+        public ActionResult DeleteLanguage([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != -1)
+            {
+                _dictionaryService.DeleteLanguages(id);
+            }
+
+            return Json(ModelState.ToDataSourceResult());
+        }
+
     }
 }

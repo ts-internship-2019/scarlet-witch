@@ -23,6 +23,7 @@
 
     function refreshGrid() {
         $("#countryGrid").data("kendoGrid").dataSource.read();
+        $("#countryGrid").data("kendoGrid").dataSource.page(1);
     }
 
      function foo()
@@ -54,7 +55,8 @@
         .Columns(columns =>
         {
             columns.Bound(o => o.CountryName);
-            columns.Bound(o => o.LanguageId);
+            //columns.Bound(o => o.LanguageId);
+            //columns.Bound(o => o.LanguageName);
         })
         .Pageable(pageable => pageable
             .Refresh(true)

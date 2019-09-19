@@ -9,5 +9,6 @@ namespace iWasHere.Domain.DTOs
         public int CountryId { get; set; }
         public int LanguageId { get; set; }
         public string CountryName { get; set; }
+        public string LanguageName { get; set; }
     }
 }
