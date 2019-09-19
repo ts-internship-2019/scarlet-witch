@@ -10,7 +10,7 @@
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
-           .Events(ev => ev.Click("openAddCountyPage"))
+           .Events(ev => ev.Click("redirectToAddContext"))
 )
 
 @(Html.Kendo().TextBox()
@@ -49,10 +49,11 @@
     .Sortable()
     .Columns(columns =>
     {
-        columns.Bound(o => o.CountyId);
+        columns.Bound(o => o.CountyId).Hidden();
         columns.Bound(o => o.CountyName);
         columns.Bound(o => o.CountryName);
-        columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=CountyId#)\">Delete</button>");
+        columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=CountyId#)\">Delete</button>");
+        columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=CountyId#)\"> Edit </button>");
     })
     .NoRecords(true)
     .Filterable()
@@ -106,5 +107,13 @@
                 alert("hai ca nu merge");
             }
         })
+    }
+
+    function redirectToAddContext() {
+        window.location.href = 'DictionaryCounty/AddCounty/?id=' + 0;
+    }
+
+    function redirectToEditContext(id) {
+        window.location.href = 'DictionaryCounty/AddCounty/?id=' + id;
     }
 </script>

@@ -195,8 +195,6 @@ namespace iWasHere.Domain.Service
             }
         }
 
-
-
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
         {
             if (languageName == null)
@@ -254,9 +252,7 @@ namespace iWasHere.Domain.Service
                 CountyName = b.CountyName
 
             }).ToList();
-
             return dictionaryCurrencyModels;
-
         }
 
         public DictionaryCityModel GetDataToEdit(int id)
@@ -268,9 +264,7 @@ namespace iWasHere.Domain.Service
                 County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString()
 
             }).Where(a => a.Id == id).FirstOrDefault();
-
             return city;
-
         }
 
         public IQueryable<DictionaryCurrencyModel> GetDictionaryCurrencyFiltered(String currencyName)
@@ -299,7 +293,33 @@ namespace iWasHere.Domain.Service
                 return dictionaryCurrency;
             }
         }
+
+        public void DeleteLandmarkType(int id)
+        {
+            DictionaryLandmarkType landmark = new DictionaryLandmarkType() { LandmarkTypeId = id };
+            _dbContext.DictionaryLandmarkType.Remove(landmark);
+            _dbContext.SaveChanges();
+        }
+
+        public void DeleteLanguages(int id)
+        {
+            DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
+            _dbContext.DictionaryLanguage.Remove(language);
+            _dbContext.SaveChanges();
+
+        }
+
+
+        public DictionaryCountyModel GetCountyToEdit(int id)
+        {
+            DictionaryCountyModel x = _dbContext.DictionaryCounty.Select(c => new DictionaryCountyModel()
+            {
+                CountyId = c.CountyId,
+                CountyName = c.CountyName,
+                CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+
+            }).Where(a => a.CountyId == id).FirstOrDefault();
+            return x;
+        }
     }
-
 }
-

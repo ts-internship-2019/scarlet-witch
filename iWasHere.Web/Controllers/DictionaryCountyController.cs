@@ -82,27 +82,46 @@ namespace iWasHere.Web.Controllers
             }
             return Json(cnts);
         }
-
-        public IActionResult AddCounty()
-        {
-            return View();
-        }
-
-        public ActionResult SaveCounty(int ctId, string cyName)
-        {
-            ScarletWitchContext context = new ScarletWitchContext();
-            context.DictionaryCounty.Add(new DictionaryCounty
-            {
-                CountryId = ctId,
-                CountyName = cyName,
-            });
-            return Json(context.SaveChanges());
-        }
-
         public int Delete([DataSourceRequest] DataSourceRequest request, int id)
         {
             int sters = _dictionaryCountyService.DeleteCounty(id);
             return sters;
+        }
+
+        public IActionResult AddCounty(int id)
+        {
+            if (id != 0)
+            {
+                DictionaryCountyModel c = _dictionaryCountyService.GetCountyToEdit(id);
+                return View(c);
+            }
+            else
+            {
+                DictionaryCountyModel c = new DictionaryCountyModel();
+                return View(c);
+            }
+        }
+
+        public ActionResult SaveCounty(string countyName, int countryId)
+        {
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.DictionaryCounty.Add(new DictionaryCounty
+            {
+                CountyName = countyName,
+                CountryId = countryId
+            });
+            return Json(context.SaveChanges());
+        }
+
+        public ActionResult EditCounty(string countyName, int countyId, int countryId)
+        {
+            DictionaryCounty newCounty = new DictionaryCounty();
+            newCounty.CountyName = countyName;
+            newCounty.CountyId = countyId;
+            newCounty.CountryId = countryId;
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.DictionaryCounty.Update(newCounty);
+            return Json(context.SaveChanges());
         }
     }
 }
