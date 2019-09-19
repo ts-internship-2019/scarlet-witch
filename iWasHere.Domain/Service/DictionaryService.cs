@@ -273,6 +273,31 @@ namespace iWasHere.Domain.Service
 
         }
 
+
+        public DictionaryLanguageModel GetDataToEditLanguage(int id)
+        {
+            DictionaryLanguageModel city = _dbContext.DictionaryLanguage.Select(c => new DictionaryLanguageModel()
+            {
+                LanguageId = c.LanguageId,
+                LanguageName = c.LanguageName,
+                LanguageCode=c.LanguageCode
+            }).Where(a => a.LanguageId == id).FirstOrDefault();
+
+            return city;
+
+        }
+
+        public CountryXlanguage GetDataToDeleteLang(int id)
+        {
+            CountryXlanguage cxl = _dbContext.CountryXlanguage.Select(c => new CountryXlanguage()
+            {
+                CountryId = c.CountryId,
+                LanguageId = c.LanguageId
+            }).Where(a => a.LanguageId == id).FirstOrDefault();
+
+            return cxl;
+        }
+
         public IQueryable<DictionaryCurrencyModel> GetDictionaryCurrencyFiltered(String currencyName)
         {
             if (currencyName == null)
