@@ -98,6 +98,21 @@ namespace iWasHere.Web.Controllers
             });
             return Json(context.SaveChanges());
         }
+
+        public int Verify([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            int nrOrase= _dictionaryCountyService.VerifyCitiesInCounty(id);
+            return nrOrase;
+        }
+        public int Delete([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            int sters = _dictionaryCountyService.DeleteCounty(id);
+            //if (id != -1)
+            //{
+            //    sters = _dictionaryCountyService.DeleteCounty(id);
+            //}
+            return sters;
+        }
     }
 }
 

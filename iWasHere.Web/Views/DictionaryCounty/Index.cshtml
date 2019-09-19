@@ -49,11 +49,10 @@
     .Sortable()
     .Columns(columns =>
     {
-    columns.Bound(o => o.CountyId).Hidden();
-    columns.Bound(o => o.CountyName);
-    columns.Bound(o => o.CountryName);
-    columns.Command(command => command.Destroy()).Width(120);
-    columns.Command(command => command.Edit()).Width(120);
+        columns.Bound(o => o.CountyId);
+        columns.Bound(o => o.CountyName);
+        columns.Bound(o => o.CountryName);
+        columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=CountyId#)\">Delete</button>");
     })
     .NoRecords(true)
     .Filterable()
@@ -66,7 +65,7 @@
     .Ajax()
     .PageSize(10)
     .Read(read => read.Action("GetDictionaryCountiesByName", "DictionaryCounty").Data("filter"))
-    .Destroy(d => d.Action("DeleteDictionaryCounty", "DictionaryCounty"))
+    .Destroy(d => d.Action("Delete", "DictionaryCounty"))
     )
     .Events(events => events.Edit("openAddCountyPage"))
 )
@@ -74,8 +73,6 @@
 <script type="text/javascript">
     function openAddCountyPage(e) {
         window.location.href = '@Url.Action("AddCounty", "DictionaryCounty")';
-
-        var row = $('#countyGrid').data("kendoGrid").cancelRow();//asa cica luam row ul pe care am dat edit
     }
 
     function filter(e) {
@@ -85,8 +82,29 @@
         return filter;
     }
 
-     function refreshGrid() {
-         $("#countyGrid").data("kendoGrid").dataSource.read();
-         $("#countyGrid").data("kendoGrid").dataSource.page(1);
+    function refreshGrid() {
+        $("#countyGrid").data("kendoGrid").dataSource.read();
+        $("#countyGrid").data("kendoGrid").dataSource.page(1);
+    }
+
+    function deleteRow(id) {
+        $.ajax({
+            type: 'DELETE',
+            url: '@Url.Action("Delete", "DictionaryCounty")',
+            data: { id: id },
+            success: function (response) {
+                alert("hai ca merge");
+                alert(response);
+                if (response == 0) {
+                    alert("Judetul nu se poate sterge pt ca contine orase");
+                } else {
+                    alert("Judet sters");
+                    $("#countyGrid").data("kendoGrid").dataSource.read();
+                }
+            },
+            error: function (response) {
+                alert("hai ca nu merge");
+            }
+        })
     }
 </script>
