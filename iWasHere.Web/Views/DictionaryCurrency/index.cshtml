@@ -14,11 +14,28 @@
         filter["currencyName"] = currencyName;
         return filter;
     }
+     function deleteRow(id) {
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeleteCurrency", "DictionaryCurrency")',
+                    data: { id: id },
+                 success: function (response) {
+                     alert("hai ca merge");
+                     alert(id);
+                        $("#currencyGrid").data("kendoGrid").dataSource.read();
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+    }
 
     function refreshGrid() {
         $("#currencyGrid").data("kendoGrid").dataSource.read();
         $("#currencyGrid").data("kendoGrid").dataSource.page(1);
     }
+
+
 </script>
 @(Html.Kendo().Button()
                .Name("primaryTextButton")
@@ -55,10 +72,13 @@
         .HtmlAttributes(new { @id = "currencyGrid" })
         .Columns(columns =>
         {
-
-            columns.Bound(o => o.CurrencyCode);
-            columns.Bound(o => o.CurrencyName);
-            columns.Bound(o => o.CurrencyExchange);
+            columns.Bound(o => o.CurrencyId).Hidden();
+            columns.Bound(o => o.CountryId).Hidden();
+            columns.Bound(o => o.CountryName).Title("Nume Tara");
+            columns.Bound(o => o.CurrencyCode).Title("Cod Moneda");
+            columns.Bound(o => o.CurrencyName).Title("Nume Moneda");
+            columns.Bound(o => o.CurrencyExchange).Title("Rata de Schimb");
+            columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=CurrencyId#)\">Delete</button>");
         })
         .Pageable(pageable => pageable
             .Refresh(true)
@@ -68,7 +88,7 @@
             .Ajax()
             .PageSize(10)
             .Read(read => read.Action("GetDictionaryCurrencyFiltered", "DictionaryCurrency").Data("filter"))
-
+            .Destroy(d => d.Action("DeleteCurrency", "DictionaryCurrency")))
         )
 )
 

@@ -173,7 +173,7 @@ namespace iWasHere.Domain.Service
             DictionaryCity city = new DictionaryCity() { CityId = id };
 
         _dbContext.DictionaryCity.Remove(city);
-          _dbContext.SaveChanges();
+        _dbContext.SaveChanges();
 
 
         }
@@ -183,6 +183,15 @@ namespace iWasHere.Domain.Service
             DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
 
             _dbContext.DictionaryLanguage.Remove(language);
+            _dbContext.SaveChanges();
+
+        }
+
+        public void DeleteCurrency(int id)
+        {
+            DictionaryCurrency currency = new DictionaryCurrency() { CurrencyId = id };
+
+            _dbContext.DictionaryCurrency.Remove(currency);
             _dbContext.SaveChanges();
 
         }
@@ -254,7 +263,9 @@ namespace iWasHere.Domain.Service
                     CurrencyId = c.CurrencyId,
                     CurrencyCode = c.CurrencyCode,
                     CurrencyName = c.CurrencyName,
-                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
+                    CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+
                 });
                 return dictionaryCurrency;
             }
@@ -265,7 +276,9 @@ namespace iWasHere.Domain.Service
                     CurrencyId = c.CurrencyId,
                     CurrencyCode = c.CurrencyCode,
                     CurrencyName = c.CurrencyName,
-                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
+                    CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+
                 }
                 ).Where(c => c.CurrencyName.Contains(currencyName));
                 return dictionaryCurrency;

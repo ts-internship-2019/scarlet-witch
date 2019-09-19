@@ -118,5 +118,15 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
+        public ActionResult DeleteCurrency([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != 0)
+            {
+                _dictionaryService.DeleteCurrency(id);
+            }
+
+            return Json(ModelState.ToDataSourceResult());
+        }
+
     }
 }
