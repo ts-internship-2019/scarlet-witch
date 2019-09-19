@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "EditCity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>EditCity</h1>
+
+@(Html.Kendo().TextBox()
+     .Name("CityName")
+     .HtmlAttributes(new { @id = "cityName" })
+)
+
+@(Html.Kendo().DropDownList()
+      .Name("CountyId")
+      .DataTextField("CountyName")
+      .DataValueField("CountyId")
+      .DataSource(source =>
+              {
+          source.Read(read =>
+          {
+              read.Action("PopulateCountyCombo", "DictionaryCity");
+          });
+      })
+      .HtmlAttributes(new { @id = "combo" })
+      
+)
+
+@(Html.Kendo().Button()
+       .Name("primaryTextButton")
+       .HtmlAttributes(new { type = "button", @class = "k-primary" })
+       .Content("Add")
+       .Events(ev => ev.Click("AddCity"))
+)
+

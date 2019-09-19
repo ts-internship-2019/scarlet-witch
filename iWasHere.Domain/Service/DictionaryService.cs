@@ -219,6 +219,34 @@ namespace iWasHere.Domain.Service
 
         }
 
+        public List<DictionaryCountyModel> PopulateCountyCombo()
+        {
+
+            List<DictionaryCountyModel> dictionaryCurrencyModels = _dbContext.DictionaryCounty.Select(b => new DictionaryCountyModel()
+            {
+                CountyId = b.CountyId,
+                CountyName = b.CountyName
+
+            }).ToList();
+
+            return dictionaryCurrencyModels;
+
+        }
+
+        public DictionaryCityModel GetDataToEdit(int id)
+        {
+            DictionaryCityModel city = _dbContext.DictionaryCity.Select(c => new DictionaryCityModel()
+            {
+                Id = c.CityId,
+                Name = c.CityName,
+                County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString()
+
+            }).Where(a => a.Id == id).FirstOrDefault();
+
+            return city;
+
+        }
+
 
 
     }

@@ -93,6 +93,51 @@ namespace iWasHere.Web.Controllers
             return Json(ModelState.ToDataSourceResult());
         }
 
+        public ActionResult PopulateCountyCombo([DataSourceRequest] DataSourceRequest request)
+        {
+            var counties = _dictionaryCityService.PopulateCountyCombo();
+            return Json(counties);
+        }
+
+        public IActionResult AddCity(int id)
+        {
+            if (id != 0)
+            {
+                DictionaryCityModel city = _dictionaryCityService.GetDataToEdit(id);
+                return View(city);
+            }
+               
+            else
+            {
+                DictionaryCityModel city = new DictionaryCityModel();
+                return View(city);
+            }
+               
+        }
+
+ 
+
+        public ActionResult SaveCity(string cityName, int countyId)
+        {
+            ScarletWitchContext context= new ScarletWitchContext();
+            context.DictionaryCity.Add(new DictionaryCity
+            {
+                CityName = cityName,
+                CountyId = countyId
+            });
+            return Json(context.SaveChanges());
+        }
+
+        public ActionResult EditCity(string cityName, int countyId, int cityId)
+        {
+            DictionaryCity newCity = new DictionaryCity();
+            newCity.CityName = cityName;
+            newCity.CountyId = countyId;
+            newCity.CityId = cityId;
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.DictionaryCity.Update(newCity);
+            return Json(context.SaveChanges());
+        }
 
     }
 } 
