@@ -98,6 +98,12 @@ namespace iWasHere.Web.Controllers
             });
             return Json(context.SaveChanges());
         }
+
+        public int Delete([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            int sters = _dictionaryCountyService.DeleteCounty(id);
+            return sters;
+        }
     }
 }
 
