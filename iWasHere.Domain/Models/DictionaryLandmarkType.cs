@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace iWasHere.Domain.Models
 {
@@ -11,6 +12,7 @@ namespace iWasHere.Domain.Models
         }
 
         public int LandmarkTypeId { get; set; }
+        [Required(ErrorMessage = "Code is required")]
         public string LandmarkTypeCode { get; set; }
         public string Description { get; set; }
 

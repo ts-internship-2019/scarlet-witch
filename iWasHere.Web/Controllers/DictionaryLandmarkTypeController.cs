@@ -70,59 +70,77 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
 
-        public ActionResult GetDictionaryLandmarkTypesFiltered([DataSourceRequest] DataSourceRequest request, String landmarkTypeName)
+        public ActionResult GetDictionaryLandmarkTypesFiltered([DataSourceRequest] DataSourceRequest request, String landmarkTypeName, out int errorResult)
         {
             IQueryable<DictionaryLandmarkTypeModel> landmarks = _dictionaryService.GetDictionaryLandmarkTypesFiltered(landmarkTypeName);
-            landmarks.ToDataSourceResult(request);
-            landmarks = landmarks.OrderBy(o => o.LandmarkTypeId);
-            var total = landmarks.Count();
-            if (request.Page > 0)
+
+            try
             {
-                landmarks = landmarks.Skip((request.Page - 1) * request.PageSize);
+                landmarks.ToDataSourceResult(request);
+                landmarks = landmarks.OrderBy(o => o.LandmarkTypeId);
+                var total = landmarks.Count();
+                if (request.Page > 0)
+                {
+                    landmarks = landmarks.Skip((request.Page - 1) * request.PageSize);
+                }
+                landmarks = landmarks.Take(request.PageSize);
+
+
+
+                var result = new DataSourceResult()
+                {
+                    Data = landmarks,
+                    Total = total
+                };
+                errorResult = 0;
+                return Json(result);
+                
             }
-            landmarks = landmarks.Take(request.PageSize);
-
-
-
-            var result = new DataSourceResult()
+            catch
             {
-                Data = landmarks,
-                Total = total
-            };
-
-            return Json(result);
+                errorResult = 1;
+                return Json(0);
+                
+            }
+           
 
         }
 
 
-        public ActionResult SaveLandmarkType(string landmarkCode, string description)
+        public IActionResult SaveLandmarkType(string landmarkCode, string description)
         {
-            ScarletWitchContext gf = new ScarletWitchContext();
-            gf.DictionaryLandmarkType.Add(new DictionaryLandmarkType
-            {
-                LandmarkTypeCode = landmarkCode,
-                Description = description
-               
+           
+                ScarletWitchContext gf = new ScarletWitchContext();
+                gf.DictionaryLandmarkType.Add(new DictionaryLandmarkType
+                {
+                    LandmarkTypeCode = landmarkCode,
+                    Description = description
 
-            });
-            return Json(gf.SaveChanges());
+
+                });
+
+               return Json(gf.SaveChanges());
+                                     
         }
 
-        public ActionResult EditLandmarkType(int landmarkTypeId, string landmarkCode, string description)
+        public IActionResult EditLandmarkType(int landmarkTypeId, string landmarkCode, string description)
         {
-            DictionaryLandmarkType newLandmarkType = new DictionaryLandmarkType();
-            newLandmarkType.LandmarkTypeId = landmarkTypeId;
-            newLandmarkType.LandmarkTypeCode = landmarkCode;
-            newLandmarkType.Description = description;
-            ScarletWitchContext context = new ScarletWitchContext();
-            context.DictionaryLandmarkType.Update(newLandmarkType);
-            return Json(context.SaveChanges());
+            
+                DictionaryLandmarkType newLandmarkType = new DictionaryLandmarkType();
+                newLandmarkType.LandmarkTypeId = landmarkTypeId;
+                newLandmarkType.LandmarkTypeCode = landmarkCode;
+                newLandmarkType.Description = description;
+                ScarletWitchContext context = new ScarletWitchContext();
+                context.DictionaryLandmarkType.Update(newLandmarkType);
+                return Json(context.SaveChanges());
+            
         }
 
 
         public IActionResult LandmarkTypeAdd(int id)
         {
-            if (id != 0)
+            
+                if (id != 0)
             {
                 DictionaryLandmarkTypeModel landmarkTypeModel = _dictionaryService.GetDataToEditLandmarkType(id);
                 return View(landmarkTypeModel);
