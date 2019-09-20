@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewData["Title"] = "LandmarkList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>LandmarkList</h1>
+<div>
+    @(Html.Kendo().Button()
+      .Name("primaryTextButton")
+      .HtmlAttributes(new { type = "button", @class = "k-primary" })
+      .Content("Add")
+      .Events(ev => ev.Click("add"))
+)
+</div>
+
+<script type="text/javascript">
+    function add() {
+
+        window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
+
+    }
+
+    function redirectImagesContext() {
+
+        window.location.href = '@Url.Action("Images", "Landmarks")';
+
+    }
+</script>
+
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("add"))
+)
+@(Html.Kendo().Button()
+           .Name("imagesButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Iamges")
+           .Events(ev => ev.Click("redirectImagesContext"))
+)
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
+        ()
+        .Name("grid")
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.LandmarkId);
+            columns.Bound(o => o.LandmarkDescription).Title("Name");
+            //columns.Template("<button id=\"deleteButton\" class=\"k-button\">Delete</button>");
+            //columns.Template("<button id=\"editButton\" class=\"k-button\"> Edit </button>");
+        })
+        .NoRecords(true)
+        .Filterable()
+        .HtmlAttributes(new { @id = "landmarkGrid" })
+        .Pageable(pageable => pageable
+        .Refresh(true)
+        .PageSizes(true)
+        .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Read(read => read.Action("GetLandmarksFiltered", "Landmarks"))
+        )
+    )

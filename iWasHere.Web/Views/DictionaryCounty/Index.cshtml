@@ -30,7 +30,7 @@
                      read.Action("GetAllCountries", "DictionaryCounty");
                  });
              })
-             .HtmlAttributes(new { style = "width: 25%" })
+             .HtmlAttributes(new { style = "width: 25%", @id ="combo" })
 )
 
 @(Html.Kendo().Button()
@@ -78,8 +78,10 @@
 
     function filter(e) {
         var countyName = document.getElementById("countyTextBox").value;
+        var countryId = document.getElementById("combo").value;
         var filter = {};
         filter["countyName"] = countyName;
+        filter["countryId"] = countryId;
         return filter;
     }
 

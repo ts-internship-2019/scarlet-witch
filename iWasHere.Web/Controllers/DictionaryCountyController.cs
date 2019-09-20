@@ -44,9 +44,9 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
 
-        public ActionResult GetDictionaryCountiesByName([DataSourceRequest] DataSourceRequest request, string countyName)
+        public ActionResult GetDictionaryCountiesByName([DataSourceRequest] DataSourceRequest request, string countyName, int countryId)
         {
-            IQueryable<DictionaryCountyModel> counties = _dictionaryCountyService.GetDictionaryCountiesByName(countyName);
+            IQueryable<DictionaryCountyModel> counties = _dictionaryCountyService.GetDictionaryCountiesByName(countyName, countryId);
             counties = counties.OrderBy(o => o.CountyId);
             var total = counties.Count();
             if (request.Page > 0)
