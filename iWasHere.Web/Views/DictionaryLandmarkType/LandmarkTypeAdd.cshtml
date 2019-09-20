@@ -1,7 +1,10 @@
 ﻿@model iWasHere.Domain.DTOs.DictionaryLandmarkTypeModel;
 @{
     ViewData["Title"] = "LandmarkTypeAdd";
+   
+
 }
+
 
 <h1>Add a Landmark type</h1>
 
@@ -33,31 +36,38 @@
         })
         }
         else {
-            $.ajax({
-            type: 'PUT',
-            url: '@Url.Action("SaveLandmarkType", "DictionaryLandmarkType")',
-            data: {
-                landmarkTypeId: document.getElementById("landmarkTypeId").value,
-                landmarkCode: document.getElementById("LandmarkTypeCode").value,
-                description: document.getElementById("Description").value
+            if (document.getElementById("LandmarkTypeCode").value != "") {
+                $.ajax({
+                    type: 'PUT',
+                    url: '@Url.Action("SaveLandmarkType", "DictionaryLandmarkType")',
+                    data: {
+                        landmarkTypeId: document.getElementById("landmarkTypeId").value,
+                        landmarkCode: document.getElementById("LandmarkTypeCode").value,
+                        description: document.getElementById("Description").value
 
-            },
-                success: function (response) {
-                    if (fromUpdate) {
-                        document.getElementById("LandmarkTypeCode").value = "";
-                         document.getElementById("Description").value = "";
-                      
-                        fromUpdate = false;
-                    }
-                    else {
-                        window.location.href = '@Url.Action("Index", "DictionaryLandmarkType")';
-                    }
+                    },
+                    success: function (response) {
+                        if (fromUpdate) {
+                            document.getElementById("LandmarkTypeCode").value = "";
+                            document.getElementById("Description").value = "";
 
-            },
-            error: function (response) {
-                //alert("hai ca nu merge");
+                            fromUpdate = false;
+                        }
+                        else {
+                            window.location.href = '@Url.Action("Index", "DictionaryLandmarkType")';
+
+                        }
+
+                    },
+                    error: function (response) {
+                        //alert(String(response));
+
+                    }
+                })
+            } else {
+                alert("Landmark code cannot be empty");
             }
-        })
+           
         }
 
     }
@@ -67,7 +77,7 @@
         var url_string = window.location.href;
         var url = new URL(url_string);
         document.getElementById("landmarkTypeId").style.visibility = "hidden";
-  
+
         var id = url.searchParams.get("id");
         if (id != 0) {
             //alert("din edit");
@@ -75,9 +85,9 @@
             document.getElementById("buttonNewId").style.visibility = "hidden";
         }
         else {
-            //alert("din add");
+            //alert("Landmark Type code cannot be empty");
         }
-        
+
     }
 
     function cancelAdd() {
@@ -88,7 +98,7 @@
     function AddNew() {
         fromUpdate = true;
         AddLandmarkTpy();
-       
+
     }
 
 
@@ -134,27 +144,28 @@
 
         </ul>
 
-            <div>
-                @(Html.Kendo().Button()
-                              .Name("primaryTextButton")
-                              .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
-                              .Content("Add")
-                              .Events(ev => ev.Click("AddLandmarkTpy"))
-                )
-                @(Html.Kendo().Button()
-                      .Name("addNewButton")
-                      .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonNewId" })
-                      .Content("Add New")
-                      .Events(ev => ev.Click("AddNew"))
-                )
-                @(Html.Kendo().Button()
-                      .Name("cancelButton")
-                      .HtmlAttributes(new { type = "button", @class = "k-primary" })
-                      .Content("Cancel")
-                      .Events(ev => ev.Click("cancelAdd"))
-                )
-            </div>
+        <div>
+            @(Html.Kendo().Button()
+                          .Name("primaryTextButton")
+                          .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
+                          .Content("Add")
+                          .Events(ev => ev.Click("AddLandmarkTpy"))
+            )
+            @(Html.Kendo().Button()
+                  .Name("addNewButton")
+                  .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonNewId" })
+                  .Content("Add New")
+                  .Events(ev => ev.Click("AddNew"))
+            )
+            @(Html.Kendo().Button()
+                  .Name("cancelButton")
+                  .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                  .Content("Cancel")
+                  .Events(ev => ev.Click("cancelAdd"))
+            )
+        </div>
 
 
     </div>
-    </body>
+</body>
+

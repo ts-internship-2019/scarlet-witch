@@ -7,6 +7,15 @@ namespace iWasHere.Domain.DTOs
 {
     public class LandmarkModel
     {
+        public DictionaryCity City { get; set; }
+
+        public DictionaryTicketType TicketType { get; set; }
+
+        public DictionaryInterval VisitInterval { get; set; }
+        public DictionaryLandmarkType LandmarkType { get; set; }
+
+        public Images Image { get; set; } 
+
         public int LandmarkId { get; set; }
         public int? LandmarkTypeId { get; set; }
         public bool? HasEntryTicket { get; set; }
@@ -18,6 +27,5 @@ namespace iWasHere.Domain.DTOs
         public int? CityId { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
-        public DictionaryCity cityModel { get; set; }
     }
 }

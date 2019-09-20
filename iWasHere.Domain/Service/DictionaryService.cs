@@ -340,7 +340,6 @@ namespace iWasHere.Domain.Service
 
         }
 
-
         public DictionaryLanguageModel GetDataToEditLanguage(int id)
         {
             DictionaryLanguageModel city = _dbContext.DictionaryLanguage.Select(c => new DictionaryLanguageModel()
@@ -349,9 +348,7 @@ namespace iWasHere.Domain.Service
                 LanguageName = c.LanguageName,
                 LanguageCode=c.LanguageCode
             }).Where(a => a.LanguageId == id).FirstOrDefault();
-
             return city;
-
         }
 
         public CountryXlanguage GetDataToDeleteLang(int id)
@@ -396,16 +393,25 @@ namespace iWasHere.Domain.Service
             }
         }
 
+        public bool VerifyLanguages(string languageName, string languageCode)
+        {
+            int stateName=0, stateCode = 0;
+            if (_dbContext.DictionaryLanguage.Any(c => c.LanguageName == languageName)) stateName = 1;
+            if (_dbContext.DictionaryLanguage.Any(c => c.LanguageCode == languageCode)) stateCode = 1;
+
+            if(stateCode==1 || stateName==1)
+                return false;
+            else
+                return true;
+        }
+
+
+
         public void DeleteLanguages(int id)
         {
             DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
-
-
-
             _dbContext.DictionaryLanguage.Remove(language);
             _dbContext.SaveChanges();
-
-
 
         }
 
@@ -420,14 +426,8 @@ namespace iWasHere.Domain.Service
         public void DeleteLandmarkType(int id)
         {
             DictionaryLandmarkType landmark = new DictionaryLandmarkType() { LandmarkTypeId = id };
-
-
-
             _dbContext.DictionaryLandmarkType.Remove(landmark);
             _dbContext.SaveChanges();
-
-
-
         }
 
         public DictionaryCurrencyModel GetCurrencyToEdit(int id)
@@ -439,11 +439,8 @@ namespace iWasHere.Domain.Service
                 CurrencyName = c.CurrencyName,
                 CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
                // CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
-
             }).Where(a => a.CurrencyId == id).FirstOrDefault();
-
             return currency;
-
         }
 
         public List<DictionaryCountryModel> PopulateCountryCombo()
@@ -459,7 +456,6 @@ namespace iWasHere.Domain.Service
             return dictionaryCurrencyModels;
 
         }
-
 
 
         public DictionaryCountyModel GetCountyToEdit(int id)
