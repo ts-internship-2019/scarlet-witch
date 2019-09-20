@@ -20,9 +20,7 @@
             url: '@Url.Action("EditCurrency", "DictionaryCurrency")',
                 data: {
 
-
-                currencyName: document.getElementById("currencyName").value,
-                countryId: document.getElementById("combo").value,
+                currencyName: document.getElementById("currencyName").value,                
                 currencyCode: document.getElementById("currencyCode").value,
                 currencyExchange: document.getElementById("currencyExchange").value,
                 currencyId: document.getElementById("currencyId").value
@@ -33,7 +31,7 @@
                  window.location.href = '@Url.Action("Index", "DictionaryCurrency")';
             },
             error: function (response) {
-                alert("hai ca nu merge");
+                alert("Moneda exista deja");
             }
         })
         }
@@ -42,8 +40,7 @@
             type: 'PUT',
             url: '@Url.Action("SaveCurrency", "DictionaryCurrency")',
             data: {
-                currencyName: document.getElementById("currencyName").value,
-                countryId: document.getElementById("combo").value,
+                currencyName: document.getElementById("currencyName").value,                
                 currencyCode: document.getElementById("currencyCode").value,
                 currencyExchange: document.getElementById("currencyExchange").value
 
@@ -52,8 +49,7 @@
                     if (fromUpdate) {
                         document.getElementById("currencyName").value = "";
                         document.getElementById("currencyCode").value = "";
-                        document.getElementById("currencyExchange").value = "";
-                        $("#combo").val("").data("kendoDropDownList").text("");
+                        document.getElementById("currencyExchange").value = "";                        
                         fromUpdate = false;
                     }
                     else {
@@ -62,7 +58,7 @@
 
             },
             error: function (response) {
-                alert("hai ca nu merge");
+                alert("Moneda exista deja");
             }
         })
         }
@@ -105,9 +101,7 @@
 
     <ul style="list-style-type:none">
         <li>
-
-            <label>City Name</label>
-
+            <label>Currency Name</label>
         </li>
         <li>
             @(Html.Kendo().TextBoxFor(model => model.CurrencyName)
@@ -126,26 +120,7 @@
                 .HtmlAttributes(new { @id = "currencyId", style = "margin:10px" })
             )
         </li>
-        <li>
-
-            <label>Country</label>
-
-
-        </li>
-        <li>
-            @(Html.Kendo().DropDownListFor(model => model.CountryId)
-                  .DataTextField("CountryName")
-                  .DataValueField("CountryId")
-                  .DataSource(source =>
-                          {
-                      source.Read(read =>
-                      {
-                          read.Action("PopulateCountryCombo", "DictionaryCurrency");
-                      });
-                  })
-                  .HtmlAttributes(new { @id = "combo", style = "margin:10px" })
-            )
-        </li>
+        
     </ul>
 
 
