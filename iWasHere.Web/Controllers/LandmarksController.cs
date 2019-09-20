@@ -30,6 +30,28 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
+        public IActionResult Images()
+        {
+            return View();
+        }
+
+        public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
+        {
+            IQueryable<LandmarkModel> landmarks = _dictionaryService.GetLandmarksFiltered();
+            landmarks.ToDataSourceResult(request);
+            landmarks = landmarks.OrderBy(o => o.LandmarkId);
+            var total = landmarks.Count();
+            if (request.Page > 0)
+            {
+                landmarks = landmarks.Skip((request.Page - 1) * request.PageSize);
+            }
+            landmarks = landmarks.Take(request.PageSize);
+
+            var result = new DataSourceResult()
+            {
+                Data = landmarks,
+                Total = total
+            };
         public ActionResult SaveLandmark(string landmarkName, int landmarkTypeId, bool hasEntryTicket, int visitIntervalId,
             int ticketId, string streetName, int streetNumber, int cityId, float latitude, float longitude, int landmarkId)
         {
@@ -51,6 +73,7 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
+            return Json(result);
         public ActionResult GetAllLandmarkTypes([DataSourceRequest] DataSourceRequest request)
         {
             var context = new ScarletWitchContext();

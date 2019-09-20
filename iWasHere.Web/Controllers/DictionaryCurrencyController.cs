@@ -51,38 +51,28 @@ namespace iWasHere.Web.Controllers
 
             return Json(result);
         }
-
-        public ActionResult GetCountry(string text)
-        {
-            var jk = new ScarletWitchContext();
-
-
-            var cnts = jk.DictionaryCountry.Select(cnt => new DictionaryCountryModel
-            {
-                CountryId = cnt.CountryId,
-                CountryName = cnt.CountryName
                
-            });
 
-            if (!string.IsNullOrEmpty(text))
-            {
-                cnts = cnts.Where(c => c.CountryName.Contains(text));
-            }
-
-            return Json(cnts);
-        }
-
-        public ActionResult SaveCurrency(int countryId,string currencyCode,string currencyName,decimal currencyExcchange)
+        public ActionResult SaveCurrency(string currencyCode,string currencyName,decimal currencyExchange)
         {
             ScarletWitchContext gf = new ScarletWitchContext();
-            gf.DictionaryCurrency.Add(new DictionaryCurrency
+
+                gf.DictionaryCurrency.Add(new DictionaryCurrency
+                {
+                    CurrencyName = currencyName,
+                    CurrencyCode = currencyCode,
+                    CurrencyExchange = currencyExchange
+                });
+
+            try
             {
-                CountryId = countryId,
-                CurrencyName = currencyCode,
-                CurrencyCode = currencyName,
-                CurrencyExchange = currencyExcchange
-            });            
-            return Json(gf.SaveChanges());
+                return Json(gf.SaveChanges());
+            }
+            catch (Exception e)
+            {
+                return Json("Empty");
+            }
+
         }
         public ActionResult GetDictionaryCurrencyFiltered([DataSourceRequest] DataSourceRequest request, String currencyName)
         {
@@ -123,17 +113,19 @@ namespace iWasHere.Web.Controllers
             
         }
 
-        public ActionResult EditCurrency(int currencyId,string currencyName,string currencyCode,string currencyExchange, int countryId)
+        public ActionResult EditCurrency(int currencyId,string currencyName,string currencyCode,string currencyExchange)
         {
             DictionaryCurrency newCurrency = new DictionaryCurrency();
             newCurrency.CurrencyId = currencyId;
             newCurrency.CurrencyName = currencyName;
             newCurrency.CurrencyCode = currencyCode;
-            newCurrency.CurrencyExchange =Convert.ToDecimal(currencyExchange);           
-            newCurrency.CountryId = countryId;
+            newCurrency.CurrencyExchange =Convert.ToDecimal(currencyExchange);      
             ScarletWitchContext context = new ScarletWitchContext();
-            context.DictionaryCurrency.Update(newCurrency);
-            return Json(context.SaveChanges());
+
+                context.DictionaryCurrency.Update(newCurrency);
+                return Json(context.SaveChanges());
+
+          
         }
 
         public ActionResult DeleteCurrency([DataSourceRequest] DataSourceRequest request, int id)

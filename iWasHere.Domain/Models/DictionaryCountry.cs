@@ -9,7 +9,7 @@ namespace iWasHere.Domain.Models
         {
             CountryXlanguage = new HashSet<CountryXlanguage>();
             DictionaryCounty = new HashSet<DictionaryCounty>();
-            DictionaryCurrency = new HashSet<DictionaryCurrency>();
+            
         }
 
         public int CountryId { get; set; }
@@ -18,6 +18,6 @@ namespace iWasHere.Domain.Models
 
         public virtual ICollection<CountryXlanguage> CountryXlanguage { get; set; }
         public virtual ICollection<DictionaryCounty> DictionaryCounty { get; set; }
-        public virtual ICollection<DictionaryCurrency> DictionaryCurrency { get; set; }
+        
     }
 }

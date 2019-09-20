@@ -397,9 +397,9 @@ namespace iWasHere.Domain.Service
                     CurrencyId = c.CurrencyId,
                     CurrencyCode = c.CurrencyCode,
                     CurrencyName = c.CurrencyName,
-                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
-                    CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
 
+                    
                 });
                 return dictionaryCurrency;
             }
@@ -410,9 +410,8 @@ namespace iWasHere.Domain.Service
                     CurrencyId = c.CurrencyId,
                     CurrencyCode = c.CurrencyCode,
                     CurrencyName = c.CurrencyName,
-                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
-                    CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
-
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+                    
                 }
                 ).Where(c => c.CurrencyName.Contains(currencyName));
                 return dictionaryCurrency;
@@ -494,6 +493,17 @@ namespace iWasHere.Domain.Service
 
             }).Where(a => a.CountyId == id).FirstOrDefault();
             return x;
+        }
+
+        public IQueryable<LandmarkModel> GetLandmarksFiltered()
+        {
+            IQueryable<LandmarkModel> landmarks = _dbContext.Landmark.Select(a => new LandmarkModel()
+            {
+                LandmarkId = a.LandmarkId,
+                LandmarkDescription = a.LandmarkDescription
+            });
+            return landmarks;
+
         }
     }
 }

@@ -11,12 +11,12 @@ namespace iWasHere.Domain.Models
         }
 
         public int CurrencyId { get; set; }
-        public int? CountryId { get; set; }
+        
         public string CurrencyCode { get; set; }
         public string CurrencyName { get; set; }
         public decimal? CurrencyExchange { get; set; }
 
-        public virtual DictionaryCountry Country { get; set; }
+        
         public virtual ICollection<Ticket> Ticket { get; set; }
     }
 }
