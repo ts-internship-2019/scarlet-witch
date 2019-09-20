@@ -28,7 +28,6 @@ namespace iWasHere.Domain.Service
 
             return dictionaryCountryModels;
         }
-
         public IQueryable<DictionaryCityModel> GetDictionaryCities()
         {
             IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
@@ -38,6 +37,33 @@ namespace iWasHere.Domain.Service
             }
             );
             return dictionaryCities;
+        }
+
+        public void SaveLandmark(string landmarkName, int landmarkTypeId, bool hasEntryTicket, int visitIntervalId, int ticketId, string streetName, int streetNumber, int cityId, float latitude, float longitude, int landmarkId)
+        {
+            
+               Landmark landmark = new Landmark()
+                {
+
+                    LandmarkTypeId = landmarkTypeId,
+                    HasEntryTicket = hasEntryTicket,
+                    VisitIntervalId = visitIntervalId,
+                    LandmarkDescription = landmarkName,
+                    TicketId = ticketId,
+                    StreetName = streetName,
+                    StreetNumber = streetNumber,
+                    CityId = cityId,
+                    Latitude = latitude,
+                    Longitude = longitude
+                };
+
+            _dbContext.Landmark.Add(landmark);
+            _dbContext.SaveChanges();
+            }
+
+        public void SaveLandmark(string v1, string landmarkName, int v2, int landmarkTypeId, bool v3, bool hasEntryTicket, int v4, int visitIntervalId, int v5, int ticketId, string v6, string streetName, int v7, int streetNumber, int v8, int cityId, float v9, float latitude, float v10, float longitude, int v11, object landmarkId)
+        {
+            throw new NotImplementedException();
         }
 
         public IQueryable<DictionaryCountyModel> GetDictionaryCounties()
@@ -371,9 +397,9 @@ namespace iWasHere.Domain.Service
                     CurrencyId = c.CurrencyId,
                     CurrencyCode = c.CurrencyCode,
                     CurrencyName = c.CurrencyName,
-                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
-                    CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
 
+                    
                 });
                 return dictionaryCurrency;
             }
@@ -384,9 +410,8 @@ namespace iWasHere.Domain.Service
                     CurrencyId = c.CurrencyId,
                     CurrencyCode = c.CurrencyCode,
                     CurrencyName = c.CurrencyName,
-                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
-                    CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
-
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+                    
                 }
                 ).Where(c => c.CurrencyName.Contains(currencyName));
                 return dictionaryCurrency;

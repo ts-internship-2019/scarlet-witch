@@ -75,9 +75,7 @@
         .HtmlAttributes(new { @id = "currencyGrid" })
         .Columns(columns =>
         {
-            columns.Bound(o => o.CurrencyId).Hidden();
-            columns.Bound(o => o.CountryId).Hidden();
-            columns.Bound(o => o.CountryName).Title("Nume Tara");
+            columns.Bound(o => o.CurrencyId).Hidden();                       
             columns.Bound(o => o.CurrencyCode).Title("Cod Moneda");
             columns.Bound(o => o.CurrencyName).Title("Nume Moneda");
             columns.Bound(o => o.CurrencyExchange).Title("Rata de Schimb");
