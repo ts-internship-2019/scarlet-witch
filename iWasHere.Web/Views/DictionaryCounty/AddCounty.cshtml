@@ -1,31 +1,50 @@
-﻿
+﻿@model iWasHere.Domain.DTOs.DictionaryCountyModel;
+
 @{
     ViewData["Title"] = "AddCounty";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    <div class="form-group">
-        <h4>Add County</h4>
 
-        @(Html.Kendo().TextBox()
-           .Name("CountyName")
-           .Value("Addd County Name")
-           .HtmlAttributes(new { style = "width: 25%" })
-        )
 
-        @(Html.Kendo().DropDownList()
-              .Name("DictionaryCountry")
-              .DataTextField("CountryName")
-              .DataValueField("CountryId")
-              .DataSource(source =>
-                      {
-                  source.Read(read =>
-                  {
-                      read.Action("GetAllCountries", "DictionaryCounty");
-                  });
-              })
-              .HtmlAttributes(new { style = "width: 25%", @id = "combo" })
-        )
-        <p></p>
+<h4>Add County</h4>
+
+<body onload="onLoadEdit()">
+
+    <ul style="list-style-type:none">
+        <li>
+            <label>County Name</label>
+        </li>
+
+        <li>
+            @(Html.Kendo().TextBoxFor(model => model.CountyName)
+                                .HtmlAttributes(new { @id = "CountyName", style = "margin:10px" })
+            )
+            @(Html.Kendo().TextBoxFor(model => model.CountyId)
+                .HtmlAttributes(new { @id = "CountyId", style = "margin:10px" })
+            )
+        </li>
+
+        <li>
+            <label>Country</label>
+        </li>
+        <li>
+            @(Html.Kendo().DropDownList()
+                             .Name("DictionaryCountry")
+                             .DataTextField("CountryName")
+                             .DataValueField("CountryId")
+                             .HtmlAttributes(new { style = "width: 25%", @id = "combo" })
+                             .DataSource(source =>
+                             {
+                                 source.Read(read =>
+                                 {
+                                     read.Action("GetAllCountries", "DictionaryCounty");
+                                 });
+                             }))
+        </li>
+    </ul>
+
+    <p></p>
+
     <div>
         @(Html.Kendo().Button()
            .Name("primaryTextButton")
@@ -40,6 +59,7 @@
                .Content("Add New")
                .Events(ev => ev.Click("addNew"))
         )
+
         @(Html.Kendo().Button()
               .Name("cancelButton")
               .HtmlAttributes(new { type = "button", @class = "k-primary" })
@@ -48,56 +68,83 @@
         )
     </div>
 
+</body>
 
-    </div>
+<script type="text/javascript">
 
-    <script type="text/javascript">
-        function add() {
-            var e = document.getElementById("combo");
-            var result = e.value;
-            alert(result); //ID002
+    let fromUpdate = false;
 
+    function add() {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("CountyId");
+
+        if (id != 0) {
             $.ajax({
-                type: 'PUT',
-                url: '@Url.Action("SaveCounty", "DictionaryCounty")',
+                type: 'POST',
+                url: '@Url.Action("EditCounty", "DictionaryCounty")',
                 data: {
-                    ctId: document.getElementById("combo").value,
-                    cyName: document.getElementById("CountyName").value
+                    countyName: document.getElementById("CountyName").value,
+                    countyId: document.getElementById("CountyId").value,
+                    countryId: document.getElementById("combo").value
                 },
                 success: function (response) {
-                    alert("merge daca e");
-
-                },
-                error: function (response) {
-                    alert("hai ca nu merge");
-                }
-            })
-            window.location.href = '@Url.Action("Index", "DictionaryCounty")';
-        }
-
-        function addNew() {
-            var e = document.getElementById("combo");
-            var result = e.value;
-            alert(result); //ID002
-
-            $.ajax({
-                type: 'PUT',
-                url: '@Url.Action("SaveCounty", "DictionaryCounty")',
-                data: {
-                    ctId: document.getElementById("combo").value,
-                    cyName: document.getElementById("CountyName").value
-                },
-                success: function (response) {
-                    alert("merge daca e");
-                    window.location.href = '@Url.Action("AddCounty", "DictionaryCounty")';
+                    alert("hai ca merge");
+                    window.location.href = '@Url.Action("Index", "DictionaryCounty")';
                 },
                 error: function (response) {
                     alert("hai ca nu merge");
                 }
             })
         }
-        function cancelAdd() {
-            window.location.href = '@Url.Action("Index", "DictionaryCounty")';
+        else {
+            $.ajax({
+                type: 'PUT',
+                url: '@Url.Action("SaveCounty", "DictionaryCounty")',
+                data: {
+                    countyName: document.getElementById("CountyName").value,
+                    countryId: document.getElementById("combo").value
+                },
+                success: function (response) {
+                    if (fromUpdate) {
+                        document.getElementById("CountyName").value = "";
+                        $("#combo").val("").data("kendoDropDownList").text("");
+                        fromUpdate = false;
+                    }
+                    else {
+                        window.location.href = '@Url.Action("Index", "DictionaryCounty")';
+                    }
+
+                },
+                error: function (response) {
+                    alert("hai ca nu merge");
+                }
+            })
         }
 
-    </script>
+    }
+        function onLoadEdit() {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        document.getElementById("CountyId").style.visibility = "hidden";
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+            alert("din edit");
+            document.getElementById("buttonId").innerText = "Update";
+        }
+        else {
+            alert("din add");
+        }
+    }
+
+    function addNew() {
+        fromUpdate = true;
+        add();
+    }
+
+    function cancelAdd() {
+        window.location.href = '@Url.Action("Index", "DictionaryCounty")';
+    }
+
+ 
+</script>

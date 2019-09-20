@@ -23,7 +23,6 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult Index()
         {
-
             return View();
         }
 

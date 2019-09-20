@@ -98,27 +98,57 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
 
-        public IActionResult LanguageAdd()
+
+        public IActionResult LanguageAdd(int id)
         {
-            return View();
+            if (id != 0)
+            {
+                DictionaryLanguageModel language = _dictionaryService.GetDataToEditLanguage(id);
+                return View(language);
+            }
+
+            else
+            {
+                DictionaryLanguageModel language = new DictionaryLanguageModel();
+                return View(language);
+            }
+
         }
 
-        public ActionResult SaveLanguage(string lgCode, string lgName)
+        public ActionResult SaveLanguage(string langCode, string langName)
         {
             ScarletWitchContext gf = new ScarletWitchContext();
             gf.DictionaryLanguage.Add(new DictionaryLanguage
             {
-                LanguageName = lgName,
-                LanguageCode = lgCode
+                LanguageName = langName,
+                LanguageCode = langCode
             });
             return Json(gf.SaveChanges());
+        }
+
+
+        public ActionResult EditLanguage(string langName, string langCode, int langId)
+        {
+            DictionaryLanguage newLang = new DictionaryLanguage();
+            newLang.LanguageId = langId;
+            newLang.LanguageCode = langCode;
+            newLang.LanguageName = langName;
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.DictionaryLanguage.Update(newLang);
+            return Json(context.SaveChanges());
         }
 
         public ActionResult DeleteLanguage([DataSourceRequest] DataSourceRequest request, int id)
         {
             if (id != -1)
             {
-                _dictionaryService.DeleteLanguages(id);
+
+                CountryXlanguage cxl = new CountryXlanguage();
+                cxl=_dictionaryService.GetDataToDeleteLang(id);
+                if (cxl==null)
+                {
+                    _dictionaryService.DeleteLanguages(id);
+                }
             }
 
             return Json(ModelState.ToDataSourceResult());

@@ -94,7 +94,58 @@ namespace iWasHere.Web.Controllers
 
         }
 
-      
+
+        public ActionResult SaveLandmarkType(string landmarkCode, string description)
+        {
+            ScarletWitchContext gf = new ScarletWitchContext();
+            gf.DictionaryLandmarkType.Add(new DictionaryLandmarkType
+            {
+                LandmarkTypeCode = landmarkCode,
+                Description = description
+               
+
+            });
+            return Json(gf.SaveChanges());
+        }
+
+        public ActionResult EditLandmarkType(int landmarkTypeId, string landmarkCode, string description)
+        {
+            DictionaryLandmarkType newLandmarkType = new DictionaryLandmarkType();
+            newLandmarkType.LandmarkTypeId = landmarkTypeId;
+            newLandmarkType.LandmarkTypeCode = landmarkCode;
+            newLandmarkType.Description = description;
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.DictionaryLandmarkType.Update(newLandmarkType);
+            return Json(context.SaveChanges());
+        }
+
+
+        public IActionResult LandmarkTypeAdd(int id)
+        {
+            if (id != 0)
+            {
+                DictionaryLandmarkTypeModel landmarkTypeModel = _dictionaryService.GetDataToEditLandmarkType(id);
+                return View(landmarkTypeModel);
+            }
+
+            else
+            {
+                DictionaryLandmarkTypeModel landmarkTypeModel = new DictionaryLandmarkTypeModel();
+                return View(landmarkTypeModel);
+            }
+        }
+
+        public ActionResult Delete([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != -1)
+            {
+                _dictionaryService.DeleteLandmarkType(id);
+            }
+
+            return Json(ModelState.ToDataSourceResult());
+        }
+
+
 
     }
 }

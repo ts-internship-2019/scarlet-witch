@@ -82,20 +82,45 @@ namespace iWasHere.Web.Controllers
             }
             return Json(cnts);
         }
-
-        public IActionResult AddCounty()
+        public int Delete([DataSourceRequest] DataSourceRequest request, int id)
         {
-            return View();
+            int sters = _dictionaryCountyService.DeleteCounty(id);
+            return sters;
         }
 
-        public ActionResult SaveCounty(int ctId, string cyName)
+        public IActionResult AddCounty(int id)
+        {
+            if (id != 0)
+            {
+                DictionaryCountyModel c = _dictionaryCountyService.GetCountyToEdit(id);
+                return View(c);
+            }
+            else
+            {
+                DictionaryCountyModel c = new DictionaryCountyModel();
+                return View(c);
+            }
+        }
+
+        public ActionResult SaveCounty(string countyName, int countryId)
         {
             ScarletWitchContext context = new ScarletWitchContext();
             context.DictionaryCounty.Add(new DictionaryCounty
             {
-                CountryId = ctId,
-                CountyName = cyName,
+                CountyName = countyName,
+                CountryId = countryId
             });
+            return Json(context.SaveChanges());
+        }
+
+        public ActionResult EditCounty(string countyName, int countyId, int countryId)
+        {
+            DictionaryCounty newCounty = new DictionaryCounty();
+            newCounty.CountyName = countyName;
+            newCounty.CountyId = countyId;
+            newCounty.CountryId = countryId;
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.DictionaryCounty.Update(newCounty);
             return Json(context.SaveChanges());
         }
     }
