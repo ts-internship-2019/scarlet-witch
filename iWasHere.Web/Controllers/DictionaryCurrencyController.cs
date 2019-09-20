@@ -24,11 +24,7 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult Index([DataSourceRequest] DataSourceRequest request)
         {
-            List<DictionaryCurrencyModel> dictionaryCurrencyModels = _dictionaryService.GetDictionaryCurrencyModels();
-
-            return View(dictionaryCurrencyModels);
-
-
+            return View();
         }
 
 
@@ -76,15 +72,15 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
-        public ActionResult SaveCurrency(int ctId,string crCode,string crName,decimal crExc)
+        public ActionResult SaveCurrency(int countryId,string currencyCode,string currencyName,decimal currencyExcchange)
         {
             ScarletWitchContext gf = new ScarletWitchContext();
             gf.DictionaryCurrency.Add(new DictionaryCurrency
             {
-                CountryId = ctId,
-                CurrencyName = crName,
-                CurrencyCode = crCode,
-                CurrencyExchange = crExc
+                CountryId = countryId,
+                CurrencyName = currencyCode,
+                CurrencyCode = currencyName,
+                CurrencyExchange = currencyExcchange
             });            
             return Json(gf.SaveChanges());
         }
@@ -112,9 +108,47 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
 
-        public IActionResult CurrencyAdd()
+        public IActionResult CurrencyAdd(int id)
         {
-            return View();
+            if (id != 0)
+            {
+                DictionaryCurrencyModel currency = _dictionaryService.GetCurrencyToEdit(id);
+                return View(currency);
+            }
+            else
+            {
+                DictionaryCurrencyModel currency = new DictionaryCurrencyModel();
+                return View(currency);
+            }
+            
+        }
+
+        public ActionResult EditCurrency(int currencyId,string currencyName,string currencyCode,string currencyExchange, int countryId)
+        {
+            DictionaryCurrency newCurrency = new DictionaryCurrency();
+            newCurrency.CurrencyId = currencyId;
+            newCurrency.CurrencyName = currencyName;
+            newCurrency.CurrencyCode = currencyCode;
+            newCurrency.CurrencyExchange =Convert.ToDecimal(currencyExchange);           
+            newCurrency.CountryId = countryId;
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.DictionaryCurrency.Update(newCurrency);
+            return Json(context.SaveChanges());
+        }
+
+        public ActionResult DeleteCurrency([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != 0)
+            {
+                _dictionaryService.DeleteCurrency(id);
+            }
+            return Json(ModelState.ToDataSourceResult());
+        }
+
+        public ActionResult PopulateCountryCombo([DataSourceRequest] DataSourceRequest request)
+        {
+            var countries = _dictionaryService.PopulateCountryCombo();
+            return Json(countries);
         }
 
     }

@@ -221,6 +221,17 @@ namespace iWasHere.Domain.Service
             }
         }
 
+        public void DeleteCurrency(int id)
+        {
+            DictionaryCurrency currency = new DictionaryCurrency() { CurrencyId = id };
+
+            _dbContext.DictionaryCurrency.Remove(currency);
+            _dbContext.SaveChanges();
+
+        }
+
+
+
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
         {
             if (languageName == null)
@@ -341,7 +352,9 @@ namespace iWasHere.Domain.Service
                     CurrencyId = c.CurrencyId,
                     CurrencyCode = c.CurrencyCode,
                     CurrencyName = c.CurrencyName,
-                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
+                    CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+
                 });
                 return dictionaryCurrency;
             }
@@ -352,7 +365,9 @@ namespace iWasHere.Domain.Service
                     CurrencyId = c.CurrencyId,
                     CurrencyCode = c.CurrencyCode,
                     CurrencyName = c.CurrencyName,
-                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
+                    CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
+                    CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+
                 }
                 ).Where(c => c.CurrencyName.Contains(currencyName));
                 return dictionaryCurrency;
@@ -390,6 +405,36 @@ namespace iWasHere.Domain.Service
             _dbContext.SaveChanges();
 
 
+
+        }
+
+        public DictionaryCurrencyModel GetCurrencyToEdit(int id)
+        {
+            DictionaryCurrencyModel currency = _dbContext.DictionaryCurrency.Select(c => new DictionaryCurrencyModel()
+            {
+                CurrencyId = c.CurrencyId,
+                CurrencyCode = c.CurrencyCode,
+                CurrencyName = c.CurrencyName,
+                CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
+               // CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+
+            }).Where(a => a.CurrencyId == id).FirstOrDefault();
+
+            return currency;
+
+        }
+
+        public List<DictionaryCountryModel> PopulateCountryCombo()
+        {
+
+            List<DictionaryCountryModel> dictionaryCurrencyModels = _dbContext.DictionaryCountry.Select(b => new DictionaryCountryModel()
+            {
+                CountryId = b.CountryId,
+                CountryName = b.CountryName
+
+            }).ToList();
+
+            return dictionaryCurrencyModels;
 
         }
 

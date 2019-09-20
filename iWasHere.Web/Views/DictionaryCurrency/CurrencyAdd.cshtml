@@ -1,88 +1,176 @@
 ﻿
 @{
-    ViewData["Title"] = "CurrencyAdd";
+
+    ViewData["Title"] = "AddCurrency";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>CurrencyAdd</h1>
 
-
+<h1>AddCurrency</h1>
 <script>
+    let fromUpdate = false;
+
+    function AddCurrency() {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+            $.ajax({
+            type: 'POST',
+            url: '@Url.Action("EditCurrency", "DictionaryCurrency")',
+                data: {
 
 
+                currencyName: document.getElementById("currencyName").value,
+                countryId: document.getElementById("combo").value,
+                currencyCode: document.getElementById("currencyCode").value,
+                currencyExchange: document.getElementById("currencyExchange").value,
+                currencyId: document.getElementById("currencyId").value
 
-    function AddCry()
-    {
-        //var e = document.getElementById("combo");
-        //var result = e.value;
-        //alert(result); //ID002
+            },
+            success: function (response) {
 
-         $.ajax({
-                        type: 'PUT',
-                    url: '@Url.Action("SaveCurrency", "DictionaryCurrency")',
-             data: {
-                 ctId: document.getElementById("combo").value,
-                 crCode: document.getElementById("CurrencyCode").value,
-                 crName: document.getElementById("CurrencyName").value,
-                 crExc: document.getElementById("CurrencyExchange").value
-                   },
-                        success: function (response) {
-                        alert("Added succesfully")
-                    },
-                        error: function (response) {
-                        alert("hai ca nu merge");
+                 window.location.href = '@Url.Action("Index", "DictionaryCurrency")';
+            },
+            error: function (response) {
+                alert("hai ca nu merge");
+            }
+        })
+        }
+        else {
+            $.ajax({
+            type: 'PUT',
+            url: '@Url.Action("SaveCurrency", "DictionaryCurrency")',
+            data: {
+                currencyName: document.getElementById("currencyName").value,
+                countryId: document.getElementById("combo").value,
+                currencyCode: document.getElementById("currencyCode").value,
+                currencyExchange: document.getElementById("currencyExchange").value
+
+            },
+                success: function (response) {
+                    if (fromUpdate) {
+                        document.getElementById("currencyName").value = "";
+                        document.getElementById("currencyCode").value = "";
+                        document.getElementById("currencyExchange").value = "";
+                        $("#combo").val("").data("kendoDropDownList").text("");
+                        fromUpdate = false;
                     }
-         })
+                    else {
+                        window.location.href = '@Url.Action("Index", "DictionaryCurrency")';
+                    }
 
-         window.location.href = '@Url.Action("Index", "DictionaryCurrency")';
+            },
+            error: function (response) {
+                alert("hai ca nu merge");
+            }
+        })
+        }
+
+    }
+
+    function onLoadEdit() {
+
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        document.getElementById("currencyId").style.visibility = "hidden";
+
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+            
+                  document.getElementById("buttonId").innerText = "Update";
+        }
+
+    }
+
+    function cancelAdd() {
+        window.location.href = '@Url.Action("Index", "DictionaryCurrency")';
+    }
+
+
+
+
+    function AddNew() {
+          fromUpdate = true;
+          AddCurrency();
 
     }
 
 
 </script>
+@model iWasHere.Domain.DTOs.DictionaryCurrencyModel;
+
+<body onload="onLoadEdit()">
+
+
+    <ul style="list-style-type:none">
+        <li>
+
+            <label>City Name</label>
+
+        </li>
+        <li>
+            @(Html.Kendo().TextBoxFor(model => model.CurrencyName)
+                                .HtmlAttributes(new { @id = "currencyName", style = "margin:10px" })
+
+            )
+            @(Html.Kendo().TextBoxFor(model => model.CurrencyCode)
+                    .HtmlAttributes(new { @id = "currencyCode", style = "margin:10px" })
+
+            )
+            @(Html.Kendo().TextBoxFor(model => model.CurrencyExchange)
+                    .HtmlAttributes(new { @id = "currencyExchange", style = "margin:10px" })
+
+            )
+            @(Html.Kendo().TextBoxFor(model => model.CurrencyId)
+                .HtmlAttributes(new { @id = "currencyId", style = "margin:10px" })
+            )
+        </li>
+        <li>
+
+            <label>Country</label>
+
+
+        </li>
+        <li>
+            @(Html.Kendo().DropDownListFor(model => model.CountryId)
+                  .DataTextField("CountryName")
+                  .DataValueField("CountryId")
+                  .DataSource(source =>
+                          {
+                      source.Read(read =>
+                      {
+                          read.Action("PopulateCountryCombo", "DictionaryCurrency");
+                      });
+                  })
+                  .HtmlAttributes(new { @id = "combo", style = "margin:10px" })
+            )
+        </li>
+    </ul>
 
 
 
-<div class="form-group">
-    <h4>Add Currency</h4>
 
-    @(Html.Kendo().TextBox()
-         .Name("CurrencyCode")
-         .Value("")         
-         .HtmlAttributes(new { style = "width: 25%" })
-    )
+    <div>
+        @(Html.Kendo().Button()
+                  .Name("primaryTextButton")
+                  .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId", style = "margin:10px" })
+                  .Content("Add")
+                  .Events(ev => ev.Click("AddCurrency"))
+        )
+        @(Html.Kendo().Button()
+          .Name("addNewButton")
+          .HtmlAttributes(new { type = "button", @class = "k-primary" })
+          .Content("Add New")
+          .Events(ev => ev.Click("AddNew"))
+        )
+        @(Html.Kendo().Button()
+              .Name("cancelButton")
+              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .Content("Cancel")
+              .Events(ev => ev.Click("cancelAdd"))
+        )
+    </div>
 
-    @(Html.Kendo().TextBox()
-       .Name("CurrencyName")
-       .Value("")
-       .HtmlAttributes(new { style = "width: 25%" })
-    )
 
-    @(Html.Kendo().TextBox()
-   .Name("CurrencyExchange")
-   .Value("")
-   .HtmlAttributes(new { style = "width: 25%" })
-    )
-
-    @(Html.Kendo().DropDownList()
-          .Name("DictionaryCountry")
-          .DataTextField("CountryName")
-          .DataValueField("CountryId")
-          .DataSource(source =>
-                  {
-              source.Read(read =>
-              {
-                  read.Action("GetCountry", "DictionaryCurrency");
-              });
-          })
-          .HtmlAttributes(new { @id = "combo" })
-    )
-
-    @(Html.Kendo().Button()
-           .Name("primaryTextButton")
-           .HtmlAttributes(new { type = "button", @class = "k-primary" })
-           .Content("Add")
-           .Events(ev => ev.Click("AddCry"))
-    )
-</div>
-
+</body>
