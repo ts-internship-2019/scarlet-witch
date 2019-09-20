@@ -141,27 +141,53 @@ namespace iWasHere.Domain.Service
 
         }
 
-        public IQueryable<DictionaryCityModel> GetDictionaryCitiesFiltered(String cityName)
+        public IQueryable<DictionaryCityModel> GetDictionaryCitiesFiltered(String cityName, int countyId)
         {
-            if (cityName==null)
+            if (cityName == null && countyId == 0)
             {
                 IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
                 {
                     Id = a.CityId,
+                    CountyId = a.CountyId,
                     Name = a.CityName,
                     County = _dbContext.DictionaryCounty.Where(c => c.CountyId == a.CountyId).Select(c => c.CountyName).FirstOrDefault().ToString()
                 });
                 return dictionaryCities;
             }
-            else
+            else if (cityName != null && countyId == 0)
             {
                 IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
                 {
                     Id = a.CityId,
+                    CountyId = a.CountyId,
                     Name = a.CityName,
                     County = _dbContext.DictionaryCounty.Where(c => c.CountyId == a.CountyId).Select(c => c.CountyName).FirstOrDefault().ToString()
                 }
-                ).Where(c => c.Name == cityName);
+               ).Where(c => c.Name == cityName);
+                return dictionaryCities;
+            }
+            else if (cityName == null && countyId != 0)
+            {
+                IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+                {
+                    Id = a.CityId,
+                    CountyId = a.CountyId,
+                    Name = a.CityName,
+                    County = _dbContext.DictionaryCounty.Where(c => c.CountyId == a.CountyId).Select(c => c.CountyName).FirstOrDefault().ToString()
+                }
+               ).Where(c =>  c.CountyId == countyId);
+                return dictionaryCities;
+            }
+            else 
+            {
+                IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+                {
+                    Id = a.CityId,
+                    CountyId = a.CountyId,
+                    Name = a.CityName,
+                    County = _dbContext.DictionaryCounty.Where(c => c.CountyId == a.CountyId).Select(c => c.CountyName).FirstOrDefault().ToString()
+                }
+                ).Where(c => c.Name == cityName && c.CountyId == countyId);
                 return dictionaryCities;
             }
          
@@ -299,6 +325,16 @@ namespace iWasHere.Domain.Service
                 return dictionaryCurrency;
             }
 
+
+        }
+
+        public bool VerifyCityName(String cityName)
+        {
+
+            if (_dbContext.DictionaryCity.Any(c => c.CityName == cityName))
+                return false;
+            else
+                return true;
 
         }
 

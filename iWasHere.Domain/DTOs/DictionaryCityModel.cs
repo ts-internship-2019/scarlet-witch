@@ -7,6 +7,7 @@ namespace iWasHere.Domain.DTOs
     public class DictionaryCityModel
     {
         public int Id { get; set; }
+        public int? CountyId { get; set; }
         public string Name { get; set; }
         public string County { get; set; }
     }
