@@ -13,5 +13,7 @@ namespace iWasHere.Domain.DTOs
         public string CurrencyCode { get; set; }
         public decimal CurrencyExchange { get; set; }
 
+        public string CountryName { get; set; }
+
     }
 }

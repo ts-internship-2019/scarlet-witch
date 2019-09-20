@@ -26,9 +26,9 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public ActionResult GetDictionaryCityPagingFilter([DataSourceRequest]DataSourceRequest request, String cityName)
+        public ActionResult GetDictionaryCityPagingFilter([DataSourceRequest]DataSourceRequest request, String cityName, int countyId)
         {
-            IQueryable<DictionaryCityModel> cities = _dictionaryCityService.GetDictionaryCitiesFiltered(cityName);
+            IQueryable<DictionaryCityModel> cities = _dictionaryCityService.GetDictionaryCitiesFiltered(cityName, countyId);
             cities.ToDataSourceResult(request);
             cities = cities.OrderBy(o => o.Id);
             var total = cities.Count();
@@ -75,12 +75,12 @@ namespace iWasHere.Web.Controllers
             return Json(xc);
         }
 
-        public ActionResult GetDictionaryCitiesFiltered([DataSourceRequest] DataSourceRequest request, String cityName)
-        {
-            var xc = _dictionaryCityService.GetDictionaryCitiesFiltered(cityName).ToDataSourceResult(request);
-            return Json(xc);
+        //public ActionResult GetDictionaryCitiesFiltered([DataSourceRequest] DataSourceRequest request, String cityName)
+        //{
+        //    var xc = _dictionaryCityService.GetDictionaryCitiesFiltered(cityName).ToDataSourceResult(request);
+        //    return Json(xc);
 
-        }
+        //}
 
         public ActionResult Delete([DataSourceRequest] DataSourceRequest request, int id )
         {
@@ -136,6 +136,12 @@ namespace iWasHere.Web.Controllers
             ScarletWitchContext context = new ScarletWitchContext();
             context.DictionaryCity.Update(newCity);
             return Json(context.SaveChanges());
+        }
+
+        public bool VerifyCityName([DataSourceRequest] DataSourceRequest request, String cityName)
+        {
+            bool status = _dictionaryCityService.VerifyCityName(cityName);
+            return status;
         }
 
     }

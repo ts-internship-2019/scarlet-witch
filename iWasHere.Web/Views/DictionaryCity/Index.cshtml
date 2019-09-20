@@ -54,8 +54,10 @@
 
     function filter(e) {
         var cityName = document.getElementById("cityTextBox").value;
+        var countyId = document.getElementById("combo").value;
         var filter = {};
         filter["cityName"] = cityName;
+        filter["countyId"] = countyId;
         return filter;
     }
 
@@ -66,8 +68,7 @@
                     data: { id: id },
                  success: function (response) {
                      alert("hai ca merge");
-                     alert(id);
-                        $("#cityGrid").data("kendoGrid").dataSource.read();
+                     $("#cityGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
                         alert("hai ca nu merge");
@@ -78,6 +79,11 @@
         $("#cityGrid").data("kendoGrid").dataSource.read();
         $("#cityGrid").data("kendoGrid").dataSource.page(1);
     }
+     function deleteFilters() {
+         document.getElementById("cityTextBox").value = "";
+         $("#combo").val("").data("kendoDropDownList").text("");
+         refreshGrid();
+    }
        function redirectToAddContext()
     {
             window.location.href = 'DictionaryCity/AddCity/?id=' + 0;
@@ -87,11 +93,30 @@
     {
         window.location.href = 'DictionaryCity/AddCity/?id=' + id;
     }
+
+
 </script>
+<div>
 @(Html.Kendo().TextBox()
 .Name("cityTextBox")
 .HtmlAttributes(new { @id = "cityTextBox" })
 )
+
+@(Html.Kendo().DropDownList()
+        .Name("CountyId")
+        .DataTextField("CountyName")
+        .DataValueField("CountyId")
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("PopulateCountyCombo", "DictionaryCity");
+            });
+        })
+        .OptionLabel("select county")
+        .HtmlAttributes(new { @id="combo"})
+ )
+
 
 @(Html.Kendo().Button()
 .Name("textButton")
@@ -99,6 +124,14 @@
 .Content("Filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
+
+@(Html.Kendo().Button()
+.Name("deleteFiltersButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Delete filters")
+.Events(ev => ev.Click("deleteFilters"))
+)
+
 @(Html.Kendo().Button()
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
@@ -110,6 +143,7 @@
         .Columns(columns =>
         {
             columns.Bound(o => o.Id).Hidden();
+            columns.Bound(o => o.CountyId);
             columns.Bound(o => o.Name).Title("Oras");
             columns.Bound(o => o.County).Title("Judet");
             columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=Id#)\">Delete</button>");
@@ -136,4 +170,5 @@
         //.Events(events => events.Edit(""))
 
 )
-
+    
+</div>
