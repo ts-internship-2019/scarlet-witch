@@ -138,6 +138,13 @@ namespace iWasHere.Web.Controllers
             return Json(context.SaveChanges());
         }
 
+
+        public bool VerifyLanguage([DataSourceRequest] DataSourceRequest request, string languageName, string languageCode)
+        {
+            bool status = _dictionaryService.VerifyLanguages(languageName,languageCode);
+            return status;
+        }
+
         public ActionResult DeleteLanguage([DataSourceRequest] DataSourceRequest request, int id)
         {
             if (id != -1)
@@ -148,9 +155,9 @@ namespace iWasHere.Web.Controllers
                 if (cxl==null)
                 {
                     _dictionaryService.DeleteLanguages(id);
+                    
                 }
             }
-
             return Json(ModelState.ToDataSourceResult());
         }
 

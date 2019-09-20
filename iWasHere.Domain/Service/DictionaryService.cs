@@ -393,6 +393,20 @@ namespace iWasHere.Domain.Service
             }
         }
 
+        public bool VerifyLanguages(string languageName, string languageCode)
+        {
+            int stateName=0, stateCode = 0;
+            if (_dbContext.DictionaryLanguage.Any(c => c.LanguageName == languageName)) stateName = 1;
+            if (_dbContext.DictionaryLanguage.Any(c => c.LanguageCode == languageCode)) stateCode = 1;
+
+            if(stateCode==1 || stateName==1)
+                return false;
+            else
+                return true;
+        }
+
+
+
         public void DeleteLanguages(int id)
         {
             DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
