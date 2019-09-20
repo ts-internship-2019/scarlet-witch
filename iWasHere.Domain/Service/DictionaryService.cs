@@ -359,20 +359,6 @@ namespace iWasHere.Domain.Service
 
         }
 
-        public void DeleteLandmarkType(int id)
-        {
-            DictionaryLandmarkType landmark = new DictionaryLandmarkType() { LandmarkTypeId = id };
-            _dbContext.DictionaryLandmarkType.Remove(landmark);
-            _dbContext.SaveChanges();
-        }
-
-        public void DeleteLanguages(int id)
-        {
-            DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
-            _dbContext.DictionaryLanguage.Remove(language);
-            _dbContext.SaveChanges();
-
-        }
 
 
         public DictionaryCountyModel GetCountyToEdit(int id)
