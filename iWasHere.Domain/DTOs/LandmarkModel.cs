@@ -22,9 +22,13 @@ namespace iWasHere.Domain.DTOs
         public int? VisitIntervalId { get; set; }
         public string LandmarkDescription { get; set; }
         public int? TicketId { get; set; }
+        public string Ticket { get; set; }
         public string StreetName { get; set; }
         public int? StreetNumber { get; set; }
         public int? CityId { get; set; }
+        public int CountyId { get; set; }
+        public string County { get; set; }
+        public string Country { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
     }

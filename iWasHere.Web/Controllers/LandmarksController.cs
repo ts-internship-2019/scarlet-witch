@@ -33,6 +33,16 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
+
+
+        public IActionResult ViewLandmark(int landmarkId)
+        {
+            LandmarkModel landmark = _dictionaryService.GetLandmarkSingle(30);
+            return View(landmark);
+        }
+
+
+
         public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
         {
             IQueryable<LandmarkModel> landmarks = _dictionaryService.GetLandmarksFiltered();
