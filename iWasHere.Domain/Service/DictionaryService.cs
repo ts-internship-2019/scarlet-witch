@@ -254,8 +254,6 @@ namespace iWasHere.Domain.Service
 
         }
 
-
-
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
         {
             if (languageName == null)
@@ -474,6 +472,17 @@ namespace iWasHere.Domain.Service
 
             }).Where(a => a.CountyId == id).FirstOrDefault();
             return x;
+        }
+
+        public IQueryable<LandmarkModel> GetLandmarksFiltered()
+        {
+            IQueryable<LandmarkModel> landmarks = _dbContext.Landmark.Select(a => new LandmarkModel()
+            {
+                LandmarkId = a.LandmarkId,
+                LandmarkDescription = a.LandmarkDescription
+            });
+            return landmarks;
+
         }
     }
 }

@@ -114,7 +114,6 @@ namespace iWasHere.Web.Controllers
                
         }
 
- 
 
         public ActionResult SaveCity(string cityName, int countyId)
         {
@@ -143,6 +142,8 @@ namespace iWasHere.Web.Controllers
             bool status = _dictionaryCityService.VerifyCityName(cityName);
             return status;
         }
+
+     
 
     }
 } 
