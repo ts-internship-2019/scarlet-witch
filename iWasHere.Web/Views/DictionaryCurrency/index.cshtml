@@ -20,8 +20,6 @@
                     url: '@Url.Action("DeleteCurrency", "DictionaryCurrency")',
                     data: { id: id },
                  success: function (response) {
-                     alert("hai ca merge");
-                     alert(id);
                         $("#currencyGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
@@ -35,20 +33,25 @@
         $("#currencyGrid").data("kendoGrid").dataSource.page(1);
     }
 
+     function redirectToAddContext()
+    {
+            window.location.href = 'DictionaryCurrency/CurrencyAdd/?id=' + 0;
+    }
+
+    function redirectToEditContext(id)
+    {
+        window.location.href = 'DictionaryCurrency/CurrencyAdd/?id=' + id;
+        
+    }
 
 </script>
+
 @(Html.Kendo().Button()
-               .Name("primaryTextButton")
-               .HtmlAttributes(new { type = "button", @class = "k-primary" })
-               .Content("Add")
-               .Events(ev => ev.Click("foo"))
-    )
-    <script>
-        function foo()
-        {
-            window.location.href = '@Url.Action("CurrencyAdd", "DictionaryCurrency")';
-        }
-    </script>
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("redirectToAddContext"))
+           )
 @(Html.Kendo().TextBox()
 .Name("currencyTextBox")
 .HtmlAttributes(new { @id = "currencyTextBox" })
@@ -79,6 +82,8 @@
             columns.Bound(o => o.CurrencyName).Title("Nume Moneda");
             columns.Bound(o => o.CurrencyExchange).Title("Rata de Schimb");
             columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=CurrencyId#)\">Delete</button>");
+            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=CurrencyId#)\"> Edit </button>");
+
         })
         .Pageable(pageable => pageable
             .Refresh(true)

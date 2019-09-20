@@ -315,6 +315,36 @@ namespace iWasHere.Domain.Service
 
         }
 
+        public DictionaryCurrencyModel GetCurrencyToEdit(int id)
+        {
+            DictionaryCurrencyModel currency = _dbContext.DictionaryCurrency.Select(c => new DictionaryCurrencyModel()
+            {
+                CurrencyId = c.CurrencyId,
+                CurrencyCode = c.CurrencyCode,
+                CurrencyName = c.CurrencyName,
+                CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
+               // CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+
+            }).Where(a => a.CurrencyId == id).FirstOrDefault();
+
+            return currency;
+
+        }
+
+        public List<DictionaryCountryModel> PopulateCountryCombo()
+        {
+
+            List<DictionaryCountryModel> dictionaryCurrencyModels = _dbContext.DictionaryCountry.Select(b => new DictionaryCountryModel()
+            {
+                CountryId = b.CountryId,
+                CountryName = b.CountryName
+
+            }).ToList();
+
+            return dictionaryCurrencyModels;
+
+        }
+
 
 
     }
