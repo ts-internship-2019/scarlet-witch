@@ -15,7 +15,7 @@ namespace iWasHere.Domain.Model
         {
         }
 
-        public virtual DbSet<DictionaryLandmarkType> DictionaryLandmarkType { get; set; }
+        public virtual DbSet<DictionaryLandmarkType1> DictionaryLandmarkType { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,7 +25,7 @@ namespace iWasHere.Domain.Model
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
-            modelBuilder.Entity<DictionaryLandmarkType>(entity =>
+            modelBuilder.Entity<DictionaryLandmarkType1>(entity =>
             {
                 entity.HasKey(e => e.DictionaryItemId);
 

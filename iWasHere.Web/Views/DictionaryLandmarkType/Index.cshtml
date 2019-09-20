@@ -5,6 +5,14 @@
 
 <h1>Landmark types</h1>
 
+
+<script>
+    function foo()
+    {
+        window.location.href = '@Url.Action("LandmarkTypeAdd", "DictionaryLandmarkType")';
+    }
+</script>
+
 <script type="text/javascript">
 
     function filter(e) {
@@ -14,10 +22,44 @@
         return filter;
     }
 
+     function deleteRow(id) {
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("Delete", "DictionaryLandmarkType")',
+                    data: { id: id },
+                 success: function (response) {
+                     alert("hai ca merge");
+                     alert(id);
+                        $("#landmarkGrid").data("kendoGrid").dataSource.read();
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+    }
+
     function refreshGrid() {
         $("#landmarkGrid").data("kendoGrid").dataSource.read();
+        $("#landmarkGrid").data("kendoGrid").dataSource.page(1);
+    }
+
+     function redirectToAddContext()
+    {
+            window.location.href = 'DictionaryLandmarkType/LandmarkTypeAdd/?id=' + 0;
+    }
+
+    function redirectToEditContext(id)
+    {
+        window.location.href = 'DictionaryLandmarkType/LandmarkTypeAdd/?id=' + id;
     }
 </script>
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("redirectToAddContext"))
+)
+
 @(Html.Kendo().TextBox()
 .Name("landmarkTextBox")
 .HtmlAttributes(new { @id = "landmarkTextBox" })
@@ -29,12 +71,18 @@
 .Content("Filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
+
+
+
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLandmarkTypeModel>()
         .Name("grid")
         .Columns(columns =>
         {
+            columns.Bound(o => o.LandmarkTypeId).Hidden();
             columns.Bound(o => o.LandmarkTypeCode);
-        columns.Bound(o => o.Description);
+            columns.Bound(o => o.Description);
+           columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkTypeId#)\">Delete</button>");
+            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=LandmarkTypeId#)\"> Edit </button>");
     })
         .HtmlAttributes(new { style = "height: 380px;" })
         .Scrollable()
@@ -51,7 +99,8 @@
             .Ajax()
             .PageSize(10)
             .Read(read => read.Action("GetDictionaryLandmarkTypesFiltered", "DictionaryLandmarkType").Data("filter"))
+             .Destroy(d => d.Action("Delete", "DictionaryLandmarkType")))
 
-        )
+)
 )
 

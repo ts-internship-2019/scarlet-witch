@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace iWasHere.Domain.Model
 {
-    public partial class DictionaryLandmarkType
+    public partial class DictionaryLandmarkType1
     {
         public int DictionaryItemId { get; set; }
         public string DictionaryItemCode { get; set; }

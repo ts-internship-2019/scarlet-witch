@@ -14,50 +14,79 @@
         var url_string = window.location.href;
         var url = new URL(url_string);
         var id = url.searchParams.get("id");
-        if (id != 0) {
-            $.ajax({
-            type: 'POST',
-            url: '@Url.Action("EditCity", "DictionaryCity")',
+        var cityNameValidation = false;
+              $.ajax({
+            type: 'GET',
+            url: '@Url.Action("VerifyCityName", "DictionaryCity")',
             data: {
-                cityName: document.getElementById("cityName").value,
-                countyId: document.getElementById("combo").value,
-                cityId: document.getElementById("cityId").value
-                
+                cityName: document.getElementById("cityName").value,         
             },
-            success: function (response) {
-                 
-                 window.location.href = '@Url.Action("Index", "DictionaryCity")';
-            },
-            error: function (response) {
-                //alert("hai ca nu merge");
+                  success: function (response) {
+                      cityNameValidation = response;
+                      alert(cityNameValidation);
+                       if (id != 0) {
+            if (cityNameValidation) {
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("EditCity", "DictionaryCity")',
+                    data: {
+                        cityName: document.getElementById("cityName").value,
+                        countyId: document.getElementById("combo").value,
+                        cityId: document.getElementById("cityId").value
+
+                    },
+                    success: function (response) {
+
+                        window.location.href = '@Url.Action("Index", "DictionaryCity")';
+                    },
+                    error: function (response) {
+                        //alert("hai ca nu merge");
+                    }
+                })
             }
-        })
+            else {
+                alert("This city name already exists");
+            }
         }
         else {
-            $.ajax({
-            type: 'PUT',
-            url: '@Url.Action("SaveCity", "DictionaryCity")',
-            data: {
-                cityName: document.getElementById("cityName").value,
-                countyId: document.getElementById("combo").value,
-                
-            },
-                success: function (response) {
-                    if (fromUpdate) {
-                        document.getElementById("cityName").value = "";
-                        $("#combo").val("").data("kendoDropDownList").text("");
-                        fromUpdate = false;
+            if (cityNameValidation) {
+                $.ajax({
+                    type: 'PUT',
+                    url: '@Url.Action("SaveCity", "DictionaryCity")',
+                    data: {
+                        cityName: document.getElementById("cityName").value,
+                        countyId: document.getElementById("combo").value,
+
+                    },
+                    success: function (response) {
+                        if (fromUpdate) {
+                            document.getElementById("cityName").value = "";
+                            $("#combo").val("").data("kendoDropDownList").text("");
+                            fromUpdate = false;
+                        }
+                        else {
+                            window.location.href = '@Url.Action("Index", "DictionaryCity")';
+                        }
+
+                    },
+                    error: function (response) {
+                        //alert("hai ca nu merge");
                     }
-                    else {
-                        window.location.href = '@Url.Action("Index", "DictionaryCity")';
-                    }
-                
+                })
+            }
+             else {
+                alert("This city name already exists");
+            }
+        }
             },
             error: function (response) {
-                //alert("hai ca nu merge");
+                alert("hai ca nu merge");
             }
-        })
-        }
+              })
+        
+       
         
     }
 
@@ -116,10 +145,7 @@
                 )
             </li>
             <li>
-                
                     <label>County</label>
-                    
-               
             </li>
             <li>
                 @(Html.Kendo().DropDownListFor(model => model.County)
