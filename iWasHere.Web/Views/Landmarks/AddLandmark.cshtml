@@ -1,4 +1,4 @@
-﻿@model iWasHere.Domain.Models.Landmark
+﻿@model iWasHere.Domain.DTOs.LandmarkModel
 
 @{
     ViewData["Title"] = "AddLandmark";
@@ -26,63 +26,168 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddLandmark">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="LandmarkTypeId" class="control-label"></label>
-                <select asp-for="LandmarkTypeId" class="form-control" asp-items="ViewBag.LandmarkTypeId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="HasEntryTicket" class="control-label"></label>
-                <input asp-for="HasEntryTicket" class="form-control" />
-                <span asp-validation-for="HasEntryTicket" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="VisitIntervalId" class="control-label"></label>
-                <select asp-for="VisitIntervalId" class="form-control" asp-items="ViewBag.VisitIntervalId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="LandmarkDescription" class="control-label"></label>
-                <input asp-for="LandmarkDescription" class="form-control" />
-                <span asp-validation-for="LandmarkDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TicketId" class="control-label"></label>
-                <select asp-for="TicketId" class="form-control" asp-items="ViewBag.TicketId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="StreetName" class="control-label"></label>
-                <input asp-for="StreetName" class="form-control" />
-                <span asp-validation-for="StreetName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StreetNumber" class="control-label"></label>
-                <input asp-for="StreetNumber" class="form-control" />
-                <span asp-validation-for="StreetNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CityId" class="control-label"></label>
-                <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Latitude" class="control-label"></label>
-                <input asp-for="Latitude" class="form-control" />
-                <span asp-validation-for="Latitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitude" class="control-label"></label>
-                <input asp-for="Longitude" class="form-control" />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
-            </div>
 
+        <ul style="list-style-type:none">
+            <li>
+                <label>Landmark Name</label>
+            </li>
+            <li>
+                @(Html.Kendo().TextBoxFor(model => model.LandmarkDescription)
+                                    .HtmlAttributes(new { @id = "LandmarkName", style = "margin:10px" })
+                )
+            </li>
 
+            <p></p>
 
+            <li>
+                <label>Landmark Type</label>
+            </li>
+            <li>
+                @(Html.Kendo().DropDownList()
+                                 .Name("DictionaryLandmarkType")
+                                 .DataTextField("LandmarkTypeCode")
+                                 .DataValueField("LandmarkTypeId")
+                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboType" })
+                                 .DataSource(source =>
+                                 {
+                                     source.Read(read =>
+                                     {
+                                         read.Action("GetAllLandmarkTypes", "Landmarks");
+                                     });
+                                 }))
+            </li>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <p></p>
 
-            </div>
-        </form>
+            <li>
+                <label>Landmark has entry ticket?</label>
+            </li>
+           <li>
+                @(Html.Kendo().RadioButton()
+                    .Name("YesRadioButton")
+                    .Label("Yes")
+                    .HtmlAttributes(new { @id="yesRB"})
+                    .Checked(true))
+
+                @(Html.Kendo().RadioButton()
+                   .Name("NoRadioButton")
+                   .Label("No")                   
+                    .HtmlAttributes(new { @id="noRB"})
+                   .Checked(false))
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Visit Interval</label>
+            </li>
+            <li>
+                @(Html.Kendo().DropDownList()
+                                 .Name("DictionaryInterval")
+                                 .DataTextField("VisitIntervalName")
+                                 .DataValueField("VisitIntervalId")
+                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboInterval" })
+                                 .DataSource(source =>
+                                 {
+                                     source.Read(read =>
+                                     {
+                                         read.Action("GetAllVisitIntervals", "Landmarks");
+                                     });
+                                 }))
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Ticket Type</label>
+            </li>
+            <li>
+                @(Html.Kendo().DropDownList()
+                                 .Name("DictionaryTicketType")
+                                 .DataTextField("TicketTypeName")
+                                 .DataValueField("TicketTypeId")
+                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboTicket" })
+                                 .DataSource(source =>
+                                 {
+                                     source.Read(read =>
+                                     {
+                                         read.Action("GetAllTicketTypes", "Landmarks");
+                                     });
+                                 }))
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>City</label>
+            </li>
+            <li>
+                @(Html.Kendo().DropDownList()
+                                 .Name("DictionaryCity")
+                                 .DataTextField("Name")
+                                 .DataValueField("Id")
+                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboCity" })
+                                 .DataSource(source =>
+                                 {
+                                     source.Read(read =>
+                                     {
+                                         read.Action("GetAllCities", "Landmarks");
+                                     });
+                                 }))
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Street Name</label>
+            </li>
+            <li>
+                @(Html.Kendo().TextBoxFor(model => model.StreetName)
+                                    .HtmlAttributes(new { @id = "StreetName", style = "margin:10px" })
+                )
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Street Number</label>
+            </li>
+            <li>
+                @(Html.Kendo().TextBoxFor(model => model.StreetNumber)
+                                    .HtmlAttributes(new { @id = "StreetNumber", style = "margin:10px" })
+                )
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Latitude</label>
+            </li>
+            <li>
+                @(Html.Kendo().NumericTextBoxFor(model => model.Latitude)
+                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:5px" })
+                )
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Longitude</label>
+            </li>
+            <li>
+                @(Html.Kendo().NumericTextBoxFor(model => model.Longitude)
+                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:5px" })
+                )
+            </li>
+        </ul>
+        <div>
+            @(Html.Kendo().Button()
+               .Name("primaryTextButton")
+               .HtmlAttributes(new { type = "button", @class = "k-primary" })
+               .Content("Save")
+               .Events(ev => ev.Click("add"))
+            )
+        </div>
     </div>
 </div>
 <form method="post" action='@Url.Action("SaveImage", "Landmarks")' enctype="multipart/form-data">
@@ -93,4 +198,47 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script type="text/javascript">
+
+
+    function add() {
+        var landmarkNameValidation = false;
+        var streetNameValidation = false;
+        var longitudeValidation = false;
+        var streetNumberValidation = false;
+        var latitudeValidation = false;
+        if (document.getElementById('yesRB').checked) {
+            h = true;
+        } else if (document.getElementById('noRB').checked) {
+            h = false;
+        }
+
+        $.ajax({
+            type: 'PUT',
+            url: '@Url.Action("SaveLandmark", "Landmarks")',
+            data: {
+                landmarkName: document.getElementById("LandmarkName").value,
+                landmarkTypeId: document.getElementById("comboType").value,
+                hasEntryTicket: h,
+                visitIntervalId: document.getElementById("comboInterval").value,
+                ticketId: document.getElementById("comboTicket").value,
+                streetName: document.getElementById("StreetName").value,
+                streetNumber: document.getElementById("StreetNumber").value,
+                cityId: document.getElementById("comboCity").value,
+                latitude: document.getElementById("Latitude").value,
+                longitude: document.getElementById("Longitude").value
+            },
+            success: function (response) {
+                alert("hai ca merge");
+                window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
+            },
+            error: function (response) {
+                alert("hai ca nu merge");
+            }
+        })
+    }
+
+</script>
+
 

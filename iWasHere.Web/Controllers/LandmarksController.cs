@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using iWasHere.Domain.DTOs;
+using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
@@ -24,6 +25,7 @@ namespace iWasHere.Web.Controllers
             _dictionaryService = dictionaryService;
             _he = he;
         }
+
         public IActionResult LandmarkList()
         {
             return View();
@@ -39,9 +41,19 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
+
+
+        public IActionResult ViewLandmark(int landmarkId)
+        {
+            LandmarkModel landmark = _dictionaryLandmarkService.GetLandmarkSingle(30);
+            return View(landmark);
+        }
+
+
+
         public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
         {
-            IQueryable<LandmarkModel> landmarks = _dictionaryService.GetLandmarksFiltered();
+            IQueryable<LandmarkModel> landmarks = _dictionaryLandmarkService.GetLandmarksFiltered();
             landmarks.ToDataSourceResult(request);
             landmarks = landmarks.OrderBy(o => o.LandmarkId);
             var total = landmarks.Count();
@@ -56,8 +68,27 @@ namespace iWasHere.Web.Controllers
                 Data = landmarks,
                 Total = total
             };
-
             return Json(result);
+        }
+            public ActionResult SaveLandmark(string landmarkName, int landmarkTypeId, bool hasEntryTicket, int visitIntervalId,
+            int ticketId, string streetName, int streetNumber, int cityId, float latitude, float longitude, int landmarkId)
+        {
+            _dictionaryLandmarkService.SaveLandmark( landmarkName,  landmarkTypeId,  hasEntryTicket,  visitIntervalId,
+             ticketId,  streetName,  streetNumber,  cityId,  latitude,  longitude,  landmarkId);
+
+            return RedirectToAction("LandmarkList");
+        }
+        
+
+        public ActionResult GetAllVisitIntervals([DataSourceRequest] DataSourceRequest request)
+        {
+            var context = new ScarletWitchContext();
+            var cnts = context.DictionaryInterval.Select(b => new DictionaryIntervalModel()
+            {
+                VisitIntervalName = b.VisitIntervalName,
+                VisitIntervalId = b.VisitIntervalId
+            }).ToList();
+            return Json(cnts);
         }
 
         public void SaveImage(IFormFile pic)
@@ -98,6 +129,27 @@ namespace iWasHere.Web.Controllers
 
 
 
+        public ActionResult GetAllTicketTypes([DataSourceRequest] DataSourceRequest request)
+        {
+            var context = new ScarletWitchContext();
+            var cnts = context.Ticket.Select(b => new DictionaryTicketModel()
+            {
+                TicketTypeName = b.TicketName,
+                TicketTypeId = b.TicketId
+            }).ToList();
+            return Json(cnts);
+        }
 
+        public ActionResult GetAllCities([DataSourceRequest] DataSourceRequest request)
+        {
+            var context = new ScarletWitchContext();
+            var cnts = context.DictionaryCity.Select(b => new DictionaryCityModel()
+            {
+                Name = b.CityName,
+                Id = b.CityId
+            }).ToList();
+            return Json(cnts);
+        }
+        
     }
 }

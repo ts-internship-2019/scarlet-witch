@@ -229,10 +229,7 @@ namespace iWasHere.Domain.Models
 
                 entity.Property(e => e.CurrencyName).HasMaxLength(256);
 
-                entity.HasOne(d => d.Country)
-                    .WithMany(p => p.DictionaryCurrency)
-                    .HasForeignKey(d => d.CountryId)
-                    .HasConstraintName("FK__Dictionar__Count__46B27FE2");
+
             });
 
             modelBuilder.Entity<DictionaryInterval>(entity =>
