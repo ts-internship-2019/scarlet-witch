@@ -143,7 +143,7 @@
 
 @{
 
-    ViewData["Title"] = "AddCity";
+    ViewData["Title"] = "AddLanguage";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -156,51 +156,77 @@
         var url_string = window.location.href;
         var url = new URL(url_string);
         var id = url.searchParams.get("id");
-        if (id != 0) {
-            $.ajax({
-            type: 'POST',
-            url: '@Url.Action("EditLanguage", "DictionaryLanguage")',
-            data: {
-                langName: document.getElementById("languageName").value,
-                langCode: document.getElementById("languageCode").value,
-                langId: document.getElementById("languageId").value
-
-            },
-            success: function (response) {
-
-                 window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
-            },
-            error: function (response) {
-                alert("hai ca nu merge");
-            }
-        })
+        var cityNameValidation = false;
+        if (document.getElementById("languageName").value == "" || document.getElementById("languageCode").value == "") {
+            alert("Camp gol");
         }
         else {
             $.ajax({
-            type: 'PUT',
-            url: '@Url.Action("SaveLanguage", "DictionaryLanguage")',
-            data: {
-                langName: document.getElementById("languageName").value,
-                langCode: document.getElementById("languageCode").value,
-
-            },
+                type: 'GET',
+                url: '@Url.Action("VerifyLanguage", "DictionaryLanguage")',
+                data: {
+                    languageName: document.getElementById("languageName").value,
+                    languageCode: document.getElementById("languageCode").value,
+                },
                 success: function (response) {
-                    if (fromUpdate) {
-                        document.getElementById("languageName").value = "";
-                        document.getElementById("languageCode").value = "";
-                        fromUpdate = false;
+                    cityNameValidation = response;
+                    alert(cityNameValidation);
+                    if (id != 0) {
+                        
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("EditLanguage", "DictionaryLanguage")',
+                                data: {
+                                    langName: document.getElementById("languageName").value,
+                                    langCode: document.getElementById("languageCode").value,
+                                    langId: document.getElementById("languageId").value
+
+                                },
+                                success: function (response) {
+
+                                    window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
+                                },
+                                error: function (response) {
+                                    //  alert("hai ca nu merge");
+                                }
+                            })
+                        
                     }
                     else {
-                        window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
+                        if (!cityNameValidation) {
+                            $.ajax({
+                                type: 'PUT',
+                                url: '@Url.Action("SaveLanguage", "DictionaryLanguage")',
+                                data: {
+                                    langName: document.getElementById("languageName").value,
+                                    langCode: document.getElementById("languageCode").value,
+
+                                },
+                                success: function (response) {
+                                    if (fromUpdate) {
+                                        document.getElementById("languageName").value = "";
+                                        document.getElementById("languageCode").value = "";
+                                        fromUpdate = false;
+                                    }
+                                    else {
+                                        window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
+                                    }
+
+                                },
+                                error: function (response) {
+                                    //  alert("hai ca nu merge");
+                                }
+                            })
+                        } else {
+                            alert("This language already exists");
+                        }
                     }
-
-            },
-            error: function (response) {
-                alert("hai ca nu merge");
-            }
-        })
+                },
+                error: function (response) {
+                    // alert("hai ca nu merge");
+                }
+            })
         }
-
     }
 
     function onLoadEdit() {
@@ -211,12 +237,12 @@
 
         var id = url.searchParams.get("id");
         if (id != 0) {
-            alert("din edit");
+            //alert("din edit");
             document.getElementById("buttonId").innerText = "Update";
             document.getElementById("buttonIdNew").style.visibility = "hidden";
         }
         else {
-            alert("din add");
+            //alert("din add");
         }
 
     }
