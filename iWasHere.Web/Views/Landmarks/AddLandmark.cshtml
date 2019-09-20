@@ -1,0 +1,180 @@
+﻿@model iWasHere.Domain.DTOs.LandmarkModel
+
+@{
+    ViewData["Title"] = "AddLandmark";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Add Landmark</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        <ul style="list-style-type:none">
+            <li>
+                <label>Landmark Name</label>
+            </li>
+            <li>
+                @(Html.Kendo().TextBoxFor(model => model.LandmarkDescription)
+                                    .HtmlAttributes(new { @id = "LandmarkName", style = "margin:10px" })
+                )
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Landmark Type</label>
+            </li>
+            <li>
+                @(Html.Kendo().DropDownList()
+                                 .Name("DictionaryLandmarkType")
+                                 .DataTextField("LandmarkTypeCode")
+                                 .DataValueField("LandmarkTypeId")
+                                 .HtmlAttributes(new { style = "width: 25%", @id = "comboType" })
+                                 .DataSource(source =>
+                                 {
+                                     source.Read(read =>
+                                     {
+                                         read.Action("GetAllLandmarkTypes", "DictionaryLandmarkType");
+                                     });
+                                 }))
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Landmark has entry ticket?</label>
+            </li>
+            <li>
+                @(Html.Kendo().RadioButton()
+                    .Name("YesRadioButton")
+                    .Label("Yes")
+                    .Checked(true))
+
+                @(Html.Kendo().RadioButton()
+                   .Name("NoRadioButton")
+                   .Label("No")
+                   .Checked(false))
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Visit Interval</label>
+            </li>
+            <li>
+                @(Html.Kendo().DropDownList()
+                                 .Name("DictionaryInterval")
+                                 .DataTextField("VisitIntervalName")
+                                 .DataValueField("VisitIntervalId")
+                                 .HtmlAttributes(new { style = "width: 25%", @id = "comboInterval" })
+                                 .DataSource(source =>
+                                 {
+                                     source.Read(read =>
+                                     {
+                                         read.Action("GetAllVisitIntervals", "DictionaryInterval");
+                                     });
+                                 }))
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Ticket Type</label>
+            </li>
+            <li>
+                @(Html.Kendo().DropDownList()
+                                 .Name("DictionaryTicketType")
+                                 .DataTextField("TicketTypeName")
+                                 .DataValueField("TicketTypeId")
+                                 .HtmlAttributes(new { style = "width: 25%", @id = "comboTicket" })
+                                 .DataSource(source =>
+                                 {
+                                     source.Read(read =>
+                                     {
+                                         read.Action("GetAllTicketTypes", "DictionaryTicketType");
+                                     });
+                                 }))
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>City</label>
+            </li>
+            <li>
+                @(Html.Kendo().DropDownList()
+                                 .Name("DictionaryCity")
+                                 .DataTextField("CityName")
+                                 .DataValueField("CityId")
+                                 .HtmlAttributes(new { style = "width: 25%", @id = "comboCity" })
+                                 .DataSource(source =>
+                                 {
+                                     source.Read(read =>
+                                     {
+                                         read.Action("GetDictionaryCities", "DictionaryCity");
+                                     });
+                                 }))
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Street Name</label>
+            </li>
+            <li>
+                @(Html.Kendo().TextBoxFor(model => model.StreetName)
+                                    .HtmlAttributes(new { @id = "StreetName", style = "margin:10px" })
+                )
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Street Number</label>
+            </li>
+            <li>
+                @(Html.Kendo().NumericTextBoxFor(model => model.StreetNumber)
+                                    .HtmlAttributes(new { @id = "StreetNumber", style = "margin:10px" })
+                )
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Latitude</label>
+            </li>
+            <li>
+                @(Html.Kendo().TextBoxFor(model => model.Latitude)
+                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:10px" })
+                )
+            </li>
+
+            <p></p>
+
+            <li>
+                <label>Longitude</label>
+            </li>
+            <li>
+                @(Html.Kendo().TextBoxFor(model => model.Longitude)
+                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:10px" })
+                )
+            </li>
+        </ul>
+        <div>
+            @(Html.Kendo().Button()
+               .Name("primaryTextButton")
+               .HtmlAttributes(new { type = "button", @class = "k-primary" })
+               .Content("Save")
+               .Events(ev => ev.Click("add"))
+            )
+        </div>
+    </div>
+  </div>
+
+<div>
+    <a asp-controller="Landmarks"
+       asp-action="LandmarkList">Back to Landmark List</a>
+</div>
+

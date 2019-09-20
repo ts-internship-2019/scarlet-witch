@@ -22,6 +22,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Views\Landmark\" />
     <Folder Include="wwwroot\lib\kendo-ui\" />
   </ItemGroup>
 
