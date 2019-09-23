@@ -18,9 +18,9 @@ namespace iWasHere.Web.Controllers
     public class LandmarksController : Controller
     {
         private readonly DictionaryService _dictionaryService;
-   
+
         private readonly IHostingEnvironment _he;
-        public static List<String> imagesPaths; 
+        public static List<String> imagesPaths;
 
         public LandmarksController(DictionaryService dictionaryService, IHostingEnvironment he)
         {
@@ -55,7 +55,7 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
         {
-            IQueryable<LandmarkModel> landmarks = _dictionaryLandmarkService.GetLandmarksFiltered();
+            IQueryable<LandmarkModel> landmarks = _dictionaryService.GetLandmarksFiltered();
             landmarks.ToDataSourceResult(request);
             landmarks = landmarks.OrderBy(o => o.LandmarkId);
             var total = landmarks.Count();
@@ -76,7 +76,7 @@ namespace iWasHere.Web.Controllers
         public ActionResult SaveLandmark(string landmarkName, int landmarkTypeId, bool hasEntryTicket, int visitIntervalId,
             int ticketId, string streetName, int streetNumber, int cityId, float latitude, float longitude, int landmarkId)
         {
-            _dictionaryLandmarkService.SaveLandmark(landmarkName, landmarkTypeId, hasEntryTicket, visitIntervalId,
+            _dictionaryService.SaveLandmark(landmarkName, landmarkTypeId, hasEntryTicket, visitIntervalId,
              ticketId, streetName, streetNumber, cityId, latitude, longitude, landmarkId);
 
             return RedirectToAction("LandmarkList");
@@ -119,11 +119,12 @@ namespace iWasHere.Web.Controllers
 
         public void SaveImagesDB()
         {
-            foreach(string path in imagesPaths)
+            foreach (string path in imagesPaths)
             {
                 _dictionaryService.SaveImagesDB(path);
-            }
+            }         
 
+        }
 
         public ActionResult GetAllTicketTypes([DataSourceRequest] DataSourceRequest request)
         {
@@ -178,7 +179,5 @@ namespace iWasHere.Web.Controllers
             }).ToList();
             return Json(cnts);
         }
-
-
     }
 }
