@@ -5,28 +5,40 @@
 }
 
 <h1>LandmarkList</h1>
-<div>
-    @(Html.Kendo().Button()
-      .Name("primaryTextButton")
-      .HtmlAttributes(new { type = "button", @class = "k-primary" })
-      .Content("Add")
-      .Events(ev => ev.Click("add"))
+
+
+<script type="text/javascript">
+    function add() {
+
+        window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
+
+    }
+
+    function redirectImagesContext() {
+
+        window.location.href = '@Url.Action("Images", "Landmarks")';
+
+    }
+
+    function redirectToViewLandmark(id)
+    {
+        window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+id;
+    }
+</script>
+
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("add"))
 )
-</div>
-
-<p></p>
-<div></div>
-<div>
-    @(Html.Kendo().Button()
-      .Name("primaryTextButton")
-      .HtmlAttributes(new { type = "button", @class = "k-primary" })
-      .Content("Edit")
-      .Events(ev => ev.Click("edit"))
+@(Html.Kendo().Button()
+           .Name("imagesButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Iamges")
+           .Events(ev => ev.Click("redirectImagesContext"))
 )
-</div>
-
-
-@*@(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
         ()
         .Name("grid")
         .HtmlAttributes(new { style = "height: 380px;" })
@@ -35,8 +47,10 @@
         .Sortable()
         .Columns(columns =>
         {
-            columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=1#)\">Delete</button>");
-            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=1#)\"> Edit </button>");
+            columns.Bound(o => o.LandmarkId);
+            columns.Bound(o => o.LandmarkDescription).Title("Name");
+            //columns.Template("<button id=\"deleteButton\" class=\"k-button\">Delete</button>");
+            columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
         })
         .NoRecords(true)
         .Filterable()
@@ -48,82 +62,6 @@
         .DataSource(dataSource => dataSource
         .Ajax()
         .PageSize(10)
-        .Read(read => read.Action("GetLandmarks", "Landmark").Data("filter"))
-        .Destroy(d => d.Action("Delete", "Landmark"))
+        .Read(read => read.Action("GetLandmarksFiltered", "Landmarks"))
         )
-        .Events(events => events.Edit("openAddCountyPage"))
-    )*@
-
-
-<script type="text/javascript">
-
-    let fromUpdate = false;
-
-    function add() {
-        window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
-    }
-     function edit() {
-        window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
-    }
-        @*var url_string = window.location.href;
-        var url = new URL(url_string);
-        var id = url.searchParams.get("CountyId");
-
-        if (id != 0) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("EditCounty", "DictionaryCounty")',
-                data: {
-                    countyName: document.getElementById("CountyName").value,
-                    countyId: document.getElementById("CountyId").value,
-                    countryId: document.getElementById("combo").value
-                },
-                success: function (response) {
-                    alert("hai ca merge");
-                    window.location.href = '@Url.Action("Index", "DictionaryCounty")';
-                },
-                error: function (response) {
-                    alert("hai ca nu merge");
-                }
-            })
-        }
-        else {
-            $.ajax({
-                type: 'PUT',
-                url: '@Url.Action("SaveCounty", "DictionaryCounty")',
-                data: {
-                    countyName: document.getElementById("CountyName").value,
-                    countryId: document.getElementById("combo").value
-                },
-                success: function (response) {
-                    if (fromUpdate) {
-                        document.getElementById("CountyName").value = "";
-                        $("#combo").val("").data("kendoDropDownList").text("");
-                        fromUpdate = false;
-                    }
-                    else {
-                        window.location.href = '@Url.Action("Index", "DictionaryCounty")';
-                    }
-
-                },
-                error: function (response) {
-                    alert("hai ca nu merge");
-                }
-            })*@
-
-    function onLoadEdit() {
-        var url_string = window.location.href;
-        var url = new URL(url_string);
-        document.getElementById("CountyId").style.visibility = "hidden";
-        var id = url.searchParams.get("id");
-        if (id != 0) {
-            alert("din edit");
-            document.getElementById("buttonId").innerText = "Update";
-        }
-        else {
-            alert("din add");
-        }
-
-    }
-
-</script>
+    )

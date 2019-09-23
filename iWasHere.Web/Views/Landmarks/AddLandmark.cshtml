@@ -4,8 +4,35 @@
     ViewData["Title"] = "AddLandmark";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script>
 
-<h1>Add Landmark</h1>
+    @*function addImage() {
+             $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("SaveImage", "Landmarks")',
+                 success: function (response) {
+                     alert("hai ca merge");
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+    }*@
+
+    function addImage (){
+    $.ajax({
+        url: '@Url.Action("SaveImage", "Landmarks")',
+        type:'post',
+        data:$('#myForm').serialize(),
+        success:function(){
+            alert("worked");
+        }
+    });
+}
+</script>
+
+<h1>AddLandmark</h1>
+
 
 <hr />
 <div class="row">
@@ -31,12 +58,12 @@
                                  .Name("DictionaryLandmarkType")
                                  .DataTextField("LandmarkTypeCode")
                                  .DataValueField("LandmarkTypeId")
-                                 .HtmlAttributes(new { style = "width: 25%", @id = "comboType" })
+                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboType" })
                                  .DataSource(source =>
                                  {
                                      source.Read(read =>
                                      {
-                                         read.Action("GetAllLandmarkTypes", "DictionaryLandmarkType");
+                                         read.Action("GetAllLandmarkTypes", "Landmarks");
                                      });
                                  }))
             </li>
@@ -50,11 +77,13 @@
                 @(Html.Kendo().RadioButton()
                     .Name("YesRadioButton")
                     .Label("Yes")
+                    .HtmlAttributes(new { @id = "yesRB" })
                     .Checked(true))
 
                 @(Html.Kendo().RadioButton()
                    .Name("NoRadioButton")
                    .Label("No")
+                    .HtmlAttributes(new { @id = "noRB" })
                    .Checked(false))
             </li>
 
@@ -68,12 +97,12 @@
                                  .Name("DictionaryInterval")
                                  .DataTextField("VisitIntervalName")
                                  .DataValueField("VisitIntervalId")
-                                 .HtmlAttributes(new { style = "width: 25%", @id = "comboInterval" })
+                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboInterval" })
                                  .DataSource(source =>
                                  {
                                      source.Read(read =>
                                      {
-                                         read.Action("GetAllVisitIntervals", "DictionaryInterval");
+                                         read.Action("GetAllVisitIntervals", "Landmarks");
                                      });
                                  }))
             </li>
@@ -88,12 +117,12 @@
                                  .Name("DictionaryTicketType")
                                  .DataTextField("TicketTypeName")
                                  .DataValueField("TicketTypeId")
-                                 .HtmlAttributes(new { style = "width: 25%", @id = "comboTicket" })
+                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboTicket" })
                                  .DataSource(source =>
                                  {
                                      source.Read(read =>
                                      {
-                                         read.Action("GetAllTicketTypes", "DictionaryTicketType");
+                                         read.Action("GetAllTicketTypes", "Landmarks");
                                      });
                                  }))
             </li>
@@ -106,14 +135,14 @@
             <li>
                 @(Html.Kendo().DropDownList()
                                  .Name("DictionaryCity")
-                                 .DataTextField("CityName")
-                                 .DataValueField("CityId")
-                                 .HtmlAttributes(new { style = "width: 25%", @id = "comboCity" })
+                                 .DataTextField("Name")
+                                 .DataValueField("Id")
+                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboCity" })
                                  .DataSource(source =>
                                  {
                                      source.Read(read =>
                                      {
-                                         read.Action("GetDictionaryCities", "DictionaryCity");
+                                         read.Action("GetAllCities", "Landmarks");
                                      });
                                  }))
             </li>
@@ -135,7 +164,7 @@
                 <label>Street Number</label>
             </li>
             <li>
-                @(Html.Kendo().NumericTextBoxFor(model => model.StreetNumber)
+                @(Html.Kendo().TextBoxFor(model => model.StreetNumber)
                                     .HtmlAttributes(new { @id = "StreetNumber", style = "margin:10px" })
                 )
             </li>
@@ -146,8 +175,8 @@
                 <label>Latitude</label>
             </li>
             <li>
-                @(Html.Kendo().TextBoxFor(model => model.Latitude)
-                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:10px" })
+                @(Html.Kendo().NumericTextBoxFor(model => model.Latitude)
+                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:5px" })
                 )
             </li>
 
@@ -157,11 +186,30 @@
                 <label>Longitude</label>
             </li>
             <li>
-                @(Html.Kendo().TextBoxFor(model => model.Longitude)
-                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:10px" })
+                @(Html.Kendo().NumericTextBoxFor(model => model.Longitude)
+                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:5px" })
                 )
             </li>
         </ul>
+        <iframe hidden name="formSending"></iframe>
+        @*<form method="post" id="myForm" target="formSending" action='@Url.Action("SaveImage", "Landmarks")' enctype="multipart/form-data">
+            <div class="demo-section k-content">
+                <input multiple type="file" name="pic" />
+                <input type="submit" value="Upload" class="k-button k-primary" />
+             </div>
+        </form>*@
+
+        <form method="post"  action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
+            <div class="demo-section k-content">
+                @(Html.Kendo().Upload()
+                    .Name("files")
+                    .HtmlAttributes(new { aria_label = "files", name="pic" , accept="image/*"})
+                )
+                <p style="padding-top: 1em; text-align: right">
+                    <input type="submit" value="Upload"  class="k-button k-primary" />
+                </p>
+            </div>
+        </form>
         <div>
             @(Html.Kendo().Button()
                .Name("primaryTextButton")
@@ -173,13 +221,57 @@
     </div>
 </div>
 
-
-
-
-
-
 <div>
-    <a asp-controller="Landmarks"
-       asp-action="LandmarkList">Back to Landmark List</a>
+    <a asp-action="Index">Back to List</a>
 </div>
+
+<script type="text/javascript">
+
+
+    function add() {
+        var landmarkNameValidation = false;
+        var streetNameValidation = false;
+        var longitudeValidation = false;
+        var streetNumberValidation = false;
+        var latitudeValidation = false;
+        if (document.getElementById('yesRB').checked) {
+            h = true;
+        } else if (document.getElementById('noRB').checked) {
+            h = false;
+        }
+
+        $.ajax({
+            type: 'PUT',
+            url: '@Url.Action("SaveLandmark", "Landmarks")',
+            data: {
+                landmarkName: document.getElementById("LandmarkName").value,
+                landmarkTypeId: document.getElementById("comboType").value,
+                hasEntryTicket: h,
+                visitIntervalId: document.getElementById("comboInterval").value,
+                ticketId: document.getElementById("comboTicket").value,
+                streetName: document.getElementById("StreetName").value,
+                streetNumber: document.getElementById("StreetNumber").value,
+                cityId: document.getElementById("comboCity").value,
+                latitude: document.getElementById("Latitude").value,
+                longitude: document.getElementById("Longitude").value
+            },
+            success: function (response) {
+                alert("hai ca merge");
+                $.ajax({
+                    url: '@Url.Action("SaveImagesDB", "Landmarks")',
+                    type: 'put',
+                    success: function () {
+                        alert("hai ca merge");
+                    }
+                });
+                window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
+            },
+            error: function (response) {
+                alert("hai ca nu merge");
+            }
+        })
+    }
+
+</script>
+
 
