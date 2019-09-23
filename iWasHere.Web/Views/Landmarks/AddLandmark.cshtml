@@ -4,8 +4,24 @@
     ViewData["Title"] = "AddLandmark";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script>
+
+    function addImage() {
+             $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("Submit", "Landmarks")',
+                 success: function (response) {
+                     alert("hai ca merge");
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+    }
+</script>
 
 <h1>AddLandmark</h1>
+
 
 <hr />
 <div class="row">
@@ -174,6 +190,10 @@
         </div>
     </div>
 </div>
+<form method="post" action='@Url.Action("SaveImage", "Landmarks")' enctype="multipart/form-data">
+    <input type="file" name="pic" />
+    <input type="submit" value="Upload" />
+</form>
 
 <div>
     <a asp-action="Index">Back to List</a>

@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iWasHere.Web.Controllers
 {
     public class LandmarksController : Controller
     {
-        private readonly DictionaryService _dictionaryLandmarkService;
+        private readonly DictionaryService _dictionaryService;
+        private readonly IHostingEnvironment _he;
 
-          public LandmarksController(DictionaryService dictionaryService)
+        public LandmarksController(DictionaryService dictionaryService, IHostingEnvironment he)
         {
-            this._dictionaryLandmarkService = dictionaryService;
+            _dictionaryService = dictionaryService;
+            _he = he;
         }
 
         public IActionResult LandmarkList()
@@ -85,17 +91,42 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
-            
-        public ActionResult GetAllLandmarkTypes([DataSourceRequest] DataSourceRequest request)
+        public void SaveImage(IFormFile pic)
         {
-            var context = new ScarletWitchContext();
-            var cnts = context.DictionaryLandmarkType.Select(b => new DictionaryLandmarkTypeModel()
+            if( pic!= null)
             {
-                LandmarkTypeCode = b.LandmarkTypeCode,
-                LandmarkTypeId = b.LandmarkTypeId
-            }).ToList();
-            return Json(cnts);
+            
+                var fileName = Path.Combine(_he.WebRootPath, Guid.NewGuid().ToString() + Path.GetExtension(pic.FileName));
+                pic.CopyTo(new FileStream(fileName, FileMode.Create));
+            }
         }
+        private IEnumerable<string> GetFileInfo(IEnumerable<IFormFile> files)
+        {
+            List<string> fileInfo = new List<string>();
+
+            foreach (var file in files)
+            {
+                var fileContent = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                var fileName = Path.GetFileName(fileContent.FileName.ToString().Trim('"'));
+
+                fileInfo.Add(string.Format("{0} ({1} bytes)", fileName, file.Length));
+            }
+
+            return fileInfo;
+        }
+        public ActionResult Submit(IFormFile files)
+        {
+            IEnumerable<string> fileInfo = new List<string>();
+
+            if (files != null)
+            {
+                var fileName = Path.Combine(_he.WebRootPath, Path.GetFileName(files.FileName));
+                files.CopyTo(new FileStream(fileName, FileMode.Create));
+            }
+
+            return View();
+        }
+
 
 
         public ActionResult GetAllTicketTypes([DataSourceRequest] DataSourceRequest request)
