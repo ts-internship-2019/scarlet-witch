@@ -277,7 +277,24 @@ namespace iWasHere.Domain.Service
 
             _dbContext.DictionaryCurrency.Remove(currency);
             _dbContext.SaveChanges();
+        }
 
+        public int DeleteLandmark(int id)
+        {
+            int sters = 0;
+            try
+            {
+                Landmark c = new Landmark() { LandmarkId = id };
+                _dbContext.Landmark.Remove(c);
+                _dbContext.SaveChanges();
+                sters = 1;
+                return sters;
+            }
+            catch (Exception ex)
+            {
+                sters = 0;
+                return sters;
+            }
         }
 
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
