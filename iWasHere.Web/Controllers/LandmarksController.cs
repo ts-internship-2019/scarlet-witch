@@ -20,7 +20,7 @@ namespace iWasHere.Web.Controllers
         private readonly DictionaryService _dictionaryService;
    
         private readonly IHostingEnvironment _he;
-        public List<String> imagesPaths = new List<string>();
+        public static List<String> imagesPaths; 
 
         public LandmarksController(DictionaryService dictionaryService, IHostingEnvironment he)
         {
@@ -47,7 +47,7 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult ViewLandmark(string id)
         {
-            LandmarkModel landmark = _dictionaryLandmarkService.GetLandmarkSingle(Convert.ToInt32(id));
+            LandmarkModel landmark = _dictionaryService.GetLandmarkSingle(Convert.ToInt32(id));
             return View(landmark);
         }
 
@@ -97,12 +97,17 @@ namespace iWasHere.Web.Controllers
         {
             if (pic != null && pic.Count > 0)
             {
+                imagesPaths = new List<string>();
                 foreach (IFormFile formFile in pic)
                 {
-
-                    var fileName = Path.Combine(_he.WebRootPath, Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName));
-                    formFile.CopyTo(new FileStream(fileName, FileMode.Create));
-                    imagesPaths.Add(fileName);
+                    if (Path.GetExtension(formFile.FileName).ToLower() == ".jpg" || Path.GetExtension(formFile.FileName).ToLower() == ".png"
+                        || Path.GetExtension(formFile.FileName).ToLower() == ".jpeg")
+                    {
+                        var fileName = Path.Combine(_he.WebRootPath, Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName));
+                        formFile.CopyTo(new FileStream(fileName, FileMode.Create));
+                        imagesPaths.Add(fileName);
+                    }
+                    
 
                 }
             }
@@ -141,6 +146,18 @@ namespace iWasHere.Web.Controllers
             }).ToList();
             return Json(cnts);
         }
-        
+
+        public ActionResult GetAllLandmarkTypes([DataSourceRequest] DataSourceRequest request)
+        {
+            var context = new ScarletWitchContext();
+            var cnts = context.DictionaryLandmarkType.Select(b => new DictionaryLandmarkTypeModel()
+            {
+                LandmarkTypeCode = b.LandmarkTypeCode,
+                LandmarkTypeId = b.LandmarkTypeId
+            }).ToList();
+            return Json(cnts);
+        }
+
+
     }
 }

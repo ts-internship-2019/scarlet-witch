@@ -534,8 +534,7 @@ namespace iWasHere.Domain.Service
 
         public void SaveImagesDB(string path)
         {
-
-            int landmarkId = Convert.ToInt32(_dbContext.Landmark.OrderByDescending(u => u.LandmarkId).FirstOrDefault());
+            var landmarkId = _dbContext.Landmark.Max(u => u.LandmarkId);
 
             Images img = new Images()
             {
