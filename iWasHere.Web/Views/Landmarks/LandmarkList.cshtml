@@ -5,7 +5,14 @@
 }
 
 <h1>LandmarkList</h1>
-
+<div>
+    @(Html.Kendo().Button()
+      .Name("primaryTextButton")
+      .HtmlAttributes(new { type = "button", @class = "k-primary" })
+      .Content("Add")
+      .Events(ev => ev.Click("redirectToAddContext"))
+    )
+</div>
 
 <script type="text/javascript">
     function add() {
@@ -18,11 +25,6 @@
 
         window.location.href = '@Url.Action("Images", "Landmarks")';
 
-    }
-
-    function redirectToViewLandmark(id)
-    {
-        window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+id;
     }
 </script>
 
@@ -49,8 +51,8 @@
         {
             columns.Bound(o => o.LandmarkId);
             columns.Bound(o => o.LandmarkDescription).Title("Name");
-            //columns.Template("<button id=\"deleteButton\" class=\"k-button\">Delete</button>");
-            columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
+            columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkId#)\">Delete</button>");
+            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=LandmarkId#)\"> Edit </button>");
         })
         .NoRecords(true)
         .Filterable()
@@ -63,5 +65,30 @@
         .Ajax()
         .PageSize(10)
         .Read(read => read.Action("GetLandmarksFiltered", "Landmarks"))
+        .Destroy(d => d.Action("Delete", "Landmarks"))
         )
     )
+<script type="text/javascript">
+
+    function redirectImagesContext() {
+        window.location.href = '@Url.Action("Images", "Landmarks")';
+    }
+
+    function redirectToAddContext() {
+        window.location.href = '@Url.Action("AddLandmark", "Landmarks")/?id=' + 0;
+    }
+
+    function redirectToEditContext(id) {
+        window.location.href = '@Url.Action("AddLandmark", "Landmarks")/?id=' + id;
+    }
+
+    function refreshGrid() {
+        $("#landmarkGrid").data("kendoGrid").dataSource.read();
+        $("#landmarkGrid").data("kendoGrid").dataSource.page(1);
+    }
+
+     function openAddLandmarkPage(e) {
+        window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
+    }
+
+</script>

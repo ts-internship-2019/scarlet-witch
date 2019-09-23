@@ -79,14 +79,15 @@
         $("#cityGrid").data("kendoGrid").dataSource.read();
         $("#cityGrid").data("kendoGrid").dataSource.page(1);
     }
-     function deleteFilters() {
-         document.getElementById("cityTextBox").value = "";
-         $("#combo").val("").data("kendoDropDownList").text("");
-         refreshGrid();
+
+    function deleteFilters() {
+        document.getElementById("cityTextBox").value = "";
+        $("#combo").val("").data("kendoDropDownList").text("");
+        refreshGrid();
     }
-       function redirectToAddContext()
-    {
-            window.location.href = 'DictionaryCity/AddCity/?id=' + 0;
+
+    function redirectToAddContext() {
+        window.location.href = 'DictionaryCity/AddCity/?id=' + 0;
     }
 
     function redirectToEditContext(id)
@@ -94,8 +95,8 @@
         window.location.href = 'DictionaryCity/AddCity/?id=' + id;
     }
 
-
 </script>
+
 <div>
 @(Html.Kendo().TextBox()
 .Name("cityTextBox")
@@ -161,7 +162,6 @@
             .Refresh(true)
             .PageSizes(true)
             .ButtonCount(5))
-
         .DataSource(dataSource => dataSource
             .Ajax()
             .PageSize(5)
