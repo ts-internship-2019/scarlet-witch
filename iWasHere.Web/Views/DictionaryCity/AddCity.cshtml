@@ -1,10 +1,8 @@
 ﻿
 @{
-
     ViewData["Title"] = "AddCity";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 
 <h1>AddCity</h1>
 <script>
@@ -15,83 +13,77 @@
         var url = new URL(url_string);
         var id = url.searchParams.get("id");
         var cityNameValidation = false;
-              $.ajax({
+        $.ajax({
             type: 'GET',
             url: '@Url.Action("VerifyCityName", "DictionaryCity")',
             data: {
-                cityName: document.getElementById("cityName").value,         
+                cityName: document.getElementById("cityName").value,
             },
-                  success: function (response) {
-                      cityNameValidation = response;
-                      alert(cityNameValidation);
-                       if (id != 0) {
-            if (cityNameValidation) {
+            success: function (response) {
+                cityNameValidation = response;
+                alert(cityNameValidation);
+                if (id != 0) {
+                    if (cityNameValidation) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("EditCity", "DictionaryCity")',
+                            data: {
+                                cityName: document.getElementById("cityName").value,
+                                countyId: document.getElementById("combo").value,
+                                cityId: document.getElementById("cityId").value
+                            },
+                            success: function (response) {
 
-
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("EditCity", "DictionaryCity")',
-                    data: {
-                        cityName: document.getElementById("cityName").value,
-                        countyId: document.getElementById("combo").value,
-                        cityId: document.getElementById("cityId").value
-
-                    },
-                    success: function (response) {
-
-                        window.location.href = '@Url.Action("Index", "DictionaryCity")';
-                    },
-                    error: function (response) {
-                        //alert("hai ca nu merge");
+                                window.location.href = '@Url.Action("Index", "DictionaryCity")';
+                            },
+                            error: function (response) {
+                                //alert("hai ca nu merge");
+                            }
+                        })
                     }
-                })
-            }
-            else {
-                alert("This city name already exists");
-            }
-        }
-        else {
-            if (cityNameValidation) {
-                $.ajax({
-                    type: 'PUT',
-                    url: '@Url.Action("SaveCity", "DictionaryCity")',
-                    data: {
-                        cityName: document.getElementById("cityName").value,
-                        countyId: document.getElementById("combo").value,
-
-                    },
-                    success: function (response) {
-                        if (fromUpdate) {
-                            document.getElementById("cityName").value = "";
-                            $("#combo").val("").data("kendoDropDownList").text("");
-                            fromUpdate = false;
-                        }
-                        else {
-                            window.location.href = '@Url.Action("Index", "DictionaryCity")';
-                        }
-
-                    },
-                    error: function (response) {
-                        //alert("hai ca nu merge");
+                    else {
+                        alert("This city name already exists");
                     }
-                })
-            }
-             else {
-                alert("This city name already exists");
-            }
-        }
+                }
+                else {
+                    if (cityNameValidation) {
+                        $.ajax({
+                            type: 'PUT',
+                            url: '@Url.Action("SaveCity", "DictionaryCity")',
+                            data: {
+                                cityName: document.getElementById("cityName").value,
+                                countyId: document.getElementById("combo").value,
+
+                            },
+                            success: function (response) {
+                                if (fromUpdate) {
+                                    document.getElementById("cityName").value = "";
+                                    $("#combo").val("").data("kendoDropDownList").text("");
+                                    fromUpdate = false;
+                                }
+                                else {
+                                    window.location.href = '@Url.Action("Index", "DictionaryCity")';
+                                }
+
+                            },
+                            error: function (response) {
+                                //alert("hai ca nu merge");
+                            }
+                        })
+                    }
+                    else {
+                        alert("This city name already exists");
+                    }
+                }
             },
             error: function (response) {
                 alert("hai ca nu merge");
             }
-              })
-        
-       
+        }              })
         
     }
 
     function onLoadEdit() {
-
         var url_string = window.location.href;
         var url = new URL(url_string);
         document.getElementById("cityId").style.visibility = "hidden";
@@ -99,41 +91,31 @@
         var id = url.searchParams.get("id");
         if (id != 0) {
             //alert("din edit");
-                  document.getElementById("buttonId").innerText = "Update";
+            document.getElementById("buttonId").innerText = "Update";
         }
         else {
             //alert("din add");
         }
-        
     }
 
     function cancelAdd() {
         window.location.href = '@Url.Action("Index", "DictionaryCity")';
     }
 
- 
 
-    
     function AddNew() {
-          fromUpdate = true;
+        fromUpdate = true;
         AddCity();
-       // window.location.href = 'Url.Action("AddCity", "DictionaryCity")';
-      
-    
     }
-
 
 </script>
 @model  iWasHere.Domain.DTOs.DictionaryCityModel;
 
 <body onload="onLoadEdit()">
 
-    
         <ul style="list-style-type:none">
             <li>
-               
                     <label>City Name</label>             
-                
             </li>
             <li>
                 @(Html.Kendo().TextBoxFor(model => model.Name)
@@ -164,8 +146,6 @@
     </ul>
 
 
-    
-
         <div>
             @(Html.Kendo().Button()
                       .Name("primaryTextButton")
@@ -186,6 +166,5 @@
                   .Events(ev => ev.Click("cancelAdd"))
             )
         </div>
-
 
 </body>
