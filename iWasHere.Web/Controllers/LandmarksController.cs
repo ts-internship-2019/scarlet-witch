@@ -105,11 +105,11 @@ namespace iWasHere.Web.Controllers
                     if (Path.GetExtension(formFile.FileName).ToLower() == ".jpg" || Path.GetExtension(formFile.FileName).ToLower() == ".png"
                         || Path.GetExtension(formFile.FileName).ToLower() == ".jpeg")
                     {
-                        var fileName = Path.Combine(_he.WebRootPath, Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName));
+                        var a = Guid.NewGuid().ToString();
+                        var fileName = Path.Combine(_he.WebRootPath, a + Path.GetExtension(formFile.FileName));
                         formFile.CopyTo(new FileStream(fileName, FileMode.Create));
-                        imagesPaths.Add(fileName);
+                        imagesPaths.Add(a + Path.GetExtension(formFile.FileName));
                     }
-                    
 
                 }
             }
