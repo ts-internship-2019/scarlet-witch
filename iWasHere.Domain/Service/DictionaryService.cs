@@ -531,5 +531,22 @@ namespace iWasHere.Domain.Service
             }).Where(a => a.LandmarkId == landmarkId).FirstOrDefault();
             return city;
         }
+
+        public void SaveImagesDB(string path)
+        {
+
+            int landmarkId = Convert.ToInt32(_dbContext.Landmark.OrderByDescending(u => u.LandmarkId).FirstOrDefault());
+
+            Images img = new Images()
+            {
+                Path = path,
+                LandmarkId = landmarkId
+
+            };
+                    
+            _dbContext.Images.Add(img);
+            _dbContext.SaveChanges();
+        }
+
     }
 }

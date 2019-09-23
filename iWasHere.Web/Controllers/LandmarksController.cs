@@ -18,7 +18,9 @@ namespace iWasHere.Web.Controllers
     public class LandmarksController : Controller
     {
         private readonly DictionaryService _dictionaryService;
+   
         private readonly IHostingEnvironment _he;
+        public List<String> imagesPaths = new List<string>();
 
         public LandmarksController(DictionaryService dictionaryService, IHostingEnvironment he)
         {
@@ -45,7 +47,7 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult ViewLandmark(int landmarkId)
         {
-            LandmarkModel landmark = _dictionaryLandmarkService.GetLandmarkSingle(30);
+            LandmarkModel landmark = _dictionaryService.GetLandmarkSingle(30);
             return View(landmark);
         }
 
@@ -53,7 +55,7 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
         {
-            IQueryable<LandmarkModel> landmarks = _dictionaryLandmarkService.GetLandmarksFiltered();
+            IQueryable<LandmarkModel> landmarks = _dictionaryService.GetLandmarksFiltered();
             landmarks.ToDataSourceResult(request);
             landmarks = landmarks.OrderBy(o => o.LandmarkId);
             var total = landmarks.Count();
@@ -73,7 +75,7 @@ namespace iWasHere.Web.Controllers
             public ActionResult SaveLandmark(string landmarkName, int landmarkTypeId, bool hasEntryTicket, int visitIntervalId,
             int ticketId, string streetName, int streetNumber, int cityId, float latitude, float longitude, int landmarkId)
         {
-            _dictionaryLandmarkService.SaveLandmark( landmarkName,  landmarkTypeId,  hasEntryTicket,  visitIntervalId,
+            _dictionaryService.SaveLandmark( landmarkName,  landmarkTypeId,  hasEntryTicket,  visitIntervalId,
              ticketId,  streetName,  streetNumber,  cityId,  latitude,  longitude,  landmarkId);
 
             return RedirectToAction("LandmarkList");
@@ -91,43 +93,32 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
-        public void SaveImage(IFormFile pic)
+        public void SaveImage(List<IFormFile> pic)
         {
-            if( pic!= null)
+            if (pic != null && pic.Count > 0)
             {
-            
-                var fileName = Path.Combine(_he.WebRootPath, Guid.NewGuid().ToString() + Path.GetExtension(pic.FileName));
-                pic.CopyTo(new FileStream(fileName, FileMode.Create));
-            }
-        }
-        private IEnumerable<string> GetFileInfo(IEnumerable<IFormFile> files)
-        {
-            List<string> fileInfo = new List<string>();
+                foreach (IFormFile formFile in pic)
+                {
 
-            foreach (var file in files)
-            {
-                var fileContent = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-                var fileName = Path.GetFileName(fileContent.FileName.ToString().Trim('"'));
+                    var fileName = Path.Combine(_he.WebRootPath, Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName));
+                    formFile.CopyTo(new FileStream(fileName, FileMode.Create));
+                    imagesPaths.Add(fileName);
 
-                fileInfo.Add(string.Format("{0} ({1} bytes)", fileName, file.Length));
+                }
             }
 
-            return fileInfo;
-        }
-        public ActionResult Submit(IFormFile files)
-        {
-            IEnumerable<string> fileInfo = new List<string>();
-
-            if (files != null)
-            {
-                var fileName = Path.Combine(_he.WebRootPath, Path.GetFileName(files.FileName));
-                files.CopyTo(new FileStream(fileName, FileMode.Create));
-            }
-
-            return View();
         }
 
 
+
+        public void SaveImagesDB()
+        {
+            foreach(string path in imagesPaths)
+            {
+                _dictionaryService.SaveImagesDB(path);
+            }
+
+        }
 
         public ActionResult GetAllTicketTypes([DataSourceRequest] DataSourceRequest request)
         {
