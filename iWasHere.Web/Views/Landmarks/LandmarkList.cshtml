@@ -19,6 +19,11 @@
         window.location.href = '@Url.Action("Images", "Landmarks")';
 
     }
+
+    function redirectToViewLandmark(id)
+    {
+        window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+id;
+    }
 </script>
 
 @(Html.Kendo().Button()
@@ -45,7 +50,7 @@
             columns.Bound(o => o.LandmarkId);
             columns.Bound(o => o.LandmarkDescription).Title("Name");
             //columns.Template("<button id=\"deleteButton\" class=\"k-button\">Delete</button>");
-            //columns.Template("<button id=\"editButton\" class=\"k-button\"> Edit </button>");
+            columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
         })
         .NoRecords(true)
         .Filterable()
