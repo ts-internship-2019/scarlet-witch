@@ -18,7 +18,9 @@ namespace iWasHere.Web.Controllers
     public class LandmarksController : Controller
     {
         private readonly DictionaryService _dictionaryService;
+   
         private readonly IHostingEnvironment _he;
+        public static List<String> imagesPaths; 
 
         public LandmarksController(DictionaryService dictionaryService, IHostingEnvironment he)
         {
@@ -91,43 +93,37 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
-        public void SaveImage(IFormFile pic)
+        public void SaveImage(List<IFormFile> pic)
         {
-            if( pic!= null)
+            if (pic != null && pic.Count > 0)
             {
-            
-                var fileName = Path.Combine(_he.WebRootPath, Guid.NewGuid().ToString() + Path.GetExtension(pic.FileName));
-                pic.CopyTo(new FileStream(fileName, FileMode.Create));
-            }
-        }
-        private IEnumerable<string> GetFileInfo(IEnumerable<IFormFile> files)
-        {
-            List<string> fileInfo = new List<string>();
+                imagesPaths = new List<string>();
+                foreach (IFormFile formFile in pic)
+                {
+                    if (Path.GetExtension(formFile.FileName).ToLower() == ".jpg" || Path.GetExtension(formFile.FileName).ToLower() == ".png"
+                        || Path.GetExtension(formFile.FileName).ToLower() == ".jpeg")
+                    {
+                        var fileName = Path.Combine(_he.WebRootPath, Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName));
+                        formFile.CopyTo(new FileStream(fileName, FileMode.Create));
+                        imagesPaths.Add(fileName);
+                    }
+                    
 
-            foreach (var file in files)
-            {
-                var fileContent = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-                var fileName = Path.GetFileName(fileContent.FileName.ToString().Trim('"'));
-
-                fileInfo.Add(string.Format("{0} ({1} bytes)", fileName, file.Length));
+                }
             }
 
-            return fileInfo;
-        }
-        public ActionResult Submit(IFormFile files)
-        {
-            IEnumerable<string> fileInfo = new List<string>();
-
-            if (files != null)
-            {
-                var fileName = Path.Combine(_he.WebRootPath, Path.GetFileName(files.FileName));
-                files.CopyTo(new FileStream(fileName, FileMode.Create));
-            }
-
-            return View();
         }
 
 
+
+        public void SaveImagesDB()
+        {
+            foreach(string path in imagesPaths)
+            {
+                _dictionaryService.SaveImagesDB(path);
+            }
+
+        }
 
         public ActionResult GetAllTicketTypes([DataSourceRequest] DataSourceRequest request)
         {
@@ -150,6 +146,18 @@ namespace iWasHere.Web.Controllers
             }).ToList();
             return Json(cnts);
         }
-        
+
+        public ActionResult GetAllLandmarkTypes([DataSourceRequest] DataSourceRequest request)
+        {
+            var context = new ScarletWitchContext();
+            var cnts = context.DictionaryLandmarkType.Select(b => new DictionaryLandmarkTypeModel()
+            {
+                LandmarkTypeCode = b.LandmarkTypeCode,
+                LandmarkTypeId = b.LandmarkTypeId
+            }).ToList();
+            return Json(cnts);
+        }
+
+
     }
 }
