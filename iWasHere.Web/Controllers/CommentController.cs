@@ -19,6 +19,14 @@ namespace iWasHere.Web.Controllers
            
         }
 
+
+        public IActionResult AddComment()
+        {
+
+            return View();
+
+        }
+
         public IActionResult SaveCommand(string landmarkId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
