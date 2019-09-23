@@ -6,10 +6,10 @@
 }
 <script>
 
-    function addImage() {
+    @*function addImage() {
              $.ajax({
                     type: 'GET',
-                    url: '@Url.Action("Submit", "Landmarks")',
+                    url: '@Url.Action("SaveImage", "Landmarks")',
                  success: function (response) {
                      alert("hai ca merge");
                     },
@@ -17,7 +17,18 @@
                         alert("hai ca nu merge");
                     }
                 })
-    }
+    }*@
+
+    function addImage (){
+    $.ajax({
+        url: '@Url.Action("SaveImage", "Landmarks")',
+        type:'post',
+        data:$('#myForm').serialize(),
+        success:function(){
+            alert("worked");
+        }
+    });
+}
 </script>
 
 <h1>AddLandmark</h1>
@@ -62,17 +73,17 @@
             <li>
                 <label>Landmark has entry ticket?</label>
             </li>
-           <li>
+            <li>
                 @(Html.Kendo().RadioButton()
                     .Name("YesRadioButton")
                     .Label("Yes")
-                    .HtmlAttributes(new { @id="yesRB"})
+                    .HtmlAttributes(new { @id = "yesRB" })
                     .Checked(true))
 
                 @(Html.Kendo().RadioButton()
                    .Name("NoRadioButton")
-                   .Label("No")                   
-                    .HtmlAttributes(new { @id="noRB"})
+                   .Label("No")
+                    .HtmlAttributes(new { @id = "noRB" })
                    .Checked(false))
             </li>
 
@@ -180,6 +191,25 @@
                 )
             </li>
         </ul>
+        <iframe hidden name="formSending"></iframe>
+        @*<form method="post" id="myForm" target="formSending" action='@Url.Action("SaveImage", "Landmarks")' enctype="multipart/form-data">
+            <div class="demo-section k-content">
+                <input multiple type="file" name="pic" />
+                <input type="submit" value="Upload" class="k-button k-primary" />
+             </div>
+        </form>*@
+
+        <form method="post"  action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
+            <div class="demo-section k-content">
+                @(Html.Kendo().Upload()
+                    .Name("files")
+                    .HtmlAttributes(new { aria_label = "files", name="pic" , accept="image/*"})
+                )
+                <p style="padding-top: 1em; text-align: right">
+                    <input type="submit" value="Upload"  class="k-button k-primary" />
+                </p>
+            </div>
+        </form>
         <div>
             @(Html.Kendo().Button()
                .Name("primaryTextButton")
@@ -190,10 +220,7 @@
         </div>
     </div>
 </div>
-<form method="post" action='@Url.Action("SaveImage", "Landmarks")' enctype="multipart/form-data">
-    <input type="file" name="pic" />
-    <input type="submit" value="Upload" />
-</form>
+
 
 <div>
     <a asp-action="Index">Back to List</a>
@@ -231,6 +258,13 @@
             },
             success: function (response) {
                 alert("hai ca merge");
+                $.ajax({
+                    url: '@Url.Action("SaveImagesDB", "Landmarks")',
+                    type: 'put',
+                    success: function () {
+                        alert("hai ca merge");
+                    }
+                });
                 window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
             },
             error: function (response) {
