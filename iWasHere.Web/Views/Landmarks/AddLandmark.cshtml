@@ -32,9 +32,77 @@
 </script>
 
 <h1>AddLandmark</h1>
+<div id="googleMap" style="width:50%;height:400px;" class="map-container"></div>
+<script>
+    var map;
+    var markers = [];
+    function myMap() {
+        var startLatLng = { lat: 44.4894, lng: 26.1267 };
+        map = new google.maps.Map(document.getElementById('googleMap'), {
+            zoom: 12,
+            center: startLatLng,
 
+        });
+
+        
+        map.addListener('click', function (event) {
+            clearMarkers();
+            addMarker(event.latLng);            
+            document.getElementById("Latitude").value = event.latLng.lat();
+            document.getElementById("Longitude").value = event.latLng.lng();
+        });
+
+        
+        addMarker(startLatLng);
+    }
+
+    
+    function addMarker(location) {
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+        markers.push(marker);
+    }
+
+    
+    function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+   
+    function clearMarkers() {
+        setMapOnAll(null);
+    }
+
+    
+    function showMarkers() {
+        setMapOnAll(map);
+    }
+
+    
+    function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+    }
+
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYlEg-dW1i94xgQ2FC4u9IsLfx1kyFEf8&callback=myMap"></script>
+
+<style>
+    .map-container{
+        position: absolute;
+        bottom: 20%;
+        right: 10%;
+    }
+
+</style>
 
 <hr />
+
 <div class="row">
     <div class="col-md-4">
 
@@ -175,8 +243,8 @@
                 <label>Latitude</label>
             </li>
             <li>
-                @(Html.Kendo().NumericTextBoxFor(model => model.Latitude)
-                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:5px" })
+                @(Html.Kendo().TextBoxFor(model => model.Latitude)
+                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:5px", @readonly="readonly" })
                 )
             </li>
 
@@ -186,11 +254,15 @@
                 <label>Longitude</label>
             </li>
             <li>
-                @(Html.Kendo().NumericTextBoxFor(model => model.Longitude)
-                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:5px" })
+                @(Html.Kendo().TextBoxFor(model => model.Longitude)
+                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:5px", @readonly="readonly"  })
                 )
             </li>
+            
+
         </ul>
+        
+
         <iframe hidden name="formSending"></iframe>
         @*<form method="post" id="myForm" target="formSending" action='@Url.Action("SaveImage", "Landmarks")' enctype="multipart/form-data">
             <div class="demo-section k-content">
@@ -199,14 +271,14 @@
              </div>
         </form>*@
 
-        <form method="post"  action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
+        <form method="post" action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
             <div class="demo-section k-content">
                 @(Html.Kendo().Upload()
                     .Name("files")
-                    .HtmlAttributes(new { aria_label = "files", name="pic" , accept="image/*"})
+                    .HtmlAttributes(new { aria_label = "files", name = "pic", accept = "image/*" })
                 )
                 <p style="padding-top: 1em; text-align: right">
-                    <input type="submit" value="Upload"  class="k-button k-primary" />
+                    <input type="submit" value="Upload" class="k-button k-primary" />
                 </p>
             </div>
         </form>
@@ -219,6 +291,7 @@
             )
         </div>
     </div>
+    
 </div>
 
 
