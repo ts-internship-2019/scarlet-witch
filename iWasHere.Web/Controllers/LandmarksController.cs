@@ -37,9 +37,9 @@ namespace iWasHere.Web.Controllers
 
 
 
-        public IActionResult ViewLandmark(int landmarkId)
+        public IActionResult ViewLandmark(string id)
         {
-            LandmarkModel landmark = _dictionaryLandmarkService.GetLandmarkSingle(30);
+            LandmarkModel landmark = _dictionaryLandmarkService.GetLandmarkSingle(Convert.ToInt32(id));
             return View(landmark);
         }
 
