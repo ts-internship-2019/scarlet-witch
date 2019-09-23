@@ -26,6 +26,11 @@
         window.location.href = '@Url.Action("Images", "Landmarks")';
 
     }
+
+    function redirectToViewLandmark(id)
+    {
+        window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+id;
+    }
 </script>
 
 
@@ -42,6 +47,7 @@
             columns.Bound(o => o.LandmarkDescription).Title("Name");
             columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkId#)\">Delete</button>");
             columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=LandmarkId#)\"> Edit </button>");
+            columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
         })
         .NoRecords(true)
         .Filterable()

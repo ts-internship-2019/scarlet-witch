@@ -19,7 +19,6 @@
 @model iWasHere.Domain.DTOs.LandmarkModel;
 
 
-<body onload="onLoad()">
 
     <h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
 
@@ -60,9 +59,3 @@
     <img src="~/@Model.Path" alt="Image" />
 
 
-
-    <input type="button"
-           value="Go Somewhere Else"
-           onclick="location.href='@Url.Action("ViewLandmark", "Landmarks")/'+id />
-
-</body>
