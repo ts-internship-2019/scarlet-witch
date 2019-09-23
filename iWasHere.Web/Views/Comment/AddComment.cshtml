@@ -41,17 +41,13 @@
 
     $.ajax({
                     type: 'PUT',
-                    url: '@Url.Action("SaveComment", "Comment")',
-        data: {
-
-                        currentValue: currentValue,
-                        isLogged: document.getElementById("Logged").value,
-                        userName: document.getElementById("User").value,
-                        title: document.getElementById("Title").value,
+                    url: '@Url.Action("SaveLandmarkType", "DictionaryLandmarkType")',
+                    data: {
+                        landmarkTypeId: document.getElementById("landmarkTypeId").value,
+                        landmarkCode: document.getElementById("LandmarkTypeCode").value,
                         description: document.getElementById("Description").value
 
-
-                     },
+                    },
                     success: function (response) {
                         if (fromUpdate) {
                             document.getElementById("LandmarkTypeCode").value = "";
@@ -128,8 +124,8 @@
                 </fieldset>
             </form>
         </li>
-        </ul>
-       
+    </ul>
+
 </div>
 
 
@@ -153,7 +149,7 @@
                                        .HtmlAttributes(new { @id = "Description", style = "margin:10px" })
             )
         </li>
-             
+
 </div>
 
 <div>
