@@ -1,4 +1,4 @@
-﻿@model iWasHere.Domain.DTOs.LandmarkModel
+﻿@model iWasHere.Domain.Models.Landmark
 
 @{
     ViewData["Title"] = "AddLandmark";
@@ -7,6 +7,7 @@
 
 <h1>AddLandmark</h1>
 
+<h4>Landmark</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -176,7 +177,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Landmarks"
+       asp-action="LandmarkList">Back to Landmark List</a>
 </div>
 
 <script type="text/javascript">
