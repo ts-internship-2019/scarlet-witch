@@ -14,32 +14,6 @@
     )
 </div>
 
-<script type="text/javascript">
-    function add() {
-
-        window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
-
-    }
-
-    function redirectImagesContext() {
-
-        window.location.href = '@Url.Action("Images", "Landmarks")';
-
-    }
-</script>
-
-@(Html.Kendo().Button()
-           .Name("primaryTextButton")
-           .HtmlAttributes(new { type = "button", @class = "k-primary" })
-           .Content("Add")
-           .Events(ev => ev.Click("add"))
-)
-@(Html.Kendo().Button()
-           .Name("imagesButton")
-           .HtmlAttributes(new { type = "button", @class = "k-primary" })
-           .Content("Iamges")
-           .Events(ev => ev.Click("redirectImagesContext"))
-)
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
         ()
         .Name("grid")
@@ -67,8 +41,12 @@
         .Read(read => read.Action("GetLandmarksFiltered", "Landmarks"))
         .Destroy(d => d.Action("Delete", "Landmarks"))
         )
-    )
+)
+
 <script type="text/javascript">
+    function add() {
+        window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
+    }
 
     function redirectImagesContext() {
         window.location.href = '@Url.Action("Images", "Landmarks")';
@@ -87,8 +65,29 @@
         $("#landmarkGrid").data("kendoGrid").dataSource.page(1);
     }
 
-     function openAddLandmarkPage(e) {
+    function openAddLandmarkPage(e) {
         window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
+    }
+    
+    function deleteRow(id) {
+        $.ajax({
+            type: 'DELETE',
+            url: '@Url.Action("Delete", "Landmarks")',
+            data: { id: id },
+            success: function (response) {
+                alert("hai ca merge");
+                alert(response);
+                if (response == 0) {
+                    alert("Atractia nu se poate sterge");
+                } else {
+                    alert("Atractie stearsa");
+                    refreshGrid();
+                }
+            },
+            error: function (response) {
+                alert("hai ca nu merge");
+            }
+        })
     }
 
 </script>

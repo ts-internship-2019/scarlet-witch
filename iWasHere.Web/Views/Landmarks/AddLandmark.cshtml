@@ -4,38 +4,11 @@
     ViewData["Title"] = "AddLandmark";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script>
-
-    @*function addImage() {
-             $.ajax({
-                    type: 'GET',
-                    url: '@Url.Action("SaveImage", "Landmarks")',
-                 success: function (response) {
-                     alert("hai ca merge");
-                    },
-                        error: function (response) {
-                        alert("hai ca nu merge");
-                    }
-                })
-    }*@
-
-    function addImage (){
-    $.ajax({
-        url: '@Url.Action("SaveImage", "Landmarks")',
-        type:'post',
-        data:$('#myForm').serialize(),
-        success:function(){
-            alert("worked");
-        }
-    });
-}
-</script>
 
 <h1>AddLandmark</h1>
 
-
 <hr />
-<div class="row">
+<body onload="onLoadEdit()">
     <div class="col-md-4">
 
         <ul style="list-style-type:none">
@@ -46,9 +19,11 @@
                 @(Html.Kendo().TextBoxFor(model => model.LandmarkDescription)
                                     .HtmlAttributes(new { @id = "LandmarkName", style = "margin:10px" })
                 )
-            </li>
 
-            <p></p>
+                @(Html.Kendo().TextBoxFor(model => model.LandmarkId)
+                .HtmlAttributes(new { @id = "LandmarkId", style = "margin:10px" })
+                )
+            </li>
 
             <li>
                 <label>Landmark Type</label>
@@ -68,8 +43,6 @@
                                  }))
             </li>
 
-            <p></p>
-
             <li>
                 <label>Landmark has entry ticket?</label>
             </li>
@@ -86,8 +59,6 @@
                     .HtmlAttributes(new { @id = "noRB" })
                    .Checked(false))
             </li>
-
-            <p></p>
 
             <li>
                 <label>Visit Interval</label>
@@ -107,10 +78,8 @@
                                  }))
             </li>
 
-            <p></p>
-
             <li>
-                <label>Ticket Type</label>
+                <label>Ticket</label>
             </li>
             <li>
                 @(Html.Kendo().DropDownList()
@@ -126,8 +95,6 @@
                                      });
                                  }))
             </li>
-
-            <p></p>
 
             <li>
                 <label>City</label>
@@ -147,8 +114,6 @@
                                  }))
             </li>
 
-            <p></p>
-
             <li>
                 <label>Street Name</label>
             </li>
@@ -157,8 +122,6 @@
                                     .HtmlAttributes(new { @id = "StreetName", style = "margin:10px" })
                 )
             </li>
-
-            <p></p>
 
             <li>
                 <label>Street Number</label>
@@ -169,8 +132,6 @@
                 )
             </li>
 
-            <p></p>
-
             <li>
                 <label>Latitude</label>
             </li>
@@ -179,8 +140,6 @@
                                     .HtmlAttributes(new { @id = "Latitude", style = "margin:5px" })
                 )
             </li>
-
-            <p></p>
 
             <li>
                 <label>Longitude</label>
@@ -191,88 +150,158 @@
                 )
             </li>
         </ul>
+        
         <iframe hidden name="formSending"></iframe>
-        @*<form method="post" id="myForm" target="formSending" action='@Url.Action("SaveImage", "Landmarks")' enctype="multipart/form-data">
-            <div class="demo-section k-content">
-                <input multiple type="file" name="pic" />
-                <input type="submit" value="Upload" class="k-button k-primary" />
-             </div>
-        </form>*@
 
-        <form method="post"  action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
+        <form method="post" action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
             <div class="demo-section k-content">
                 @(Html.Kendo().Upload()
                     .Name("files")
-                    .HtmlAttributes(new { aria_label = "files", name="pic" , accept="image/*"})
+                    .HtmlAttributes(new { aria_label = "files", name = "pic", accept = "image/*" })
                 )
                 <p style="padding-top: 1em; text-align: right">
-                    <input type="submit" value="Upload"  class="k-button k-primary" />
+                    <input type="submit" value="Upload" class="k-button k-primary" />
                 </p>
             </div>
         </form>
+
         <div>
             @(Html.Kendo().Button()
                .Name("primaryTextButton")
-               .HtmlAttributes(new { type = "button", @class = "k-primary" })
-               .Content("Save")
+               .HtmlAttributes(new { type = "button", @class = "k-primary" , @id="buttonId" })
+               .Content("Add")
                .Events(ev => ev.Click("add"))
+            )
+
+            @(Html.Kendo().Button()
+              .Name("primaryTextButton")
+              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .Content("Add New")
+              .Events(ev => ev.Click("addNew"))
             )
         </div>
     </div>
-</div>
+</body>
 
+    <div>
+        <a asp-controller="Landmarks"
+           asp-action="LandmarkList">Back to List</a>
+    </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <script type="text/javascript">
 
-<script type="text/javascript">
-
-
-    function add() {
-        var landmarkNameValidation = false;
-        var streetNameValidation = false;
-        var longitudeValidation = false;
-        var streetNumberValidation = false;
-        var latitudeValidation = false;
-        if (document.getElementById('yesRB').checked) {
-            h = true;
-        } else if (document.getElementById('noRB').checked) {
-            h = false;
+        function addImage() {
+            $.ajax({
+                url: '@Url.Action("SaveImage", "Landmarks")',
+                type: 'post',
+                data: $('#myForm').serialize(),
+                success: function () {
+                    alert("worked");
+                }
+            });
         }
 
-        $.ajax({
-            type: 'PUT',
-            url: '@Url.Action("SaveLandmark", "Landmarks")',
-            data: {
-                landmarkName: document.getElementById("LandmarkName").value,
-                landmarkTypeId: document.getElementById("comboType").value,
-                hasEntryTicket: h,
-                visitIntervalId: document.getElementById("comboInterval").value,
-                ticketId: document.getElementById("comboTicket").value,
-                streetName: document.getElementById("StreetName").value,
-                streetNumber: document.getElementById("StreetNumber").value,
-                cityId: document.getElementById("comboCity").value,
-                latitude: document.getElementById("Latitude").value,
-                longitude: document.getElementById("Longitude").value
-            },
-            success: function (response) {
-                alert("hai ca merge");
-                $.ajax({
-                    url: '@Url.Action("SaveImagesDB", "Landmarks")',
-                    type: 'put',
-                    success: function () {
-                        alert("hai ca merge");
-                    }
-                });
-                window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
-            },
-            error: function (response) {
-                alert("hai ca nu merge");
-            }
-        })
-    }
+        function add() {
 
-</script>
+            if (document.getElementById('yesRB').checked) {
+                h = true;
+            } else {
+                h = false;
+            }
+
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var id = url.searchParams.get("LandmarkId");
+            alert(id);
+
+            if (id != 0) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("EditLandmark", "Landmarks")',
+                    data: {
+                        landmarkName: document.getElementById("LandmarkName").value,
+                        landmarkTypeId: document.getElementById("comboType").value,
+                        hasEntryTicket: h,
+                        visitIntervalId: document.getElementById("comboInterval").value,
+                        ticketId: document.getElementById("comboTicket").value,
+                        streetName: document.getElementById("StreetName").value,
+                        streetNumber: document.getElementById("StreetNumber").value,
+                        cityId: document.getElementById("comboCity").value,
+                        latitude: document.getElementById("Latitude").value,
+                        longitude: document.getElementById("Longitude").value,
+                        landmarkId: document.getElementById("LandmarkId").value
+                    },
+                    success: function (response) {
+                        alert("hai ca merge");
+                        window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
+                    },
+                    error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+            }
+            else {
+                $.ajax({
+                    type: 'PUT',
+                    url: '@Url.Action("SaveLandmark", "Landmarks")',
+                    data: {
+                        landmarkName: document.getElementById("LandmarkName").value,
+                        landmarkTypeId: document.getElementById("comboType").value,
+                        hasEntryTicket: h,
+                        visitIntervalId: document.getElementById("comboInterval").value,
+                        ticketId: document.getElementById("comboTicket").value,
+                        streetName: document.getElementById("StreetName").value,
+                        streetNumber: document.getElementById("StreetNumber").value,
+                        cityId: document.getElementById("comboCity").value,
+                        latitude: document.getElementById("Latitude").value,
+                        longitude: document.getElementById("Longitude").value
+                    },
+                    success: function (response) {
+
+                        if (fromUpdate) {
+                            document.getElementById("LandmarkName").value = "";
+                            fromUpdate = false;
+                        }
+                        alert("hai ca merge");
+                        $.ajax({
+                            url: '@Url.Action("SaveImagesDB", "Landmarks")',
+                            type: 'put',
+                            success: function () {
+                                alert("hai ca merge");
+                            }
+                        });
+
+                        window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
+                    },
+                    error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+            }
+        }
+
+        
+        function onLoadEdit() {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            document.getElementById("LandmarkId").style.visibility = "hidden";
+            alert(id);
+            var id = url.searchParams.get("id");
+            if (id != 0) {
+                alert("din edit");
+                document.getElementById("buttonId").innerText = "Update";
+            }
+            else {
+                alert("din add");
+            }
+        }
+
+        function addNew() {
+            fromUpdate = true;
+            add();
+        }
+
+
+    </script>
 
 

@@ -18,44 +18,45 @@ namespace iWasHere.Web.Controllers
     public class LandmarksController : Controller
     {
         private readonly DictionaryService _dictionaryService;
-   
+
         private readonly IHostingEnvironment _he;
-        public static List<String> imagesPaths; 
+        public static List<String> imagesPaths;
 
         public LandmarksController(DictionaryService dictionaryService, IHostingEnvironment he)
         {
             _dictionaryService = dictionaryService;
             _he = he;
         }
-
         public IActionResult LandmarkList()
         {
             return View();
         }
-
-        public IActionResult AddLandmark()
+  
+        public IActionResult AddLandmark(int id)
         {
-            return View();
+            if (id != 0)
+            {
+                LandmarkModel model = _dictionaryService.GetLandmarkSingle(id);
+                return View(model);
+            }
+            else
+            {
+                LandmarkModel model = new LandmarkModel();
+                return View(model);
+            }
         }
-
         public IActionResult Images()
         {
             return View();
         }
-
-
-
         public IActionResult ViewLandmark(string id)
         {
             LandmarkModel landmark = _dictionaryService.GetLandmarkSingle(Convert.ToInt32(id));
             return View(landmark);
         }
-
-
-
         public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
         {
-            IQueryable<LandmarkModel> landmarks = _dictionaryLandmarkService.GetLandmarksFiltered();
+            IQueryable<LandmarkModel> landmarks = _dictionaryService.GetLandmarksFiltered();
             landmarks.ToDataSourceResult(request);
             landmarks = landmarks.OrderBy(o => o.LandmarkId);
             var total = landmarks.Count();
@@ -76,12 +77,10 @@ namespace iWasHere.Web.Controllers
         public ActionResult SaveLandmark(string landmarkName, int landmarkTypeId, bool hasEntryTicket, int visitIntervalId,
             int ticketId, string streetName, int streetNumber, int cityId, float latitude, float longitude, int landmarkId)
         {
-            _dictionaryLandmarkService.SaveLandmark(landmarkName, landmarkTypeId, hasEntryTicket, visitIntervalId,
+            _dictionaryService.SaveLandmark(landmarkName, landmarkTypeId, hasEntryTicket, visitIntervalId,
              ticketId, streetName, streetNumber, cityId, latitude, longitude, landmarkId);
-
             return RedirectToAction("LandmarkList");
         }
-
 
         public ActionResult GetAllVisitIntervals([DataSourceRequest] DataSourceRequest request)
         {
@@ -115,16 +114,13 @@ namespace iWasHere.Web.Controllers
 
         }
 
-
-
         public void SaveImagesDB()
         {
-            foreach(string path in imagesPaths)
+            foreach (string path in imagesPaths)
             {
                 _dictionaryService.SaveImagesDB(path);
             }
-
-
+        }
         public ActionResult GetAllTicketTypes([DataSourceRequest] DataSourceRequest request)
         {
             var context = new ScarletWitchContext();
@@ -179,6 +175,11 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
+        public int Delete([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            int sters = _dictionaryService.DeleteLandmark(id);
+            return sters;
+        }
 
     }
 }
