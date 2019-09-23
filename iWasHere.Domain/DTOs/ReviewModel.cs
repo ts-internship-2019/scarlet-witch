@@ -4,7 +4,7 @@ using System.Text;
 
 namespace iWasHere.Domain.DTOs
 {
-    public partial class ReviewModel
+    public class ReviewModel
     {
         public int ReviewId { get; set; }
         public int? LandmarkId { get; set; }
