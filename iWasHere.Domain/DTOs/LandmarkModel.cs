@@ -7,7 +7,6 @@ namespace iWasHere.Domain.DTOs
 {
     public class LandmarkModel
     {
-
         public DictionaryCity City { get; set; }
 
         public DictionaryTicketType TicketType { get; set; }
