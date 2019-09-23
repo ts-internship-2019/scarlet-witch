@@ -19,18 +19,20 @@ namespace iWasHere.Web.Controllers
            
         }
 
-        public IActionResult SaveCommand(string landmarkId)
+        public IActionResult SaveComment(int currentValue, bool isLogged, string userName, string title, string description)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             ScarletWitchContext gf = new ScarletWitchContext();
-            gf.Review.Add(new Review
+
+            if (isLogged == true)
             {
-                //LandmarkId = 
-                //LandmarkTypeCode = landmarkCode,
-                //Description = description
+                gf.Review.Add(new Review
+                {
 
 
-            });
+                });
+            }
+            
 
             return Json(gf.SaveChanges());
 
