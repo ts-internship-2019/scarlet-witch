@@ -41,13 +41,17 @@
 
     $.ajax({
                     type: 'PUT',
-                    url: '@Url.Action("SaveLandmarkType", "DictionaryLandmarkType")',
-                    data: {
-                        landmarkTypeId: document.getElementById("landmarkTypeId").value,
-                        landmarkCode: document.getElementById("LandmarkTypeCode").value,
+                    url: '@Url.Action("SaveComment", "Comment")',
+        data: {
+
+                        currentValue: currentValue,
+                        isLogged: document.getElementById("Logged").value,
+                        userName: document.getElementById("User").value,
+                        title: document.getElementById("Title").value,
                         description: document.getElementById("Description").value
 
-                    },
+
+                     },
                     success: function (response) {
                         if (fromUpdate) {
                             document.getElementById("LandmarkTypeCode").value = "";
@@ -85,7 +89,7 @@
         </li>
         <li>
 
-           
+
             @(Html.Kendo().TextBox()
             .Name("User")
             .Value("anonim")
@@ -93,8 +97,8 @@
 
         </li>
 
-        </ul>
-        
+    </ul>
+
 </div>
 
 

@@ -12,5 +12,7 @@ namespace iWasHere.Domain.DTOs
         public string Title { get; set; }
         public decimal? Grade { get; set; }
         public string UserId { get; set; }
+
+        public string UserName { get; set; }
     }
 }

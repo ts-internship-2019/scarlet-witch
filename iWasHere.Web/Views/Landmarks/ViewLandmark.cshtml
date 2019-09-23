@@ -4,58 +4,93 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script>
-    function onLoad() {
-
-        var url_string = window.location.href;
-        var url = new URL(url_string);
-        var id = url.searchParams.get("id");
-    }
-</script>
-
-
 
 
 @model iWasHere.Domain.DTOs.LandmarkModel;
 
 
+<style>
+    
+.left-div {
+  display: inline-block;
+  max-width: 400px;
+  text-align: left;
+  padding: 10px;
+  background-color: #ddd;
+  border-radius: 3px;
+  margin: 5px;
+  vertical-align: top;
+}
 
-    <h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
+.right-div {
+  display: inline-block;
+  max-width: 400px;
+  text-align: left;
+  padding: 10px;
+  background-color: #ddd;
+  border-radius: 3px;
+  margin: 5px;
+}
+</style>
 
-    <ul>
-        <li>
-            <label>LandmarkType:</label>
-            @Html.DisplayFor(model => model.LandmarkType.LandmarkTypeCode)
-        </li>
-        <li>
-            <label>Interval:</label>
-            @Html.DisplayFor(model => model.VisitInterval.VisitIntervalName)
-        </li>
-        <li>
-            <label>Ticket:</label>
-            @Html.DisplayFor(model => model.Ticket)
-        </li>
-        <li>
-            <label>Street Name:</label>
-            @Html.DisplayFor(model => model.StreetName)
-        </li>
-        <li>
-            <label>Street Number:</label>
-            @Html.DisplayFor(model => model.StreetNumber)
-        </li>
-        <li>
-            <label>City:</label>
-            @Html.DisplayFor(model => model.City.CityName)
-        </li>
-        <li>
-            <label>County:</label>
-            @Html.DisplayFor(model => model.County)
-        </li>
-        <li>
-            <label>Country:</label>
-            @Html.DisplayFor(model => model.Country)
-        </li>
-    </ul>
-    <img src="~/@Model.Path" alt="Image" />
+
+
+
+<h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-12">
+            <div class="left-div">
+                <ul>
+                    <li>
+                        <label>LandmarkType:</label>
+                        @Html.DisplayFor(model => model.LandmarkType.LandmarkTypeCode)
+                    </li>
+                    <li>
+                        <label>Interval:</label>
+                        @Html.DisplayFor(model => model.VisitInterval.VisitIntervalName)
+                    </li>
+                    <li>
+                        <label>Ticket:</label>
+                        @Html.DisplayFor(model => model.Ticket)
+                    </li>
+                    <li>
+                        <label>Street Name:</label>
+                        @Html.DisplayFor(model => model.StreetName)
+                    </li>
+                    <li>
+                        <label>Street Number:</label>
+                        @Html.DisplayFor(model => model.StreetNumber)
+                    </li>
+                    <li>
+                        <label>City:</label>
+                        @Html.DisplayFor(model => model.City.CityName)
+                    </li>
+                    <li>
+                        <label>County:</label>
+                        @Html.DisplayFor(model => model.County)
+                    </li>
+                    <li>
+                        <label>Country:</label>
+                        @Html.DisplayFor(model => model.Country)
+                    </li>
+                </ul>
+            </div>
+
+            <div class="right-div">
+                <img src="~/@Model.Path" alt="Image" />
+                
+            </div>
+        </div>
+        </div>
+    </div>
+<input type="button"
+       value="Add Comment"
+       onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
+
+
+@*<input type="button"
+       value="Add Comment"
+       onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId "/>*@
 
 
