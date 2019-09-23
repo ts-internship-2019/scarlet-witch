@@ -6,16 +6,31 @@
 
 
 
-@model iWasHere.Domain.DTOs.LandmarkModel;
-
-    }</script>
-
-
-
-
-
+@model iWasHere.Domain.DTOs.LandmarkModel;    
 
 <h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYlEg-dW1i94xgQ2FC4u9IsLfx1kyFEf8&callback=myMap"></script>
+
+<script>
+    var map;
+    var markers = [];
+
+    function myMap() {
+        var startLatLng = { lat: 44.4894, lng: 26.1267 };
+        map = new google.maps.Map(document.getElementById('googleMap'), {
+            zoom: 12,
+            center: startLatLng,
+
+        });
+</script>
+<style>
+
+    .map-container {
+        position: absolute;
+        bottom: 20%;
+        right: 10%;
+    }
+</style>
 <div class="container">
     <div class="row ">
         <div class="col-md-12">
@@ -53,6 +68,14 @@
                         <label>Country:</label>
                         @Html.DisplayFor(model => model.Country)
                     </li>
+                    <li>
+                        <label>Latitude:</label>
+                        @Html.DisplayFor(model => model.Latitude)
+                    </li>
+                    <li>
+                        <label>Longitude:</label>
+                        @Html.DisplayFor(model => model.Longitude)
+                    </li>
                 </ul>
             </div>
 
@@ -62,11 +85,13 @@
                        value="Add Comment"
                        onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
             </div>
-        </div>
+            <div id="googleMap" style="width:50%;height:400px;" class="map-container"></div>
         </div>
     </div>
+</div>
 
-    
+
+
 
 
 
