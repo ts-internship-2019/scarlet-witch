@@ -524,6 +524,8 @@ namespace iWasHere.Domain.Service
                 StreetNumber=c.StreetNumber,
                 CityId=c.CityId,
                 City=c.City,
+                Latitude = c.Latitude,
+                Longitude = c.Longitude,
                 CountyId= _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                 County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
                 Country= _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),

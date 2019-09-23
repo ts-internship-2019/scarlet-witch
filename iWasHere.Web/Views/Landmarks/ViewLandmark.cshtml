@@ -12,50 +12,70 @@
         var id = url.searchParams.get("id");
     }
 </script>
+<script>
 
+    function myMap() {
+        var startLatLng = { document.getElementById("Latitude").value, document.getElementById("Longitude").value };
+        map = new google.maps.Map(document.getElementById('googleMap'), {
+            zoom: 12,
+            center: startLatLng,
+        });
 
+    }</script>
 
 
 @model iWasHere.Domain.DTOs.LandmarkModel;
+<div position ="absolute", style="height:100%; width:100%;">
+    <div id="googleMap" style="width:25%;height:200px;" class="map-container"></div>
+</div>
+
+<h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
+<ul>
+    <li>
+        <label>LandmarkType:</label>
+        @Html.DisplayFor(model => model.LandmarkType.LandmarkTypeCode)
+    </li>
+    <li>
+        <label>Interval:</label>
+        @Html.DisplayFor(model => model.VisitInterval.VisitIntervalName)
+    </li>
+    <li>
+        <label>Ticket:</label>
+        @Html.DisplayFor(model => model.Ticket)
+    </li>
+    <li>
+        <label>Street Name:</label>
+        @Html.DisplayFor(model => model.StreetName)
+    </li>
+    <li>
+        <label>Street Number:</label>
+        @Html.DisplayFor(model => model.StreetNumber)
+    </li>
+    <li>
+        <label>City:</label>
+        @Html.DisplayFor(model => model.City.CityName)
+    </li>
+    <li>
+        <label>County:</label>
+        @Html.DisplayFor(model => model.County)
+    </li>
+    <li>
+        <label>Country:</label>
+        @Html.DisplayFor(model => model.Country)
+    </li>
+    <li>
+        <label>Latitude:</label>
+        @Html.DisplayFor(model => model.Latitude)
+
+    </li>
+    <li>
+        <label>Longitude:</label>
+        @Html.DisplayFor(model => model.Longitude)
+    </li>
+</ul>
+
+<img src="~/@Model.Path" alt="Image" />
 
 
-
-    <h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
-
-    <ul>
-        <li>
-            <label>LandmarkType:</label>
-            @Html.DisplayFor(model => model.LandmarkType.LandmarkTypeCode)
-        </li>
-        <li>
-            <label>Interval:</label>
-            @Html.DisplayFor(model => model.VisitInterval.VisitIntervalName)
-        </li>
-        <li>
-            <label>Ticket:</label>
-            @Html.DisplayFor(model => model.Ticket)
-        </li>
-        <li>
-            <label>Street Name:</label>
-            @Html.DisplayFor(model => model.StreetName)
-        </li>
-        <li>
-            <label>Street Number:</label>
-            @Html.DisplayFor(model => model.StreetNumber)
-        </li>
-        <li>
-            <label>City:</label>
-            @Html.DisplayFor(model => model.City.CityName)
-        </li>
-        <li>
-            <label>County:</label>
-            @Html.DisplayFor(model => model.County)
-        </li>
-        <li>
-            <label>Country:</label>
-            @Html.DisplayFor(model => model.Country)
-        </li>
-    </ul>
-    <img src="~/@Model.Path" alt="Image" />
 
 
