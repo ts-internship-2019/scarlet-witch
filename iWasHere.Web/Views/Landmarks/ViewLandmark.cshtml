@@ -10,7 +10,7 @@
         var url_string = window.location.href;
         var url = new URL(url_string);
         var id = url.searchParams.get("id");
-    }   
+    }
 </script>
 
 
@@ -57,9 +57,12 @@
             @Html.DisplayFor(model => model.Country)
         </li>
     </ul>
+    <img src="~/@Model.Path" alt="Image" />
 
-    <img src="~/75577a90-d156-43f9-9ba6-c29b81442ca9.png" alt="Image" />
 
 
+    <input type="button"
+           value="Go Somewhere Else"
+           onclick="location.href='@Url.Action("ViewLandmark", "Landmarks")/'+id />
 
 </body>
