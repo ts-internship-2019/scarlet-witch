@@ -18,9 +18,9 @@ namespace iWasHere.Web.Controllers
     public class LandmarksController : Controller
     {
         private readonly DictionaryService _dictionaryService;
-   
+
         private readonly IHostingEnvironment _he;
-        public static List<String> imagesPaths; 
+        public static List<String> imagesPaths;
 
         public LandmarksController(DictionaryService dictionaryService, IHostingEnvironment he)
         {
@@ -75,15 +75,16 @@ namespace iWasHere.Web.Controllers
             };
             return Json(result);
         }
-            public ActionResult SaveLandmark(string landmarkName, int landmarkTypeId, bool hasEntryTicket, int visitIntervalId,
+
+        public ActionResult SaveLandmark(string landmarkName, int landmarkTypeId, bool hasEntryTicket, int visitIntervalId,
             int ticketId, string streetName, int streetNumber, int cityId, float latitude, float longitude, int landmarkId)
         {
-            _dictionaryService.SaveLandmark( landmarkName,  landmarkTypeId,  hasEntryTicket,  visitIntervalId,
-             ticketId,  streetName,  streetNumber,  cityId,  latitude,  longitude,  landmarkId);
+            _dictionaryService.SaveLandmark(landmarkName, landmarkTypeId, hasEntryTicket, visitIntervalId,
+             ticketId, streetName, streetNumber, cityId, latitude, longitude, landmarkId);
 
             return RedirectToAction("LandmarkList");
         }
-        
+
 
         public ActionResult GetAllVisitIntervals([DataSourceRequest] DataSourceRequest request)
         {
@@ -121,10 +122,10 @@ namespace iWasHere.Web.Controllers
 
         public void SaveImagesDB()
         {
-            foreach(string path in imagesPaths)
+            foreach (string path in imagesPaths)
             {
                 _dictionaryService.SaveImagesDB(path);
-            }
+            }         
 
         }
 
@@ -150,6 +151,27 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
+        public ActionResult EditLandmark(string landmarkName, int landmarkTypeId, bool hasEntryTicket, int visitIntervalId,
+            int ticketId, string streetName, int streetNumber, int cityId, float latitude, float longitude, int landmarkId)
+        {
+            Landmark newLandmark = new Landmark();
+            newLandmark.LandmarkDescription = landmarkName;
+            newLandmark.LandmarkTypeId = landmarkTypeId;
+            newLandmark.HasEntryTicket = hasEntryTicket;
+            newLandmark.VisitIntervalId = visitIntervalId;
+            newLandmark.TicketId = ticketId;
+            newLandmark.StreetName = streetName;
+            newLandmark.StreetNumber = streetNumber;
+            newLandmark.CityId = cityId;
+            newLandmark.Latitude = latitude;
+            newLandmark.Longitude = longitude;
+            newLandmark.LandmarkId = landmarkId;
+
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.Landmark.Update(newLandmark);
+            return Json(context.SaveChanges());
+        }
+
         public ActionResult GetAllLandmarkTypes([DataSourceRequest] DataSourceRequest request)
         {
             var context = new ScarletWitchContext();
@@ -160,7 +182,5 @@ namespace iWasHere.Web.Controllers
             }).ToList();
             return Json(cnts);
         }
-
-
     }
 }

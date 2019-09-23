@@ -49,7 +49,6 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult Languages_ReadNoFilter([DataSourceRequest]DataSourceRequest request)
         {
-            //IQueryable<DictionaryLanguage> languages = new ScarletWitchContext().DictionaryLanguage;
             IQueryable<DictionaryCityModel> cities = _dictionaryCityService.GetDictionaryCities();
             cities = cities.OrderBy(o => o.Id);
             var total = cities.Count();
@@ -105,13 +104,11 @@ namespace iWasHere.Web.Controllers
                 DictionaryCityModel city = _dictionaryCityService.GetDataToEdit(id);
                 return View(city);
             }
-               
             else
             {
                 DictionaryCityModel city = new DictionaryCityModel();
                 return View(city);
-            }
-               
+            }   
         }
 
 
@@ -142,9 +139,6 @@ namespace iWasHere.Web.Controllers
             bool status = _dictionaryCityService.VerifyCityName(cityName);
             return status;
         }
-
-     
-
     }
 } 
 
