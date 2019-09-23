@@ -9,7 +9,29 @@
 @model iWasHere.Domain.DTOs.LandmarkModel;
 
 
+<style>
+    
+.left-div {
+  display: inline-block;
+  max-width: 400px;
+  text-align: left;
+  padding: 10px;
+  background-color: #ddd;
+  border-radius: 3px;
+  margin: 5px;
+  vertical-align: top;
+}
 
+.right-div {
+  display: inline-block;
+  max-width: 400px;
+  text-align: left;
+  padding: 10px;
+  background-color: #ddd;
+  border-radius: 3px;
+  margin: 5px;
+}
+</style>
 
 
 
@@ -18,7 +40,7 @@
 <div class="container">
     <div class="row ">
         <div class="col-md-12">
-            <div class="col-md-6">
+            <div class="left-div">
                 <ul>
                     <li>
                         <label>LandmarkType:</label>
@@ -55,15 +77,16 @@
                 </ul>
             </div>
 
-            <div class="col-md-6">
+            <div class="right-div">
                 <img src="~/@Model.Path" alt="Image" />
-                <input type="button"
-                       value="Add Comment"
-                       onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
+                
             </div>
         </div>
         </div>
     </div>
+<input type="button"
+       value="Add Comment"
+       onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
 
     
 
