@@ -505,5 +505,47 @@ namespace iWasHere.Domain.Service
             return landmarks;
 
         }
+
+
+        public LandmarkModel GetLandmarkSingle(int landmarkId)
+        {
+            LandmarkModel city = _dbContext.Landmark.Select(c => new LandmarkModel()
+            {
+                LandmarkId = c.LandmarkId,
+                LandmarkDescription = c.LandmarkDescription,
+                HasEntryTicket=c.HasEntryTicket,
+                VisitIntervalId=c.VisitIntervalId,
+                VisitInterval=c.VisitInterval,
+                TicketId=c.TicketId,
+                Ticket= _dbContext.DictionaryTicketType.Where(d => d.TicketTypeId == c.Ticket.TicketTypeId).Select(a => a.TicketTypeName).FirstOrDefault(),
+                LandmarkType =c.LandmarkType,
+                LandmarkTypeId=c.LandmarkTypeId,
+                StreetName=c.StreetName,
+                StreetNumber=c.StreetNumber,
+                CityId=c.CityId,
+                City=c.City,
+                CountyId= _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
+                County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
+                Country= _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+
+            }).Where(a => a.LandmarkId == landmarkId).FirstOrDefault();
+            return city;
+        }
+
+        public void SaveImagesDB(string path)
+        {
+            var landmarkId = _dbContext.Landmark.Max(u => u.LandmarkId);
+
+            Images img = new Images()
+            {
+                Path = path,
+                LandmarkId = landmarkId
+
+            };
+                    
+            _dbContext.Images.Add(img);
+            _dbContext.SaveChanges();
+        }
+
     }
 }

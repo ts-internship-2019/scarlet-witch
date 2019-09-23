@@ -1,23 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iWasHere.Web.Controllers
 {
     public class LandmarksController : Controller
     {
-        private readonly DictionaryService _dictionaryLandmarkService;
+        private readonly DictionaryService _dictionaryService;
+   
+        private readonly IHostingEnvironment _he;
+        public static List<String> imagesPaths; 
 
-        public LandmarksController(DictionaryService dictionaryService)
+        public LandmarksController(DictionaryService dictionaryService, IHostingEnvironment he)
         {
-            this._dictionaryLandmarkService = dictionaryService;
+            _dictionaryService = dictionaryService;
+            _he = he;
         }
 
         public IActionResult LandmarkList()
@@ -34,6 +42,16 @@ namespace iWasHere.Web.Controllers
         {
             return View();
         }
+
+
+
+        public IActionResult ViewLandmark(string id)
+        {
+            LandmarkModel landmark = _dictionaryService.GetLandmarkSingle(Convert.ToInt32(id));
+            return View(landmark);
+        }
+
+
 
         public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
         {
@@ -76,16 +94,36 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
-        public ActionResult GetAllLandmarkTypes([DataSourceRequest] DataSourceRequest request)
+        public void SaveImage(List<IFormFile> pic)
         {
-            var context = new ScarletWitchContext();
-            var cnts = context.DictionaryLandmarkType.Select(b => new DictionaryLandmarkTypeModel()
+            if (pic != null && pic.Count > 0)
             {
-                LandmarkTypeCode = b.LandmarkTypeCode,
-                LandmarkTypeId = b.LandmarkTypeId
-            }).ToList();
-            return Json(cnts);
+                imagesPaths = new List<string>();
+                foreach (IFormFile formFile in pic)
+                {
+                    if (Path.GetExtension(formFile.FileName).ToLower() == ".jpg" || Path.GetExtension(formFile.FileName).ToLower() == ".png"
+                        || Path.GetExtension(formFile.FileName).ToLower() == ".jpeg")
+                    {
+                        var a = Guid.NewGuid().ToString();
+                        var fileName = Path.Combine(_he.WebRootPath, a + Path.GetExtension(formFile.FileName));
+                        formFile.CopyTo(new FileStream(fileName, FileMode.Create));
+                        imagesPaths.Add(a + Path.GetExtension(formFile.FileName));
+                    }
+
+                }
+            }
+
         }
+
+
+
+        public void SaveImagesDB()
+        {
+            foreach(string path in imagesPaths)
+            {
+                _dictionaryService.SaveImagesDB(path);
+            }
+
 
         public ActionResult GetAllTicketTypes([DataSourceRequest] DataSourceRequest request)
         {
@@ -129,5 +167,18 @@ namespace iWasHere.Web.Controllers
             context.Landmark.Update(newLandmark);
             return Json(context.SaveChanges());
         }
+
+        public ActionResult GetAllLandmarkTypes([DataSourceRequest] DataSourceRequest request)
+        {
+            var context = new ScarletWitchContext();
+            var cnts = context.DictionaryLandmarkType.Select(b => new DictionaryLandmarkTypeModel()
+            {
+                LandmarkTypeCode = b.LandmarkTypeCode,
+                LandmarkTypeId = b.LandmarkTypeId
+            }).ToList();
+            return Json(cnts);
+        }
+
+
     }
 }
