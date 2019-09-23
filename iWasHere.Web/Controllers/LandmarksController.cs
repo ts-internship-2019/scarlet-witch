@@ -18,7 +18,7 @@ namespace iWasHere.Web.Controllers
     public class LandmarksController : Controller
     {
         private readonly DictionaryService _dictionaryService;
-
+   
         private readonly IHostingEnvironment _he;
         public static List<String> imagesPaths;
 
@@ -27,6 +27,7 @@ namespace iWasHere.Web.Controllers
             _dictionaryService = dictionaryService;
             _he = he;
         }
+
         public IActionResult LandmarkList()
         {
             return View();
@@ -49,11 +50,17 @@ namespace iWasHere.Web.Controllers
         {
             return View();
         }
+
+
+
         public IActionResult ViewLandmark(string id)
         {
             LandmarkModel landmark = _dictionaryService.GetLandmarkSingle(Convert.ToInt32(id));
             return View(landmark);
         }
+
+
+
         public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
         {
             IQueryable<LandmarkModel> landmarks = _dictionaryService.GetLandmarksFiltered();
@@ -79,8 +86,10 @@ namespace iWasHere.Web.Controllers
         {
             _dictionaryService.SaveLandmark(landmarkName, landmarkTypeId, hasEntryTicket, visitIntervalId,
              ticketId, streetName, streetNumber, cityId, latitude, longitude, landmarkId);
+
             return RedirectToAction("LandmarkList");
         }
+
 
         public ActionResult GetAllVisitIntervals([DataSourceRequest] DataSourceRequest request)
         {
@@ -119,8 +128,10 @@ namespace iWasHere.Web.Controllers
             foreach (string path in imagesPaths)
             {
                 _dictionaryService.SaveImagesDB(path);
-            }
+            }         
+
         }
+
         public ActionResult GetAllTicketTypes([DataSourceRequest] DataSourceRequest request)
         {
             var context = new ScarletWitchContext();

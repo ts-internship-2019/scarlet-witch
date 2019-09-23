@@ -10,6 +10,7 @@
         var url_string = window.location.href;
         var url = new URL(url_string);
         var id = url.searchParams.get("id");
+    }
 </script>
 
 
@@ -18,7 +19,6 @@
 @model iWasHere.Domain.DTOs.LandmarkModel;
 
 
-<body onload="onLoad()">
 
     <h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
 
@@ -56,6 +56,6 @@
             @Html.DisplayFor(model => model.Country)
         </li>
     </ul>
+    <img src="~/@Model.Path" alt="Image" />
 
 
-</body>

@@ -543,7 +543,8 @@ namespace iWasHere.Domain.Service
                 City=c.City,
                 CountyId= _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                 County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
-                Country= _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+                Country= _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
+                Path = _dbContext.Images.Where(d => d.LandmarkId == c.LandmarkId).Select(a => a.Path).FirstOrDefault().ToString()
 
             }).Where(a => a.LandmarkId == landmarkId).FirstOrDefault();
             return city;
@@ -562,6 +563,17 @@ namespace iWasHere.Domain.Service
                     
             _dbContext.Images.Add(img);
             _dbContext.SaveChanges();
+        }
+
+
+        public string GetImageToShow(int id)
+        {
+            ImageModel x = _dbContext.Images.Select(c => new ImageModel()
+            {
+                Path=c.Path
+
+            }).Where(a => a.LandmarkId == id).FirstOrDefault();
+            return x.Path;
         }
 
     }

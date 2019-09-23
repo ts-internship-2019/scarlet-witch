@@ -1,0 +1,232 @@
+﻿@model iWasHere.Domain.DTOs.ReviewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Comment</h1>
+
+<script src="https://kit.fontawesome.com/e36d8f191f.js" crossorigin="anonymous"></script>
+
+
+@*<div class="demo-section k-content">
+        @(Html.Kendo().ButtonGroup()
+            .Name("select-period")
+            .Items(t =>
+            {
+                t.Add().IconClass("fas fa-star");
+                t.Add().IconClass("fas fa-star");
+                t.Add().IconClass("fas fa-star");
+                t.Add().IconClass("fas fa-star");
+                t.Add().IconClass("fas fa-star");
+                t.Add().IconClass("fas fa-star");
+                t.Add().IconClass("fas fa-star");
+                t.Add().IconClass("fas fa-star");
+                t.Add().IconClass("fas fa-star");
+                t.Add().IconClass("fas fa-star");
+            })
+            .Selection("multiple")
+            .Events(ev => ev.Select("onSelect"))
+
+        )
+    </div>*@
+
+<script>
+    var currentValue = 0;
+    function handleClick(myRadio) {
+        alert('Old value: ' + currentValue);
+        alert('New value: ' + myRadio.value);
+        currentValue = myRadio.value;
+    }
+
+    $.ajax({
+                    type: 'PUT',
+                    url: '@Url.Action("SaveLandmarkType", "DictionaryLandmarkType")',
+                    data: {
+                        landmarkTypeId: document.getElementById("landmarkTypeId").value,
+                        landmarkCode: document.getElementById("LandmarkTypeCode").value,
+                        description: document.getElementById("Description").value
+
+                    },
+                    success: function (response) {
+                        if (fromUpdate) {
+                            document.getElementById("LandmarkTypeCode").value = "";
+                            document.getElementById("Description").value = "";
+
+                            fromUpdate = false;
+                        }
+                        else {
+                            window.location.href = '@Url.Action("Index", "DictionaryLandmarkType")';
+
+                        }
+
+                    },
+                    error: function (response) {
+                        //alert(String(response));
+
+                    }
+                })
+
+</script>
+
+<div>
+    <ul style="list-style-type:none">
+        <li>
+
+            <label>User</label>
+
+        </li>
+        <li>
+            @(Html.Kendo().CheckBox()
+            .Name("Logged")
+            .Checked(false)
+            .Label("User logged")
+            )
+        </li>
+        <li>
+
+           
+            @(Html.Kendo().TextBox()
+            .Name("User")
+            .Value("anonim")
+            )
+
+        </li>
+
+        </ul>
+        
+</div>
+
+
+<div style="width:100%">
+
+    <ul style="list-style-type:none">
+        <li>
+
+            <label>Rating</label>
+
+        </li>
+        <li>
+            <form name="myForm">
+
+                <fieldset class="rating">
+                    <input type="radio" id="star10" name="rating" onclick="handleClick(this);" value="10" /><label class="full" for="star10" title="10 stars"></label>
+                    <input type="radio" id="star9" name="rating" onclick="handleClick(this);" value="9" /><label class="full" for="star9" title="9 stars"></label>
+                    <input type="radio" id="star8" name="rating" onclick="handleClick(this);" value="8" /><label class="full" for="star8" title="8 stars"></label>
+                    <input type="radio" id="star7" name="rating" onclick="handleClick(this);" value="7" /><label class="full" for="star7" title="7 stars"></label>
+                    <input type="radio" id="star6" name="rating" onclick="handleClick(this);" value="6" /><label class="full" for="star6" title="6 stars"></label>
+                    <input type="radio" id="star5" name="rating" onclick="handleClick(this);" value="5" /><label class="full" for="star5" title="5 stars"></label>
+                    <input type="radio" id="star4" name="rating" onclick="handleClick(this);" value="4" /><label class="full" for="star4" title="4 stars"></label>
+                    <input type="radio" id="star3" name="rating" onclick="handleClick(this);" value="3" /><label class="full" for="star3" title="3 stars"></label>
+                    <input type="radio" id="star2" name="rating" onclick="handleClick(this);" value="2" /><label class="full" for="star2" title="2 stars"></label>
+                    <input type="radio" id="star1" name="rating" onclick="handleClick(this);" value="1" /><label class="full" for="star1" title="1 star"></label>
+
+                </fieldset>
+            </form>
+        </li>
+        </ul>
+       
+</div>
+
+
+<div style="clear:both">
+    <ul style="list-style-type:none">
+        <li>
+
+            <label>Title</label>
+
+        </li>
+        <li>
+            @(Html.Kendo().TextBoxFor(model => model.Title)
+                                        .HtmlAttributes(new { @id = "Title", style = "margin:10px" })
+            )
+        </li>
+        <li>
+            <label>Description</label>
+        </li>
+        <li>
+            @(Html.Kendo().TextBoxFor(model => model.Review1)
+                                       .HtmlAttributes(new { @id = "Description", style = "margin:10px" })
+            )
+        </li>
+             
+</div>
+
+<div>
+    @(Html.Kendo().Button()
+                .Name("addCommentButton")
+                .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "addCommentButton" })
+                .Content("Save")
+                .Events(ev => ev.Click("Save"))
+    )
+    @(Html.Kendo().Button()
+          .Name("cancelButton")
+          .HtmlAttributes(new { type = "button", @class = "k-primary" })
+          .Content("Cancel")
+          .Events(ev => ev.Click("Cancel"))
+    )
+</div>
+
+
+<style>
+
+
+    fieldset, label {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        margin: 20px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin: 10px;
+    }
+
+    /****** Style Star Rating Widget *****/
+
+    .rating {
+        border: none;
+        float: left;
+    }
+
+        .rating > input {
+            display: none;
+        }
+
+        .rating > label:before {
+            margin: 5px;
+            font-size: 1.25em;
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f005";
+        }
+
+        .rating > .half:before {
+            content: "\f089";
+            position: absolute;
+        }
+
+        .rating > label {
+            color: #ddd;
+            float: right;
+        }
+
+        /***** CSS Magic to Highlight Stars on Hover *****/
+
+        .rating > input:checked ~ label, /* show gold star when clicked */
+        .rating:not(:checked) > label:hover, /* hover current star */
+        .rating:not(:checked) > label:hover ~ label {
+            color: #FFD700;
+        }
+            /* hover previous stars in list */
+
+            .rating > input:checked + label:hover, /* hover current star when changing rating */
+            .rating > input:checked ~ label:hover,
+            .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+            .rating > input:checked ~ label:hover ~ label {
+                color: #FFED85;
+            }
+</style>
