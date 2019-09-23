@@ -12,6 +12,8 @@ namespace iWasHere.Domain.Models
         public decimal? Grade { get; set; }
         public string UserId { get; set; }
 
+        public string UserName { get; set; }
+
         public virtual Landmark Landmark { get; set; }
         public virtual AspNetUsers User { get; set; }
     }
