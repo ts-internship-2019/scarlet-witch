@@ -6,8 +6,10 @@
 }
 
 <h1>AddLandmark</h1>
-<div id="googleMap" style="width:50%;height:400px;" class="map-container"></div>
+<div id="googleMap" style="width:100%;height:300px;"></div>
+
 <script>
+
     var map;
     var markers = [];
     function myMap() {
@@ -18,19 +20,16 @@
 
         });
 
-        
         map.addListener('click', function (event) {
             clearMarkers();
-            addMarker(event.latLng);            
+            addMarker(event.latLng);
             document.getElementById("Latitude").value = event.latLng.lat();
             document.getElementById("Longitude").value = event.latLng.lng();
         });
 
-        
         addMarker(startLatLng);
     }
 
-    
     function addMarker(location) {
         var marker = new google.maps.Marker({
             position: location,
@@ -39,24 +38,20 @@
         markers.push(marker);
     }
 
-    
     function setMapOnAll(map) {
         for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(map);
         }
     }
 
-   
     function clearMarkers() {
         setMapOnAll(null);
     }
 
-    
     function showMarkers() {
         setMapOnAll(map);
     }
 
-    
     function deleteMarkers() {
         clearMarkers();
         markers = [];
@@ -67,17 +62,16 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYlEg-dW1i94xgQ2FC4u9IsLfx1kyFEf8&callback=myMap"></script>
 
 <style>
-    .map-container{
+    .map-container {
         position: absolute;
         bottom: 20%;
-        right: 10%;
     }
-
 </style>
 
 <hr />
 
-<div class="row">
+<body onload="onLoadEdit()" class="container">
+
     <div class="col-md-4">
 
         <ul style="list-style-type:none">
@@ -86,11 +80,10 @@
             </li>
             <li>
                 @(Html.Kendo().TextBoxFor(model => model.LandmarkDescription)
-                                    .HtmlAttributes(new { @id = "LandmarkName", style = "margin:10px" })
+                                    .HtmlAttributes(new { @id = "LandmarkName", style = " width: 75%" })
                 )
-
                 @(Html.Kendo().TextBoxFor(model => model.LandmarkId)
-                .HtmlAttributes(new { @id = "LandmarkId", style = "margin:10px" })
+                .HtmlAttributes(new { @id = "LandmarkId", style = "width: 0%" })
                 )
             </li>
 
@@ -116,17 +109,13 @@
                 <label>Landmark has entry ticket?</label>
             </li>
             <li>
-                @(Html.Kendo().RadioButton()
-                    .Name("YesRadioButton")
-                    .Label("Yes")
-                    .HtmlAttributes(new { @id = "yesRB" })
-                    .Checked(true))
 
-                @(Html.Kendo().RadioButton()
-                   .Name("NoRadioButton")
-                   .Label("No")
-                    .HtmlAttributes(new { @id = "noRB" })
-                   .Checked(false))
+                <div class="form-group row">
+                    <form action="">
+                        <input id="yesRB" type="radio" name="gender"> Yes<br>
+                        <input id="noRB" type="radio" name="gender"> No<br>
+                    </form>
+                </div>
             </li>
 
             <li>
@@ -188,7 +177,7 @@
             </li>
             <li>
                 @(Html.Kendo().TextBoxFor(model => model.StreetName)
-                                    .HtmlAttributes(new { @id = "StreetName", style = "margin:10px" })
+                                    .HtmlAttributes(new { @id = "StreetName", style = " width: 75%" })
                 )
             </li>
 
@@ -197,7 +186,7 @@
             </li>
             <li>
                 @(Html.Kendo().TextBoxFor(model => model.StreetNumber)
-                                    .HtmlAttributes(new { @id = "StreetNumber", style = "margin:10px" })
+                                    .HtmlAttributes(new { @id = "StreetNumber", style = " width: 75%" })
                 )
             </li>
 
@@ -206,7 +195,7 @@
             </li>
             <li>
                 @(Html.Kendo().TextBoxFor(model => model.Latitude)
-                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:5px", @readonly="readonly" })
+                                    .HtmlAttributes(new { @id = "Latitude", style = " width: 75%", @readonly = "readonly" })
                 )
             </li>
 
@@ -217,14 +206,12 @@
             </li>
             <li>
                 @(Html.Kendo().TextBoxFor(model => model.Longitude)
-                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:5px", @readonly="readonly"  })
+                                    .HtmlAttributes(new { @id = "Longitude", style = " width: 75%", @readonly = "readonly" })
                 )
             </li>
         </ul>
-        
 
         <iframe hidden name="formSending"></iframe>
-
         <form method="post" action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
             <div class="demo-section k-content">
                 @(Html.Kendo().Upload()
@@ -240,7 +227,7 @@
         <div>
             @(Html.Kendo().Button()
                .Name("primaryTextButton")
-               .HtmlAttributes(new { type = "button", @class = "k-primary" , @id="buttonId" })
+               .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
                .Content("Add")
                .Events(ev => ev.Click("add"))
             )
@@ -255,12 +242,12 @@
     </div>
 </body>
 
-    <div>
-        <a asp-controller="Landmarks"
-           asp-action="LandmarkList">Back to List</a>
-    </div>
+<div>
+    <a asp-controller="Landmarks"
+       asp-action="LandmarkList">Back to List</a>
+</div>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
         function addImage() {
             $.ajax({
@@ -284,7 +271,6 @@
             var url_string = window.location.href;
             var url = new URL(url_string);
             var id = url.searchParams.get("LandmarkId");
-            alert(id);
 
             if (id != 0) {
                 $.ajax({
@@ -352,12 +338,11 @@
             }
         }
 
-        
+
         function onLoadEdit() {
             var url_string = window.location.href;
             var url = new URL(url_string);
             document.getElementById("LandmarkId").style.visibility = "hidden";
-            alert(id);
             var id = url.searchParams.get("id");
             if (id != 0) {
                 alert("din edit");
@@ -374,6 +359,6 @@
         }
 
 
-    </script>
+</script>
 
 

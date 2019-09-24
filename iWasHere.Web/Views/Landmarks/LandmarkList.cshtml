@@ -45,6 +45,13 @@
         {
             columns.Bound(o => o.LandmarkId);
             columns.Bound(o => o.LandmarkDescription).Title("Name");
+            columns.Bound(o => o.StreetName);
+            columns.Bound(o => o.StreetNumber);
+            columns.Bound(o => o.Latitude);
+            columns.Bound(o => o.Longitude);
+            columns.Bound(o => o.CityName);
+            columns.Bound(o => o.CountyName);
+            columns.Bound(o => o.CountryName);
             columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkId#)\">Delete</button>");
             columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=LandmarkId#)\"> Edit </button>");
             columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");

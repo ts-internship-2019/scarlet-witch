@@ -448,13 +448,11 @@ namespace iWasHere.Domain.Service
         }
 
 
-
         public void DeleteLanguages(int id)
         {
             DictionaryLanguage language = new DictionaryLanguage() { LanguageId = id };
             _dbContext.DictionaryLanguage.Remove(language);
             _dbContext.SaveChanges();
-
         }
 
         public bool VerifyCityName(String cityName)
@@ -480,14 +478,12 @@ namespace iWasHere.Domain.Service
                 CurrencyCode = c.CurrencyCode,
                 CurrencyName = c.CurrencyName,
                 CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
-               // CountryName = _dbContext.DictionaryCountry.Where(a => a.CountryId == c.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
             }).Where(a => a.CurrencyId == id).FirstOrDefault();
             return currency;
         }
 
         public List<DictionaryCountryModel> PopulateCountryCombo()
         {
-
             List<DictionaryCountryModel> dictionaryCurrencyModels = _dbContext.DictionaryCountry.Select(b => new DictionaryCountryModel()
             {
                 CountryId = b.CountryId,
@@ -496,7 +492,6 @@ namespace iWasHere.Domain.Service
             }).ToList();
 
             return dictionaryCurrencyModels;
-
         }
 
 
@@ -517,7 +512,14 @@ namespace iWasHere.Domain.Service
             IQueryable<LandmarkModel> landmarks = _dbContext.Landmark.Select(a => new LandmarkModel()
             {
                 LandmarkId = a.LandmarkId,
-                LandmarkDescription = a.LandmarkDescription
+                LandmarkDescription = a.LandmarkDescription,
+                Latitude = a.Latitude,
+                Longitude = a.Longitude,
+                StreetName = a.StreetName,
+                StreetNumber = a.StreetNumber,
+                CityName =  _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(x => x.CityName).FirstOrDefault().ToString(),
+                CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == a.City.County.Country.CountryId).Select(x => x.CountryName).FirstOrDefault().ToString(),
+                CountyName = _dbContext.DictionaryCounty.Where(d => d.CountyId == a.City.County.CountyId).Select(x => x.CountyName).FirstOrDefault().ToString()
             });
             return landmarks;
 
@@ -559,12 +561,10 @@ namespace iWasHere.Domain.Service
                 Path = path,
                 LandmarkId = landmarkId
 
-            };
-                    
+            }; 
             _dbContext.Images.Add(img);
             _dbContext.SaveChanges();
         }
-
 
         public string GetImageToShow(int id)
         {
