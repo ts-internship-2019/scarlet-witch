@@ -277,24 +277,7 @@ namespace iWasHere.Domain.Service
 
             _dbContext.DictionaryCurrency.Remove(currency);
             _dbContext.SaveChanges();
-        }
 
-        public int DeleteLandmark(int id)
-        {
-            int sters = 0;
-            try
-            {
-                Landmark c = new Landmark() { LandmarkId = id };
-                _dbContext.Landmark.Remove(c);
-                _dbContext.SaveChanges();
-                sters = 1;
-                return sters;
-            }
-            catch (Exception ex)
-            {
-                sters = 0;
-                return sters;
-            }
         }
 
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
@@ -563,6 +546,8 @@ namespace iWasHere.Domain.Service
                     StreetNumber = c.StreetNumber,
                     CityId = c.CityId,
                     City = c.City,
+                    Latitude=c.Latitude,
+                    Longitude=c.Longitude,
                     CountyId = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
                     Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
@@ -617,6 +602,48 @@ namespace iWasHere.Domain.Service
 
             }).Where(a => a.LandmarkId == id).FirstOrDefault();
             return x.Path;
+        }
+
+        public int DeleteCountry(int id)
+        {
+            //CountryXlanguage cxl = new CountryXlanguage() { CountryId = id };
+            //_dbContext.CountryXlanguage.Remove(cxl);
+            //_dbContext.SaveChanges();
+
+            int sters = 0;
+            try
+            {
+                DictionaryCountry c = new DictionaryCountry() { CountryId = id };
+                _dbContext.DictionaryCountry.Remove(c);
+                _dbContext.SaveChanges();
+                sters = 1;
+                return sters;
+            }
+            catch (Exception ex)
+            {
+                sters = 0;
+                return sters;
+            }
+
+            
+        }
+
+        public int DeleteLandmark(int id)
+        {
+            int sters = 0;
+            try
+            {
+                Landmark c = new Landmark() { LandmarkId = id };
+                _dbContext.Landmark.Remove(c);
+                _dbContext.SaveChanges();
+                sters = 1;
+                return sters;
+            }
+            catch(Exception ex)
+            {
+                sters = 0;
+                return sters;
+            }
         }
 
     }

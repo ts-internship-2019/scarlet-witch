@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Landmark\" />
+    <Folder Include="Views\DictionaryInterval\" />
     <Folder Include="wwwroot\lib\kendo-ui\" />
   </ItemGroup>
 
