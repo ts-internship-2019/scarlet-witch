@@ -32,13 +32,15 @@ namespace iWasHere.Domain.DTOs
         public string Country { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
-        public string Path { get; set; }
+        public List<Images> Path { get; set; }
 
         public string CountyName { get; set; }
 
         public string CityName { get; set; }
 
         public string CountryName { get; set; }
+
+        public List<Review> Reviews { get; set; }
 
 
         public LandmarkModel()
