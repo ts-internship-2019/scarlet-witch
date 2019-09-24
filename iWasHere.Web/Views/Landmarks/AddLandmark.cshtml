@@ -279,7 +279,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 </div>
 
 <script type="text/javascript">
-
+    
     function onClose() {
         $("#showDialogBtn").fadeIn();
     }
@@ -298,7 +298,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             type: 'POST',
             data: $('#myForm').serialize(),
             success: function () {
-                alert("Imagine salvata!");
+                alert("Imagine salvata!"); 
             },
             error: function (response) {
                 alert("Eroare!");
@@ -340,9 +340,9 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
         var url_string = window.location.href;
         var url = new URL(url_string);
-        var id = url.searchParams.get("LandmarkId");
+        var id = url.searchParams.get("id");
         var landmarkValidation = false;
-
+        alert(id);
         if (!document.getElementById("LandmarkName").value ||
             !document.getElementById("StreetName").value ||
             !document.getElementById("StreetNumber").value ||
@@ -409,15 +409,18 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                 },
                                 success: function (response) {
                                     alert("Atractie salvata!");
-                                    if (fromUpdate) {
-                                        document.getElementById("LandmarkName").value = "";
-                                        fromUpdate = false;
-                                    }                                    
+                                    //if (fromUpdate) {
+                                    //    document.getElementById("LandmarkName").value = "";
+                                    //    fromUpdate = false;
+                                    //}                                    
                                     $.ajax({
                                         url: '@Url.Action("SaveImagesDB", "Landmarks")',
                                         type: 'put',
                                         success: function () {
                                             alert("Imagine salvata!");
+                                        },
+                                        error: function () {
+                                            alert("Eroare imagine!");
                                         }
                                     });
                                     window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
