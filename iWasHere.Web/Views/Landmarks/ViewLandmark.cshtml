@@ -11,6 +11,31 @@
 <h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYlEg-dW1i94xgQ2FC4u9IsLfx1kyFEf8&callback=myMap"></script>
 
+<style>
+    
+.left-div {
+  display: inline-block;
+  max-width: 400px;
+  text-align: left;
+  padding: 10px;
+  background-color: #ddd;
+  border-radius: 3px;
+  margin: 5px;
+  vertical-align: top;
+}
+
+.right-div {
+  display: inline-block;
+  max-width: 400px;
+  text-align: left;
+  padding: 10px;
+  background-color: #ddd;
+  border-radius: 3px;
+  margin: 5px;
+}
+</style>
+
+
 <script>
     var map;
     var markers = [];
@@ -31,10 +56,12 @@
         right: 10%;
     }
 </style>
+
+<h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
 <div class="container">
     <div class="row ">
         <div class="col-md-12">
-            <div class="col-md-6">
+            <div class="left-div">
                 <ul>
                     <li>
                         <label>LandmarkType:</label>
@@ -79,16 +106,17 @@
                 </ul>
             </div>
 
-            <div class="col-md-6">
+            <div class="right-div">
                 <img src="~/@Model.Path" alt="Image" />
-                <input type="button"
-                       value="Add Comment"
-                       onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
+                
             </div>
             <div id="googleMap" style="width:50%;height:400px;" class="map-container"></div>
         </div>
+        </div>
     </div>
-</div>
+<input type="button"
+       value="Add Comment"
+       onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
 
 
 
