@@ -110,8 +110,6 @@
                         document.getElementById("CountyName").value = "";
                         $("#combo").val("").data("kendoDropDownList").text("");
                         fromUpdate = false;
-                    }
-                    else {
                         window.location.href = '@Url.Action("Index", "DictionaryCounty")';
                     }
 
@@ -141,6 +139,8 @@
     function addNew() {
         fromUpdate = true;
         add();
+        
+        window.location.href = '@Url.Action("AddCounty", "DictionaryCounty")';
     }
 
     function cancelAdd() {

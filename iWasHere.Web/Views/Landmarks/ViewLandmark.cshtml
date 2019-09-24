@@ -142,25 +142,21 @@
 
                 </div>
 
-
-                <div class="right-div">
-                    <img src="~/@Model.Path" alt="Image" />
-                    <input type="button"
-                           value="Add Comment"
-                           onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
-                </div>
-
-
+            <div class="right-div">
+                <img src="~/@Model.Path" alt="This landmark has no image" />
+                
             </div>
 
         </div>
-
+        </div>
     </div>
-</body>
+<input type="button" class="k-primary"
+       value="Add Comment"
+       onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
 
 
-
-
-
+@*<input type="button"
+       value="Add Comment"
+       onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId "/>*@
 
 

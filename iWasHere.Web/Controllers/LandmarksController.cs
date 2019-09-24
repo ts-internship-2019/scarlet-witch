@@ -18,7 +18,7 @@ namespace iWasHere.Web.Controllers
     public class LandmarksController : Controller
     {
         private readonly DictionaryService _dictionaryService;
-
+   
         private readonly IHostingEnvironment _he;
         public static List<String> imagesPaths;
 
@@ -32,12 +32,20 @@ namespace iWasHere.Web.Controllers
         {
             return View();
         }
-
-        public IActionResult AddLandmark()
+  
+        public IActionResult AddLandmark(int id)
         {
-            return View();
+            if (id != 0)
+            {
+                LandmarkModel model = _dictionaryService.GetLandmarkSingle(id);
+                return View(model);
+            }
+            else
+            {
+                LandmarkModel model = new LandmarkModel();
+                return View(model);
+            }
         }
-
         public IActionResult Images()
         {
             return View();
@@ -48,13 +56,8 @@ namespace iWasHere.Web.Controllers
         public IActionResult ViewLandmark(string id)
         {
             LandmarkModel landmark = _dictionaryService.GetLandmarkSingle(Convert.ToInt32(id));
-           
             return View(landmark);
         }
-
-
-
-
 
         public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
         {
@@ -118,8 +121,6 @@ namespace iWasHere.Web.Controllers
 
         }
 
-
-
         public void SaveImagesDB()
         {
             foreach (string path in imagesPaths)
@@ -182,5 +183,12 @@ namespace iWasHere.Web.Controllers
             }).ToList();
             return Json(cnts);
         }
+
+        public int Delete([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            int sters = _dictionaryService.DeleteLandmark(id);
+            return sters;
+        }
+
     }
 }

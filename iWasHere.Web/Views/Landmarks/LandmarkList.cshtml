@@ -45,6 +45,13 @@
         {
             columns.Bound(o => o.LandmarkId);
             columns.Bound(o => o.LandmarkDescription).Title("Name");
+            columns.Bound(o => o.StreetName);
+            columns.Bound(o => o.StreetNumber);
+            columns.Bound(o => o.Latitude);
+            columns.Bound(o => o.Longitude);
+            columns.Bound(o => o.CityName);
+            columns.Bound(o => o.CountyName);
+            columns.Bound(o => o.CountryName);
             columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkId#)\">Delete</button>");
             columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=LandmarkId#)\"> Edit </button>");
             columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
@@ -62,8 +69,12 @@
         .Read(read => read.Action("GetLandmarksFiltered", "Landmarks"))
         .Destroy(d => d.Action("Delete", "Landmarks"))
         )
-    )
+)
+
 <script type="text/javascript">
+    function add() {
+        window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
+    }
 
     function redirectImagesContext() {
         window.location.href = '@Url.Action("Images", "Landmarks")';
@@ -82,8 +93,29 @@
         $("#landmarkGrid").data("kendoGrid").dataSource.page(1);
     }
 
-     function openAddLandmarkPage(e) {
+    function openAddLandmarkPage(e) {
         window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
+    }
+    
+    function deleteRow(id) {
+        $.ajax({
+            type: 'DELETE',
+            url: '@Url.Action("Delete", "Landmarks")',
+            data: { id: id },
+            success: function (response) {
+                alert("hai ca merge");
+                alert(response);
+                if (response == 0) {
+                    alert("Atractia nu se poate sterge");
+                } else {
+                    alert("Atractie stearsa");
+                    refreshGrid();
+                }
+            },
+            error: function (response) {
+                alert("hai ca nu merge");
+            }
+        })
     }
 
 </script>
