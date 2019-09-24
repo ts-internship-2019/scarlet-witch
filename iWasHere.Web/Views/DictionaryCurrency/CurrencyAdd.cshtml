@@ -2,8 +2,7 @@
 @{
 
     ViewData["Title"] = "AddCurrency";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+Layout = "~/Views/Shared/_Layout.cshtml";}
 
 
 <h1>AddCurrency</h1>
@@ -25,7 +24,6 @@
                         currencyCode: document.getElementById("currencyCode").value,
                         currencyExchange: document.getElementById("currencyExchange").value,
                         currencyId: document.getElementById("currencyId").value
-
                     },
                     success: function (response) {
 
@@ -101,31 +99,56 @@
 </script>
 @model iWasHere.Domain.DTOs.DictionaryCurrencyModel;
 
+<style>
+    .txtBoxStyle {
+
+        position: absolute;
+            right:60%;
+            
+            padding: 10%;
+
+
+    }
+
+
+</style>
+
+
 <body onload="onLoadEdit()">
 
 
-    <ul style="list-style-type:none">
+    <ul style="list-style-type:none" >
         <li>
             <label>Currency Name</label>
+            @(Html.Kendo().TextBoxFor(model => model.CurrencyName)
+                              .HtmlAttributes(new { @id = "currencyName", style = "margin:20px; left:6.5%" })
+
+            )
+
         </li>
         <li>
-            @(Html.Kendo().TextBoxFor(model => model.CurrencyName)
-                                .HtmlAttributes(new { @id = "currencyName", style = "margin:10px" })
-
-            )
+            <label>Currency Code</label>
             @(Html.Kendo().TextBoxFor(model => model.CurrencyCode)
-                    .HtmlAttributes(new { @id = "currencyCode", style = "margin:10px" })
+                    .HtmlAttributes(new { @id = "currencyCode", style = "margin:20px; left:7%" })
 
             )
+
+        </li>
+        <li>
+            <label>Currency Exchange</label>
             @(Html.Kendo().NumericTextBoxFor(model => model.CurrencyExchange)
-                    .HtmlAttributes(new { @id = "currencyExchange", style = "margin:10px", aria_label = "Currency Exchange " })
+                    .HtmlAttributes(new { @id = "currencyExchange", style = "margin:10px; left:5%", aria_label = "Currency Exchange " })
 
             )
+
+
+        </li>
+        <li>
             @(Html.Kendo().TextBoxFor(model => model.CurrencyId)
                 .HtmlAttributes(new { @id = "currencyId", style = "margin:10px" })
             )
         </li>
-        
+
     </ul>
 
 

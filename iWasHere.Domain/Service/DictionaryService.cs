@@ -454,13 +454,12 @@ namespace iWasHere.Domain.Service
             else
                 return true;
         }
-        public bool VerifyLandmark(String name, String street, int number, double lat, double longitud)
+        public bool VerifyLandmark(String name, double lat, double longitud)
         {
-            if (_dbContext.Landmark.Any(c => c.LandmarkDescription == name && c.StreetName == street && c.StreetNumber == number
-            && c.Latitude == lat && c.Longitude == longitud))
-                return false;
-            else
+            if (_dbContext.Landmark.Any(c => c.LandmarkDescription == name && c.Latitude == lat && c.Longitude == longitud))
                 return true;
+            else
+                return false;
         }
 
 
@@ -529,6 +528,7 @@ namespace iWasHere.Domain.Service
 
         public LandmarkModel GetLandmarkSingle(int landmarkId)
         {
+            DictionaryService service = new DictionaryService(_dbContext);
             try
             {
                 LandmarkModel city = _dbContext.Landmark.Select(c => new LandmarkModel()
@@ -551,7 +551,14 @@ namespace iWasHere.Domain.Service
                     CountyId = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
                     Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
-                    Path = _dbContext.Images.Where(d => d.LandmarkId == c.LandmarkId).Select(a => a.Path).FirstOrDefault().ToString()
+                    Path = _dbContext.Images.Where(d => d.LandmarkId == landmarkId).Select(b => new Images() {Path=b.Path }).ToList(),
+                    Reviews = _dbContext.Review.Where(d => d.LandmarkId == landmarkId).Select(b => new Review()
+                    {
+                        Review1 = b.Review1,
+                        Grade = b.Grade,
+                        UserName = b.UserName,
+                        Title = b.Title
+                    }).ToList()
                 }).Where(a => a.LandmarkId == landmarkId).FirstOrDefault();
                 return city;
             }
@@ -572,13 +579,36 @@ namespace iWasHere.Domain.Service
                     StreetNumber = c.StreetNumber,
                     CityId = c.CityId,
                     City = c.City,
+                    Latitude = c.Latitude,
+                    Longitude = c.Longitude,
                     CountyId = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
-                    Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString()
+                    Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
+                    Reviews =_dbContext.Review.Where(d=>d.LandmarkId==landmarkId).Select(b => new Review()
+                    {
+                        Review1 = b.Review1,
+                        Grade = b.Grade,
+                        UserName = b.UserName,
+                        Title = b.Title }).ToList()
                 }).Where(a => a.LandmarkId == landmarkId).FirstOrDefault();
                 return city;
             }
         }
+
+        public List<Review> GetReviews(int landmarkId)
+        {
+            List<Review> reviews = _dbContext.Review.Select(b => new Review()
+            {
+                Review1 = b.Review1,
+                Grade=b.Grade,
+                UserName=b.UserName,
+                Title=b.Title
+
+            }).Where(a=>a.LandmarkId==landmarkId).ToList();
+
+            return reviews;
+        }
+
 
         public void SaveImagesDB(string path)
         {
