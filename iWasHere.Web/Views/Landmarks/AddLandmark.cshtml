@@ -77,190 +77,191 @@
 
 <hr />
 
-<div class="row">
-    <div class="col-md-4">
+<body onload="onLoadEdit()" class="container">
+    <div class="row">
+        <div class="col-md-4">
 
-        <ul style="list-style-type:none">
-            <li>
-                <label>Landmark Name</label>
-            </li>
-            <li>
-                @(Html.Kendo().TextBoxFor(model => model.LandmarkDescription)
-                                    .HtmlAttributes(new { @id = "LandmarkName", style = "margin:10px" })
-                )
+            <ul style="list-style-type:none">
+                <li>
+                    <label>Landmark Name</label>
+                </li>
+                <li>
+                    @(Html.Kendo().TextBoxFor(model => model.LandmarkDescription)
+                                        .HtmlAttributes(new { @id = "LandmarkName", style = "margin:10px" })
+                    )
 
-                @(Html.Kendo().TextBoxFor(model => model.LandmarkId)
-                .HtmlAttributes(new { @id = "LandmarkId", style = "margin:10px" })
-                )
-            </li>
+                    @(Html.Kendo().TextBoxFor(model => model.LandmarkId)
+                    .HtmlAttributes(new { @id = "LandmarkId", style = "margin:10px" })
+                    )
+                </li>
 
-            <li>
-                <label>Landmark Type</label>
-            </li>
-            <li>
-                @(Html.Kendo().DropDownList()
-                                 .Name("DictionaryLandmarkType")
-                                 .DataTextField("LandmarkTypeCode")
-                                 .DataValueField("LandmarkTypeId")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboType" })
-                                 .DataSource(source =>
-                                 {
-                                     source.Read(read =>
+                <li>
+                    <label>Landmark Type</label>
+                </li>
+                <li>
+                    @(Html.Kendo().DropDownList()
+                                     .Name("DictionaryLandmarkType")
+                                     .DataTextField("LandmarkTypeCode")
+                                     .DataValueField("LandmarkTypeId")
+                                     .HtmlAttributes(new { style = "width: 75%", @id = "comboType" })
+                                     .DataSource(source =>
                                      {
-                                         read.Action("GetAllLandmarkTypes", "Landmarks");
-                                     });
-                                 }))
-            </li>
+                                         source.Read(read =>
+                                         {
+                                             read.Action("GetAllLandmarkTypes", "Landmarks");
+                                         });
+                                     }))
+                </li>
 
-            <li>
-                <label>Landmark has entry ticket?</label>
-            </li>
-            <li>
-                @(Html.Kendo().RadioButton()
-                    .Name("YesRadioButton")
-                    .Label("Yes")
-                    .HtmlAttributes(new { @id = "yesRB" })
-                    .Checked(true))
+                <li>
+                    <label>Landmark has entry ticket?</label>
+                </li>
+                <li>
+                    @(Html.Kendo().RadioButton()
+                        .Name("YesRadioButton")
+                        .Label("Yes")
+                        .HtmlAttributes(new { @id = "yesRB" })
+                        .Checked(true))
 
-                @(Html.Kendo().RadioButton()
-                   .Name("NoRadioButton")
-                   .Label("No")
-                    .HtmlAttributes(new { @id = "noRB" })
-                   .Checked(false))
-            </li>
+                    @(Html.Kendo().RadioButton()
+                       .Name("NoRadioButton")
+                       .Label("No")
+                        .HtmlAttributes(new { @id = "noRB" })
+                       .Checked(false))
+                </li>
 
-            <li>
-                <label>Visit Interval</label>
-            </li>
-            <li>
-                @(Html.Kendo().DropDownList()
-                                 .Name("DictionaryInterval")
-                                 .DataTextField("VisitIntervalName")
-                                 .DataValueField("VisitIntervalId")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboInterval" })
-                                 .DataSource(source =>
-                                 {
-                                     source.Read(read =>
+                <li>
+                    <label>Visit Interval</label>
+                </li>
+                <li>
+                    @(Html.Kendo().DropDownList()
+                                     .Name("DictionaryInterval")
+                                     .DataTextField("VisitIntervalName")
+                                     .DataValueField("VisitIntervalId")
+                                     .HtmlAttributes(new { style = "width: 75%", @id = "comboInterval" })
+                                     .DataSource(source =>
                                      {
-                                         read.Action("GetAllVisitIntervals", "Landmarks");
-                                     });
-                                 }))
-            </li>
+                                         source.Read(read =>
+                                         {
+                                             read.Action("GetAllVisitIntervals", "Landmarks");
+                                         });
+                                     }))
+                </li>
 
-            <li>
-                <label>Ticket</label>
-            </li>
-            <li>
-                @(Html.Kendo().DropDownList()
-                                 .Name("DictionaryTicketType")
-                                 .DataTextField("TicketTypeName")
-                                 .DataValueField("TicketTypeId")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboTicket" })
-                                 .DataSource(source =>
-                                 {
-                                     source.Read(read =>
+                <li>
+                    <label>Ticket</label>
+                </li>
+                <li>
+                    @(Html.Kendo().DropDownList()
+                                     .Name("DictionaryTicketType")
+                                     .DataTextField("TicketTypeName")
+                                     .DataValueField("TicketTypeId")
+                                     .HtmlAttributes(new { style = "width: 75%", @id = "comboTicket" })
+                                     .DataSource(source =>
                                      {
-                                         read.Action("GetAllTicketTypes", "Landmarks");
-                                     });
-                                 }))
-            </li>
+                                         source.Read(read =>
+                                         {
+                                             read.Action("GetAllTicketTypes", "Landmarks");
+                                         });
+                                     }))
+                </li>
 
-            <li>
-                <label>City</label>
-            </li>
-            <li>
-                @(Html.Kendo().DropDownList()
-                                 .Name("DictionaryCity")
-                                 .DataTextField("Name")
-                                 .DataValueField("Id")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboCity" })
-                                 .DataSource(source =>
-                                 {
-                                     source.Read(read =>
+                <li>
+                    <label>City</label>
+                </li>
+                <li>
+                    @(Html.Kendo().DropDownList()
+                                     .Name("DictionaryCity")
+                                     .DataTextField("Name")
+                                     .DataValueField("Id")
+                                     .HtmlAttributes(new { style = "width: 75%", @id = "comboCity" })
+                                     .DataSource(source =>
                                      {
-                                         read.Action("GetAllCities", "Landmarks");
-                                     });
-                                 }))
-            </li>
+                                         source.Read(read =>
+                                         {
+                                             read.Action("GetAllCities", "Landmarks");
+                                         });
+                                     }))
+                </li>
 
-            <li>
-                <label>Street Name</label>
-            </li>
-            <li>
-                @(Html.Kendo().TextBoxFor(model => model.StreetName)
-                                    .HtmlAttributes(new { @id = "StreetName", style = "margin:10px" })
+                <li>
+                    <label>Street Name</label>
+                </li>
+                <li>
+                    @(Html.Kendo().TextBoxFor(model => model.StreetName)
+                                        .HtmlAttributes(new { @id = "StreetName", style = "margin:10px" })
+                    )
+                </li>
+
+                <li>
+                    <label>Street Number</label>
+                </li>
+                <li>
+                    @(Html.Kendo().TextBoxFor(model => model.StreetNumber)
+                                        .HtmlAttributes(new { @id = "StreetNumber", style = "margin:10px" })
+                    )
+                </li>
+
+                <li>
+                    <label>Latitude</label>
+                </li>
+                <li>
+                    @(Html.Kendo().TextBoxFor(model => model.Latitude)
+                                        .HtmlAttributes(new { @id = "Latitude", style = "margin:5px", @readonly = "readonly" })
+                    )
+                </li>
+
+                <p></p>
+
+                <li>
+                    <label>Longitude</label>
+                </li>
+                <li>
+                    @(Html.Kendo().TextBoxFor(model => model.Longitude)
+                                        .HtmlAttributes(new { @id = "Longitude", style = "margin:5px", @readonly = "readonly" })
+                    )
+                </li>
+            </ul>
+
+
+            <iframe hidden name="formSending"></iframe>
+
+            <form method="post" action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
+                <div class="demo-section k-content">
+                    @(Html.Kendo().Upload()
+                        .Name("files")
+                        .HtmlAttributes(new { aria_label = "files", name = "pic", accept = "image/*" })
+                    )
+                    <p style="padding-top: 1em; text-align: right">
+                        <input type="submit" value="Upload" class="k-button k-primary" />
+                    </p>
+                </div>
+            </form>
+
+            <div>
+                @(Html.Kendo().Button()
+                   .Name("primaryTextButton")
+                   .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
+                   .Content("Add")
+                   .Events(ev => ev.Click("add"))
                 )
-            </li>
 
-            <li>
-                <label>Street Number</label>
-            </li>
-            <li>
-                @(Html.Kendo().TextBoxFor(model => model.StreetNumber)
-                                    .HtmlAttributes(new { @id = "StreetNumber", style = "margin:10px" })
+                @(Html.Kendo().Button()
+                  .Name("primaryTextButton")
+                  .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                  .Content("Add New")
+                  .Events(ev => ev.Click("addNew"))
                 )
-            </li>
-
-            <li>
-                <label>Latitude</label>
-            </li>
-            <li>
-                @(Html.Kendo().TextBoxFor(model => model.Latitude)
-                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:5px", @readonly="readonly" })
-                )
-            </li>
-
-            <p></p>
-
-            <li>
-                <label>Longitude</label>
-            </li>
-            <li>
-                @(Html.Kendo().TextBoxFor(model => model.Longitude)
-                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:5px", @readonly="readonly"  })
-                )
-            </li>
-        </ul>
-        
-
-        <iframe hidden name="formSending"></iframe>
-
-        <form method="post" action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
-            <div class="demo-section k-content">
-                @(Html.Kendo().Upload()
-                    .Name("files")
-                    .HtmlAttributes(new { aria_label = "files", name = "pic", accept = "image/*" })
-                )
-                <p style="padding-top: 1em; text-align: right">
-                    <input type="submit" value="Upload" class="k-button k-primary" />
-                </p>
             </div>
-        </form>
+        </div>
+
 
         <div>
-            @(Html.Kendo().Button()
-               .Name("primaryTextButton")
-               .HtmlAttributes(new { type = "button", @class = "k-primary" , @id="buttonId" })
-               .Content("Add")
-               .Events(ev => ev.Click("add"))
-            )
-
-            @(Html.Kendo().Button()
-              .Name("primaryTextButton")
-              .HtmlAttributes(new { type = "button", @class = "k-primary" })
-              .Content("Add New")
-              .Events(ev => ev.Click("addNew"))
-            )
+            <a asp-controller="Landmarks"
+               asp-action="LandmarkList">Back to List</a>
         </div>
-    </div>
-</body>
 
-    <div>
-        <a asp-controller="Landmarks"
-           asp-action="LandmarkList">Back to List</a>
-    </div>
-
-    <script type="text/javascript">
+        <script type="text/javascript">
 
         function addImage() {
             $.ajax({
@@ -352,7 +353,7 @@
             }
         }
 
-        
+
         function onLoadEdit() {
             var url_string = window.location.href;
             var url = new URL(url_string);
@@ -374,6 +375,7 @@
         }
 
 
-    </script>
+        </script>
 
 
+        </body>
