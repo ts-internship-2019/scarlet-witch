@@ -1,43 +1,77 @@
 ﻿
 @{
-    ViewData["Title"] = "CurrencyAdd";
+    ViewData["Title"] = "CountryAdd";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
+    }
 
 <h1>Add a Country</h1>
 
 <script>
 
+    let fromUpdate = false;
 
-    function AddCty()
-    {
-        var e = document.getElementById("combo");
-        var result = e.value;
-        alert(result); //ID002
+    function add() {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("CountryId");
 
-         $.ajax({
-                        type: 'PUT',
-                    url: '@Url.Action("SaveCountry", "DictionaryCountry")',
-             data: {
-                 countryName: document.getElementById("CountryName").value,
-                 languageId: document.getElementById("combo").value,
-                   },
-                        success: function (response) {
-                            alert("merge daca e");
-
-                    },
-                        error: function (response) {
-                        alert("hai ca nu merge");
+        if (id != 0) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("EditCountry", "DictionaryCountry")',
+                data: {
+                    countryName: document.getElementById("CountryName").value,
+                    languageId: document.getElementById("combo").value
+                },
+                success: function (response) {
+                    alert("hai ca merge");
+                    window.location.href = '@Url.Action("Index", "DictionaryCountry")';
+                },
+                error: function (response) {
+                    alert("hai ca nu merge");
+                }
+            })
+        }
+        else {
+            $.ajax({
+                type: 'PUT',
+                url: '@Url.Action("SaveCountry", "DictionaryCountry")',
+                data: {
+                    countryName: document.getElementById("CountryName").value,
+                    languageId: document.getElementById("combo").value
+                },
+                success: function (response) {
+                    if (fromUpdate) {
+                        document.getElementById("CountryName").value = "";
+                        $("#combo").val("").data("kendoDropDownList").text("");
+                        fromUpdate = false;
                     }
-         })
+                    else {
+                        window.location.href = '@Url.Action("Index", "DictionaryCountry")';
+                    }
 
+                },
+                error: function (response) {
+                    alert("hai ca nu merge");
+                }
+            })
+        }
+
+    }
+
+    function addNew() {
+        fromUpdate = true;
+        add();
+    }
+
+    function cancelAdd() {
+        window.location.href = '@Url.Action("Index", "DictionaryCountry")';
     }
 </script>
 
 
 
 <div class="form-group">
-    <h4>Add Currency</h4>
 
     @(Html.Kendo().TextBox()
          .Name("CountryName")
@@ -62,8 +96,22 @@
     @(Html.Kendo().Button()
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
-           .Content("Add")
-           .Events(ev => ev.Click("AddCty"))
-    )
+           .Content("Save")
+           .Events(ev => ev.Click("add"))
+        )
+
+        @(Html.Kendo().Button()
+               .Name("addNewButton")
+               .HtmlAttributes(new { type = "button", @class = "k-primary" })
+               .Content("Add New")
+               .Events(ev => ev.Click("addNew"))
+        )
+
+        @(Html.Kendo().Button()
+              .Name("cancelButton")
+              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .Content("Cancel")
+              .Events(ev => ev.Click("cancelAdd"))
+        )
 </div>
 

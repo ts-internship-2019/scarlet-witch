@@ -1,7 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Countries";
-    Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
-}
+Layout = "~/Views/Shared/_Layout.cshtml";}
 
 <h1>Countries</h1>
 
@@ -9,10 +8,14 @@
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
-           .Events(ev => ev.Click("foo"))
+           .Events(ev => ev.Click("redirectToAddContext"))
 )
 
 <script type="text/javascript">
+
+    function openAddCountryPage(e) {
+        window.location.href = '@Url.Action("AddCountry", "DictionaryCountry")';
+    }
 
     function filter(e) {
         var countryName = document.getElementById("countryTextBox").value;
@@ -26,10 +29,39 @@
         $("#countryGrid").data("kendoGrid").dataSource.page(1);
     }
 
-     function foo()
-    {
+    function deleteRow(id) {
+        $.ajax({
+            type: 'DELETE',
+            url: '@Url.Action("Delete", "DictionaryCountry")',
+            data: { id: id },
+            success: function (response) {
+                alert("hai ca merge");
+                if (response == 0) {
+                    alert("Tara nu se poate sterge pentru ca aceasta contine judete");
+                } else {
+                    alert("Tara stearsa")
+                    $("#countryGrid").data("kendoGrid").dataSource.read();
+                }
+
+            },
+            error: function (response) {
+                alert("hai ca nu merge");
+            }
+        })
+    }
+
+    function openAddCountryPage(e) {
         window.location.href = '@Url.Action("AddCountry", "DictionaryCountry")';
     }
+
+    function redirectToAddContext() {
+        window.location.href = 'DictionaryCountry/AddCountry/?id=' + 0;
+    }
+
+    function redirectToEditContext(id) {
+        window.location.href = 'DictionaryCountry/AddCountry/?id=' + id;
+    }
+
 </script>
 @(Html.Kendo().TextBox()
 .Name("countryTextBox")
@@ -44,28 +76,32 @@
 )
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountryModel>()
         .Name("grid")
-
-
         .HtmlAttributes(new { style = "height: 380px;" })
         .Scrollable()
         .Sortable()
+        .Groupable()
         .NoRecords(true)
         .Filterable()
         .HtmlAttributes(new { @id = "countryGrid" })
         .Columns(columns =>
         {
+            columns.Bound(o => o.CountryId).Hidden();
             columns.Bound(o => o.CountryName);
-            //columns.Bound(o => o.LanguageId);
-            //columns.Bound(o => o.LanguageName);
+            columns.Bound(o => o.LanguageName);
+            columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=CountryId#)\">Delete</button>");
+            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=CountryId#)\"> Edit </button>");
         })
         .Pageable(pageable => pageable
-            .Refresh(true)
-            .PageSizes(true)
-            .ButtonCount(10))
+        .Refresh(true)
+        .PageSizes(true)
+        .ButtonCount(10)
+        .ButtonCount(5))
         .DataSource(dataSource => dataSource
             .Ajax()
             .PageSize(10)
             .Read(read => read.Action("GetDictionaryCountriesFiltered", "DictionaryCountry").Data("filter"))
+            .Destroy(d => d.Action("Delete", "DictionaryCountry"))
+    )
+        .Events(events => events.Edit("openAddCountryPage"))
 
-        )
 ) 
