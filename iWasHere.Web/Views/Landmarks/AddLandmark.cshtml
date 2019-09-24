@@ -218,13 +218,16 @@
                     .Name("files")
                     .HtmlAttributes(new { aria_label = "files", name = "pic", accept = "image/*" })
                 )
-                <p style="padding-top: 1em; text-align: right">
-                    <input type="submit" value="Upload" class="k-button k-primary" />
-                </p>
             </div>
+
         </form>
 
         <div>
+
+            <p style="padding-top: 1em; text-align: right">
+                <input type="submit" value="Upload Image" class="k-button k-primary" />
+            </p>
+
             @(Html.Kendo().Button()
                .Name("primaryTextButton")
                .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
@@ -238,6 +241,8 @@
               .Content("Add New")
               .Events(ev => ev.Click("addNew"))
             )
+
+
         </div>
     </div>
 </body>
@@ -255,109 +260,138 @@
                 type: 'post',
                 data: $('#myForm').serialize(),
                 success: function () {
-                    alert("worked");
-                }
+                    alert("Imagine salvata!");
+                },
+                error: function (response) {
+                        alert("Eroare!");
+                    }
             });
         }
 
-        function add() {
+    function add() {
+        if (document.getElementById('yesRB').checked) {
+            h = true;
+        } else {
+            h = false;
+        }
 
-            if (document.getElementById('yesRB').checked) {
-                h = true;
-            } else {
-                h = false;
-            }
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("LandmarkId");
+        var landmarkValidation = false;
 
-            var url_string = window.location.href;
-            var url = new URL(url_string);
-            var id = url.searchParams.get("LandmarkId");
+        if (!document.getElementById("LandmarkName").value ||
+            !document.getElementById("StreetName").value ||
+            !document.getElementById("StreetNumber").value ||
+            !document.getElementById("Latitude").value ||
+            !document.getElementById("Longitude").value ||
+            !document.getElementById("comboType").value) {
+            alert("Campuri necompletate!");
+        } else {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("VerifyLandmark", "Landmarks")',
+                data: {
+                    landmarkName: document.getElementById("LandmarkName").value,
+                    streetName: document.getElementById("StreetName").value,
+                    streetNumber: document.getElementById("StreetNumber").value,
+                    latitude: document.getElementById("Latitude").value,
+                    longitude: document.getElementById("Longitude").value,
+                },
+                success: function (response) {
+                    landmarkValidation = response;
 
-            if (id != 0) {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("EditLandmark", "Landmarks")',
-                    data: {
-                        landmarkName: document.getElementById("LandmarkName").value,
-                        landmarkTypeId: document.getElementById("comboType").value,
-                        hasEntryTicket: h,
-                        visitIntervalId: document.getElementById("comboInterval").value,
-                        ticketId: document.getElementById("comboTicket").value,
-                        streetName: document.getElementById("StreetName").value,
-                        streetNumber: document.getElementById("StreetNumber").value,
-                        cityId: document.getElementById("comboCity").value,
-                        latitude: document.getElementById("Latitude").value,
-                        longitude: document.getElementById("Longitude").value,
-                        landmarkId: document.getElementById("LandmarkId").value
-                    },
-                    success: function (response) {
-                        alert("hai ca merge");
-                        window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
-                    },
-                    error: function (response) {
-                        alert("hai ca nu merge");
-                    }
-                })
-            }
-            else {
-                $.ajax({
-                    type: 'PUT',
-                    url: '@Url.Action("SaveLandmark", "Landmarks")',
-                    data: {
-                        landmarkName: document.getElementById("LandmarkName").value,
-                        landmarkTypeId: document.getElementById("comboType").value,
-                        hasEntryTicket: h,
-                        visitIntervalId: document.getElementById("comboInterval").value,
-                        ticketId: document.getElementById("comboTicket").value,
-                        streetName: document.getElementById("StreetName").value,
-                        streetNumber: document.getElementById("StreetNumber").value,
-                        cityId: document.getElementById("comboCity").value,
-                        latitude: document.getElementById("Latitude").value,
-                        longitude: document.getElementById("Longitude").value
-                    },
-                    success: function (response) {
+                    if (landmarkValidation == false) {
 
-                        if (fromUpdate) {
-                            document.getElementById("LandmarkName").value = "";
-                            fromUpdate = false;
+                        if (id != 0) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("EditLandmark", "Landmarks")',
+                                data: {
+                                    landmarkName: document.getElementById("LandmarkName").value,
+                                    landmarkTypeId: document.getElementById("comboType").value,
+                                    hasEntryTicket: h,
+                                    visitIntervalId: document.getElementById("comboInterval").value,
+                                    ticketId: document.getElementById("comboTicket").value,
+                                    streetName: document.getElementById("StreetName").value,
+                                    streetNumber: document.getElementById("StreetNumber").value,
+                                    cityId: document.getElementById("comboCity").value,
+                                    latitude: document.getElementById("Latitude").value,
+                                    longitude: document.getElementById("Longitude").value,
+                                    landmarkId: document.getElementById("LandmarkId").value
+                                },
+                                success: function (response) {
+                                    alert("Atractie modificata!");
+                                    window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
+                                },
+                                error: function (response) {
+                                    alert("Eroare!");
+                                }
+                            })
                         }
-                        alert("hai ca merge");
-                        $.ajax({
-                            url: '@Url.Action("SaveImagesDB", "Landmarks")',
-                            type: 'put',
-                            success: function () {
-                                alert("hai ca merge");
-                            }
-                        });
+                        else {
+                            $.ajax({
+                                type: 'PUT',
+                                url: '@Url.Action("SaveLandmark", "Landmarks")',
+                                data: {
+                                    landmarkName: document.getElementById("LandmarkName").value,
+                                    landmarkTypeId: document.getElementById("comboType").value,
+                                    hasEntryTicket: h,
+                                    visitIntervalId: document.getElementById("comboInterval").value,
+                                    ticketId: document.getElementById("comboTicket").value,
+                                    streetName: document.getElementById("StreetName").value,
+                                    streetNumber: document.getElementById("StreetNumber").value,
+                                    cityId: document.getElementById("comboCity").value,
+                                    latitude: document.getElementById("Latitude").value,
+                                    longitude: document.getElementById("Longitude").value
+                                },
+                                success: function (response) {
 
-                        window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
-                    },
-                    error: function (response) {
-                        alert("hai ca nu merge");
+                                    if (fromUpdate) {
+                                        document.getElementById("LandmarkName").value = "";
+                                        fromUpdate = false;
+                                    }
+                                    alert("Atractie salvata!");
+                                    $.ajax({
+                                        url: '@Url.Action("SaveImagesDB", "Landmarks")',
+                                        type: 'put',
+                                        success: function () {
+                                            alert("Imagine salvata!");
+                                        }
+                                    });
+
+                                    window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
+                                },
+                                error: function (response) {
+                                    alert("Eroare!");
+                                }
+                            })
+                        }
+                    } else {
+                        alert("Atractie deja existenta!");
                     }
-                })
-            }
+                },
+                error: function (response) {
+                    alert("Eroare!");
+                }
+            })
         }
-
-
-        function onLoadEdit() {
-            var url_string = window.location.href;
-            var url = new URL(url_string);
-            document.getElementById("LandmarkId").style.visibility = "hidden";
-            var id = url.searchParams.get("id");
-            if (id != 0) {
-                alert("din edit");
-                document.getElementById("buttonId").innerText = "Update";
-            }
-            else {
-                alert("din add");
-            }
+    }
+                
+    function onLoadEdit() {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        document.getElementById("LandmarkId").style.visibility = "hidden";
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+            document.getElementById("buttonId").innerText = "Update";
         }
+    }
 
-        function addNew() {
-            fromUpdate = true;
-            add();
-        }
-
+    function addNew() {
+        fromUpdate = true;
+        add();
+    }
 
 </script>
 

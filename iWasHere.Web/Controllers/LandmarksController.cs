@@ -88,7 +88,6 @@ namespace iWasHere.Web.Controllers
             return RedirectToAction("LandmarkList");
         }
 
-
         public ActionResult GetAllVisitIntervals([DataSourceRequest] DataSourceRequest request)
         {
             var context = new ScarletWitchContext();
@@ -115,10 +114,8 @@ namespace iWasHere.Web.Controllers
                         formFile.CopyTo(new FileStream(fileName, FileMode.Create));
                         imagesPaths.Add(a + Path.GetExtension(formFile.FileName));
                     }
-
                 }
             }
-
         }
 
         public void SaveImagesDB()
@@ -188,6 +185,12 @@ namespace iWasHere.Web.Controllers
         {
             int sters = _dictionaryService.DeleteLandmark(id);
             return sters;
+        }
+
+        public bool VerifyLandmark([DataSourceRequest] DataSourceRequest request, String name, String street, int number, double lat, double longitud)
+        {
+            bool status = _dictionaryService.VerifyLandmark(name, street, number, lat, longitud);
+            return status;
         }
 
     }

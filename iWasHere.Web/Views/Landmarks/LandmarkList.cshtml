@@ -16,9 +16,7 @@
 
 <script type="text/javascript">
     function add() {
-
         window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
-
     }
 
     function redirectImagesContext() {
@@ -103,8 +101,6 @@
             url: '@Url.Action("Delete", "Landmarks")',
             data: { id: id },
             success: function (response) {
-                alert("hai ca merge");
-                alert(response);
                 if (response == 0) {
                     alert("Atractia nu se poate sterge");
                 } else {
@@ -113,7 +109,7 @@
                 }
             },
             error: function (response) {
-                alert("hai ca nu merge");
+                alert("Eroare!");
             }
         })
     }
