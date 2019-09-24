@@ -39,6 +39,7 @@ namespace iWasHere.Web.Controllers
             {
                 return northwind.DictionaryLandmarkType.Select(landmark => new DictionaryLandmarkTypeModel
                 {
+                    LandmarkTypeId = landmark.LandmarkTypeId,
                     LandmarkTypeCode = landmark.LandmarkTypeCode,
                     Description = landmark.Description
                  
@@ -70,7 +71,7 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
 
-        public ActionResult GetDictionaryLandmarkTypesFiltered([DataSourceRequest] DataSourceRequest request, String landmarkTypeName, out int errorResult)
+        public ActionResult GetDictionaryLandmarkTypesFiltered([DataSourceRequest] DataSourceRequest request, String landmarkTypeName)
         {
             IQueryable<DictionaryLandmarkTypeModel> landmarks = _dictionaryService.GetDictionaryLandmarkTypesFiltered(landmarkTypeName);
 
@@ -92,13 +93,13 @@ namespace iWasHere.Web.Controllers
                     Data = landmarks,
                     Total = total
                 };
-                errorResult = 0;
+               
                 return Json(result);
                 
             }
             catch
             {
-                errorResult = 1;
+               
                 return Json(0);
                 
             }
@@ -113,6 +114,7 @@ namespace iWasHere.Web.Controllers
                 ScarletWitchContext gf = new ScarletWitchContext();
                 gf.DictionaryLandmarkType.Add(new DictionaryLandmarkType
                 {
+                    
                     LandmarkTypeCode = landmarkCode,
                     Description = description
 
