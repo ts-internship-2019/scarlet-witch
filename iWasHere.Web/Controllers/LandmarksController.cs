@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Xml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
@@ -12,6 +15,7 @@ using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace iWasHere.Web.Controllers
 {
@@ -88,7 +92,6 @@ namespace iWasHere.Web.Controllers
             return RedirectToAction("LandmarkList");
         }
 
-
         public ActionResult GetAllVisitIntervals([DataSourceRequest] DataSourceRequest request)
         {
             var context = new ScarletWitchContext();
@@ -115,10 +118,8 @@ namespace iWasHere.Web.Controllers
                         formFile.CopyTo(new FileStream(fileName, FileMode.Create));
                         imagesPaths.Add(a + Path.GetExtension(formFile.FileName));
                     }
-
                 }
             }
-
         }
 
         public void SaveImagesDB()
@@ -184,11 +185,81 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
+        public void ExportFile([DataSourceRequest] DataSourceRequest request)
+        {
+            string destinationFile = Path.Combine(Environment.CurrentDirectory, "SampleDocument.docx");
+            string sourceFile = Path.Combine(Environment.CurrentDirectory, "Sample.docx");
+            try
+            {
+
+
+                System.IO.File.Copy(sourceFile, destinationFile, true);
+                var logFile = System.IO.File.Create(System.IO.Path.GetTempFileName());
+                using (WordprocessingDocument document = WordprocessingDocument.Open(destinationFile, true))
+                {
+                    document.ChangeDocumentType(DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+
+                    MainDocumentPart mainPart = document.MainDocumentPart;
+
+                    DocumentSettingsPart documentSettingPart1 = mainPart.DocumentSettingsPart;
+
+                    // Create a new attachedTemplate and specify a relationship ID
+                    //AttachedTemplate attachedTemplate1 = new AttachedTemplate() { Id = "relationId1" };
+
+                    // Append the attached template to the DocumentSettingsPart
+                    //documentSettingPart1.Settings.Append(attachedTemplate1);
+
+                    // Add an ExternalRelationShip of type AttachedTemplate.
+                    // Specify the path of template and the relationship ID
+                    //documentSettingPart1.AddExternalRelationship("http://schemas.openxmlformats.org/officeDocument/2006/relationships/attachedTemplate", new Uri(sourceFile, UriKind.Absolute), "relationId1");
+
+                    // Save the document
+                    var logWriter = new System.IO.StreamWriter(logFile);
+                    mainPart.Document.Save();
+
+                    Console.WriteLine("Document generated at " + destinationFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine("\nPress Enter to continue…");
+                Console.ReadLine();
+            }
+        }
+
+        public string parseXMLBnr([DataSourceRequest] DataSourceRequest request)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("https://www.bnr.ro/nbrfxrates.xml");
+            XmlNode node = doc.GetElementsByTagName("Rate")[10];
+
+            DictionaryCurrency newCurrency = new DictionaryCurrency();
+            newCurrency.CurrencyId = 1702472;
+            newCurrency.CurrencyName = "EURO";
+            newCurrency.CurrencyCode = "EUR";
+            newCurrency.CurrencyExchange = Convert.ToDecimal(node.InnerText);
+            ScarletWitchContext context = new ScarletWitchContext();
+
+            context.DictionaryCurrency.Update(newCurrency);
+            context.SaveChanges();
+
+            return node.InnerText;
+        }
         public int Delete([DataSourceRequest] DataSourceRequest request, int id)
         {
             int sters = _dictionaryService.DeleteLandmark(id);
             return sters;
         }
 
+        public bool VerifyLandmark([DataSourceRequest] DataSourceRequest request, String name, String street, int number, double lat, double longitud)
+        {
+            bool status = _dictionaryService.VerifyLandmark(name, street, number, lat, longitud);
+            return status;
+        }
     }
 }
+

@@ -1,12 +1,30 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<script>
+
+        function onLoadFunction() {
+
+               $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("parseXMLBnr", "Landmarks")',
+                 success: function (response) {
+                     alert("hai ca merge");
+                     alert(response);
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+
+    }
+</script>
 
 
-<body style="background-color:#ffff">
+<body onload="onLoadFunction() style="background-color:#ffff">
     <div class="text-center">
         <h1 class="display-4">Welcome</h1>
-        <i a-href=""
+        
+        )
     </div>
 </body>
-    

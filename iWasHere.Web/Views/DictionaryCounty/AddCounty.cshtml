@@ -78,68 +78,81 @@
         var url_string = window.location.href;
         var url = new URL(url_string);
         var id = url.searchParams.get("CountyId");
+        var countyNameValidation = false;
 
-        if (id != 0) {
+        if (!document.getElementById("CountyName").value ||
+            !document.getElementById("combo").value) {
+            alert("Campuri necompletate!");
+        } else {
             $.ajax({
-                type: 'POST',
-                url: '@Url.Action("EditCounty", "DictionaryCounty")',
+                type: 'GET',
+                url: '@Url.Action("VerifyCountyName", "DictionaryCounty")',
                 data: {
-                    countyName: document.getElementById("CountyName").value,
-                    countyId: document.getElementById("CountyId").value,
-                    countryId: document.getElementById("combo").value
+                    countyName: document.getElementById("CountyName").value
                 },
                 success: function (response) {
-                    alert("hai ca merge");
-                    window.location.href = '@Url.Action("Index", "DictionaryCounty")';
-                },
-                error: function (response) {
-                    alert("hai ca nu merge");
-                }
-            })
-        }
-        else {
-            $.ajax({
-                type: 'PUT',
-                url: '@Url.Action("SaveCounty", "DictionaryCounty")',
-                data: {
-                    countyName: document.getElementById("CountyName").value,
-                    countryId: document.getElementById("combo").value
-                },
-                success: function (response) {
-                    if (fromUpdate) {
-                        document.getElementById("CountyName").value = "";
-                        $("#combo").val("").data("kendoDropDownList").text("");
-                        fromUpdate = false;
-                        window.location.href = '@Url.Action("Index", "DictionaryCounty")';
+                    countyNameValidation = response;
+
+                    if (countyNameValidation == false) {
+                        if (id != 0) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("EditCounty", "DictionaryCounty")',
+                                data: {
+                                    countyName: document.getElementById("CountyName").value,
+                                    countyId: document.getElementById("CountyId").value,
+                                    countryId: document.getElementById("combo").value
+                                },
+                                success: function (response) {
+                                    alert("Judet modificat!");
+                                    window.location.href = '@Url.Action("Index", "DictionaryCounty")';
+                                },
+                                error: function (response) {
+                                    alert("Eroare!");
+                                }
+                            })
+                        }
+                        else {
+                            $.ajax({
+                                type: 'PUT',
+                                url: '@Url.Action("SaveCounty", "DictionaryCounty")',
+                                data: {
+                                    countyName: document.getElementById("CountyName").value,
+                                    countryId: document.getElementById("combo").value
+                                },
+                                success: function (response) {
+                                    if (fromUpdate) {
+                                        document.getElementById("CountyName").value = "";
+                                        $("#combo").val("").data("kendoDropDownList").text("");
+                                        fromUpdate = false;
+                                        window.location.href = '@Url.Action("Index", "DictionaryCounty")';
+                                    }
+                                },
+                                error: function (response) {
+                                    alert("Eroare!");
+                                }
+                            })
+                        }
+                    } else {
+                        alert("Judet deja existent!");
                     }
-
-                },
-                error: function (response) {
-                    alert("hai ca nu merge");
                 }
             })
         }
-
     }
-
     function onLoadEdit() {
         var url_string = window.location.href;
         var url = new URL(url_string);
         document.getElementById("CountyId").style.visibility = "hidden";
         var id = url.searchParams.get("id");
         if (id != 0) {
-            alert("din edit");
             document.getElementById("buttonId").innerText = "Update";
-        }
-        else {
-            alert("din add");
         }
     }
 
     function addNew() {
         fromUpdate = true;
         add();
-        
         window.location.href = '@Url.Action("AddCounty", "DictionaryCounty")';
     }
 
@@ -147,5 +160,4 @@
         window.location.href = '@Url.Action("Index", "DictionaryCounty")';
     }
 
- 
 </script>

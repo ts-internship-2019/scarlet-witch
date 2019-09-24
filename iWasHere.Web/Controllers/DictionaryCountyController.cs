@@ -123,6 +123,12 @@ namespace iWasHere.Web.Controllers
             context.DictionaryCounty.Update(newCounty);
             return Json(context.SaveChanges());
         }
+
+        public bool VerifyCountyName([DataSourceRequest] DataSourceRequest request, String name)
+        {
+            bool status = _dictionaryCountyService.VerifyCountyName(name);
+            return status;
+        }
     }
 }
 

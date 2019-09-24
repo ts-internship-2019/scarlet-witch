@@ -16,9 +16,7 @@
 
 <script type="text/javascript">
     function add() {
-
         window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
-
     }
 
     function redirectImagesContext() {
@@ -31,7 +29,57 @@
     {
         window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+id;
     }
+    
+    function exportFile() {
+
+        alert("hai ca exportam daca e");
+        window.location.href = '@Url.Action("ExportFile", "Landmarks")';
+
+    }
+
+
 </script>
+<body>
+    <pre id="output"></pre>
+    @(Html.Kendo().Button()
+               .Name("primaryTextButton")
+               .HtmlAttributes(new { type = "button", @class = "k-primary" })
+               .Content("Add")
+               .Events(ev => ev.Click("add"))
+    )
+    @(Html.Kendo().Button()
+               .Name("imagesButton")
+               .HtmlAttributes(new { type = "button", @class = "k-primary" })
+               .Content("Iamges")
+               .Events(ev => ev.Click("redirectImagesContext"))
+    )
+    @(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
+            ()
+            .Name("grid")
+            .HtmlAttributes(new { style = "height: 380px;" })
+            .Scrollable()
+            .Groupable()
+            .Sortable()
+            .Columns(columns =>
+            {
+                columns.Bound(o => o.LandmarkId);
+                columns.Bound(o => o.LandmarkDescription).Title("Name");
+                //columns.Template("<button id=\"deleteButton\" class=\"k-button\">Delete</button>");
+                columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
+                columns.Template("<button id=\"exportDoc\" class=\"k-button\" onclick=\"exportFile()\"> Export </button>");
+            })
+            .NoRecords(true)
+            .Filterable()
+            .HtmlAttributes(new { @id = "landmarkGrid" })
+            .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .Read(read => read.Action("GetLandmarksFiltered", "Landmarks"))
+            )
 
 
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
@@ -103,8 +151,6 @@
             url: '@Url.Action("Delete", "Landmarks")',
             data: { id: id },
             success: function (response) {
-                alert("hai ca merge");
-                alert(response);
                 if (response == 0) {
                     alert("Atractia nu se poate sterge");
                 } else {
@@ -113,7 +159,7 @@
                 }
             },
             error: function (response) {
-                alert("hai ca nu merge");
+                alert("Eroare!");
             }
         })
     }
