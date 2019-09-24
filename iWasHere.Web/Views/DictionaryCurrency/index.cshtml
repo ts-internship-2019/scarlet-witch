@@ -43,6 +43,12 @@
 
     }
 
+    function clearFilter()
+    {
+        document.getElementById("currencyTextBox").value = " ";
+        refreshGrid();
+    }
+
 </script>
 
 @(Html.Kendo().Button()
@@ -51,6 +57,8 @@
            .Content("Add")
            .Events(ev => ev.Click("redirectToAddContext"))
 )
+
+
 @(Html.Kendo().TextBox()
 .Name("currencyTextBox")
 .HtmlAttributes(new { @id = "currencyTextBox" })
@@ -62,6 +70,14 @@
 .Content("Filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
+
+@(Html.Kendo().Button()
+.Name("filterButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Clear Filter")
+.Events(ev => ev.Click("clearFilter"))
+)
+
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCurrencyModel>()
         .Name("grid")
 
