@@ -78,13 +78,13 @@
             </div>
 
             <div class="right-div">
-                <img src="~/@Model.Path" alt="Image" />
+                <img src="~/@Model.Path" alt="This landmark has no image" />
                 
             </div>
         </div>
         </div>
     </div>
-<input type="button"
+<input type="button" class="k-primary"
        value="Add Comment"
        onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
 
