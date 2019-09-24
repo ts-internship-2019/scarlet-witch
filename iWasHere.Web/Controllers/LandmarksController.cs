@@ -187,9 +187,9 @@ namespace iWasHere.Web.Controllers
             return sters;
         }
 
-        public bool VerifyLandmark([DataSourceRequest] DataSourceRequest request, String name, String street, int number, double lat, double longitud)
+        public bool VerifyLandmark([DataSourceRequest] DataSourceRequest request, String name, double lat, double longitud)
         {
-            bool status = _dictionaryService.VerifyLandmark(name, street, number, lat, longitud);
+            bool status = _dictionaryService.VerifyLandmark(name, lat, longitud);
             return status;
         }
 

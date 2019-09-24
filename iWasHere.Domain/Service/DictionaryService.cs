@@ -454,13 +454,12 @@ namespace iWasHere.Domain.Service
             else
                 return true;
         }
-        public bool VerifyLandmark(String name, String street, int number, double lat, double longitud)
+        public bool VerifyLandmark(String name, double lat, double longitud)
         {
-            if (_dbContext.Landmark.Any(c => c.LandmarkDescription == name && c.StreetName == street && c.StreetNumber == number
-            && c.Latitude == lat && c.Longitude == longitud))
-                return false;
-            else
+            if (_dbContext.Landmark.Any(c => c.LandmarkDescription == name && c.Latitude == lat && c.Longitude == longitud))
                 return true;
+            else
+                return false;
         }
 
 
