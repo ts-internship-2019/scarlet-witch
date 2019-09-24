@@ -22,7 +22,6 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult AddComment()
         {
-
             return View();
 
         }
