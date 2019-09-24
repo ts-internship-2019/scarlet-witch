@@ -34,6 +34,13 @@ namespace iWasHere.Domain.DTOs
         public double? Longitude { get; set; }
         public string Path { get; set; }
 
+        public string CountyName { get; set; }
+
+        public string CityName { get; set; }
+
+        public string CountryName { get; set; }
+
+
         public LandmarkModel()
         {
             this.City = new DictionaryCity();

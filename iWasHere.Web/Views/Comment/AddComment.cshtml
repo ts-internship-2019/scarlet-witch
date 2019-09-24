@@ -70,6 +70,16 @@
 
     }
 
+        function hideUser() {
+            if (document.getElementById("Logged").checked == true) {
+                document.getElementById("User").disabled = true;
+                document.getElementById("User").value = "";
+            } else {
+                document.getElementById("User").disabled = false;
+                document.getElementById("User").value = "anonim";
+            }
+            
+        }
     </script>
 
     <div>
@@ -84,6 +94,7 @@
                 .Name("Logged")
                 .Checked(false)
                 .Label("User logged")
+                .HtmlAttributes(new { onClick = "hideUser()" })
                 )
             </li>
             <li>
