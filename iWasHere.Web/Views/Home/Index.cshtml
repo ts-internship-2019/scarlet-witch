@@ -1,7 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<script>
 
+        function onLoadFunction() {
+
+               $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("parseXMLBnr", "Landmarks")',
+                 success: function (response) {
+                     alert("hai ca merge");
+                     alert(response);
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+
+    }
+</script>
+<body  onload="onLoadFunction()">
     <div class="text-center">
         <h1 class="display-4">Welcome</h1>
         <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
@@ -30,3 +48,4 @@
              .HtmlAttributes(new { style = "width:100%;" })
         )
     </div>
+</body>
