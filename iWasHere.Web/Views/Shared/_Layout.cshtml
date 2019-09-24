@@ -58,10 +58,10 @@
     </environment>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header style="background-color:lightblue">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">iWasHere.Web</a>
+                <a class="navbar-brand" style="color:#FF434D" asp-area="" asp-controller="Home" asp-action="Index">iWasHere.Web</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -69,11 +69,12 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                      
+
                         <li class="nav-item">
                             <div id="dictionaries">
                                 @(Html.Kendo().Menu()
                               .Name("Menu")
+                              .HtmlAttributes(new { style="background-color:lightblue" })
                               .Items(items =>
                               {
                                   items.Add().Text("Home").Action("Index", "Home", new { area = "" });
@@ -103,7 +104,7 @@
                                 )
 
                             </div>
-                        </li>                
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -116,7 +117,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted" style="background-color:lightgray">
         <div class="container">
             &copy; 2019 - iWasHere.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

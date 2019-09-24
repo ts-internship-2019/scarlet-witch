@@ -29,7 +29,20 @@
     {
         window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+id;
     }
+    
+    function exportFile() {
+
+        alert("hai ca exportam daca e");
+        window.location.href = '@Url.Action("ExportFile", "Landmarks")';
+
+    }
+
+
 </script>
+<body>
+    <pre id="output"></pre>
+
+
 
 
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
@@ -41,12 +54,10 @@
         .Sortable()
         .Columns(columns =>
         {
-            columns.Bound(o => o.LandmarkId);
+            columns.Bound(o => o.LandmarkId).Hidden();
             columns.Bound(o => o.LandmarkDescription).Title("Name");
             columns.Bound(o => o.StreetName);
             columns.Bound(o => o.StreetNumber);
-            columns.Bound(o => o.Latitude);
-            columns.Bound(o => o.Longitude);
             columns.Bound(o => o.CityName);
             columns.Bound(o => o.CountyName);
             columns.Bound(o => o.CountryName);
@@ -68,6 +79,7 @@
         .Destroy(d => d.Action("Delete", "Landmarks"))
         )
 )
+</body>
 
 <script type="text/javascript">
     function add() {
@@ -115,3 +127,4 @@
     }
 
 </script>
+    </body>
