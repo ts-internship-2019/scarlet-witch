@@ -109,16 +109,7 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
 
-        public ActionResult SaveCountry(string countryName, int languageId)
-        {
-            ScarletWitchContext gf = new ScarletWitchContext();
-            gf.DictionaryCountry.Add(new DictionaryCountry
-            {
-                CountryName = countryName,
-                LanguageId = languageId
-            });
-            return Json(gf.SaveChanges());
-        }
+        
         public ActionResult GetLanguageAdd(string text)
         {
             var jk = new ScarletWitchContext();
@@ -138,5 +129,38 @@ namespace iWasHere.Web.Controllers
             return Json(lngs);
         }
 
+        public int Delete([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            int sters = _dictionaryService.DeleteCountry(id);
+            return sters;
+        }
+
+        //public ActionResult EditCountry(string countryName, int countryId, int languageId)
+        //{
+        //    DictionaryCountry newCountry = new DictionaryCountry();
+        //    newCountry.CountryName = countryName;
+        //    newCountry.CountryId = countryId;
+        //    newCountry.LanguageId = languageId;
+
+        //    CountryXlanguage cxl = new CountryXlanguage();
+        //    cxl.CountryId = countryId;
+        //    cxl.LanguageId = languageId;
+
+        //    ScarletWitchContext context = new ScarletWitchContext();
+        //    context.CountryXlanguage.Update(cxl);
+        //    context.DictionaryCountry.Update(newCountry);
+        //    return Json(context.SaveChanges());
+        //}
+
+        public ActionResult SaveCountry(string countryName, int languageId)
+        {
+            ScarletWitchContext context = new ScarletWitchContext();
+            context.DictionaryCountry.Add(new DictionaryCountry
+            {
+                CountryName = countryName,
+                LanguageId = languageId
+            });
+            return Json(context.SaveChanges());
+        }
     }
 }
