@@ -7,7 +7,10 @@
 <h1>AddCity</h1>
 <script>
     let fromUpdate = false;
-    
+    let nameChanged = false;
+    $("#cityName").on('change keydown paste input', function () {
+        nameChanged = true;
+    });
     function AddCity() {
         var url_string = window.location.href;
         var url = new URL(url_string);
@@ -21,10 +24,9 @@
             },
             success: function (response) {
                 cityNameValidation = response;
-                alert(cityNameValidation);
+                //alert(cityNameValidation);
                 if (id != 0) {
-                    if (cityNameValidation) {
-                        $.ajax({
+                       $.ajax({
                             type: 'POST',
                             url: '@Url.Action("EditCity", "DictionaryCity")',
                             data: {
@@ -37,13 +39,10 @@
                                 window.location.href = '@Url.Action("Index", "DictionaryCity")';
                             },
                             error: function (response) {
-                                //alert("hai ca nu merge");
+                                 alert("This city name already exists");
                             }
                         })
-                    }
-                    else {
-                        alert("This city name already exists");
-                    }
+         
                 }
                 else {
                     if (cityNameValidation) {
@@ -79,7 +78,8 @@
             error: function (response) {
                 alert("hai ca nu merge");
             }
-        }              })
+        })        
+
         
     }
 
@@ -92,6 +92,7 @@
         if (id != 0) {
             //alert("din edit");
             document.getElementById("buttonId").innerText = "Update";
+            document.getElementById("addNewButton").style.visibility = "hidden"; 
         }
         else {
             //alert("din add");
@@ -155,7 +156,7 @@
             )
             @(Html.Kendo().Button()
               .Name("addNewButton")
-              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .HtmlAttributes(new { type = "button", @class = "k-primary" , @id="addNewButton"})
               .Content("Add New")
               .Events(ev => ev.Click("AddNew"))
             )
