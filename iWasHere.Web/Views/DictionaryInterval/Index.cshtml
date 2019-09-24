@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Interval";
+    Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
+}
+
+<h1>Interval</h1>
+
+<script type="text/javascript">
+
+    function filter(e) {
+        var intervalName = document.getElementById("intervalTextBox").value;
+        var filter = {};
+        filter["intervalName"] = intervalName;
+        return filter;
+    }
+     function deleteRow(id) {
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeleteInterval", "DictionaryInterval")',
+                    data: { id: id },
+                 success: function (response) {
+                        $("#intervarlGrid").data("kendoGrid").dataSource.read();
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })
+    }
+
+    function refreshGrid() {
+        $("#intervarlGrid").data("kendoGrid").dataSource.read();
+        $("#intervarlGrid").data("kendoGrid").dataSource.page(1);
+    }
+
+     function redirectToAddContext()
+    {
+            window.location.href = 'DictionaryInterval/IntervalAdd/?id=' + 0;
+    }
+
+    function redirectToEditContext(id)
+    {
+        window.location.href = 'DictionaryInterval/IntervalAdd/?id=' + id;
+
+    }
+
+</script>
+
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("redirectToAddContext"))
+)
+@(Html.Kendo().TextBox()
+.Name("intervalTextBox")
+.HtmlAttributes(new { @id = "intervalTextBox" })
+)
+
+@(Html.Kendo().Button()
+.Name("textButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Filter")
+.Events(ev => ev.Click("refreshGrid"))
+)
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryIntervalModel>()
+        .Name("grid")
+
+
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Sortable()
+        .NoRecords(true)
+        .Filterable()
+        .HtmlAttributes(new { @id = "intervalGrid" })
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.VisitIntervalId).Hidden();
+            columns.Bound(o => o.VisitIntervalName).Title("Tip Interval");
+            columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=VisitIntervalId#)\">Delete</button>");
+            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=VisitIntervalId#)\"> Edit </button>");
+
+        })
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(10))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .Read(read => read.Action("GetDictionaryIntervalFiltered", "DictionaryInterval").Data("filter"))
+            .Destroy(d => d.Action("DeleteInterval", "DictionaryInterval")))
+)
+)
+
+
