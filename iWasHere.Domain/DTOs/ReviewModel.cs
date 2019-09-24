@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace iWasHere.Domain.Models
+namespace iWasHere.Domain.DTOs
 {
-    public partial class Review
+    public class ReviewModel
     {
         public int ReviewId { get; set; }
         public int? LandmarkId { get; set; }
@@ -13,8 +14,5 @@ namespace iWasHere.Domain.Models
         public string UserId { get; set; }
 
         public string UserName { get; set; }
-
-        public virtual Landmark Landmark { get; set; }
-        public virtual AspNetUsers User { get; set; }
     }
 }

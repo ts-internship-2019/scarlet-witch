@@ -4,58 +4,159 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script>
-    function onLoad() {
-
-        var url_string = window.location.href;
-        var url = new URL(url_string);
-        var id = url.searchParams.get("id");
-</script>
-
 
 
 
 @model iWasHere.Domain.DTOs.LandmarkModel;
 
 
-<body onload="onLoad()">
-
-    <h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
-
-    <ul>
-        <li>
-            <label>LandmarkType:</label>
-            @Html.DisplayFor(model => model.LandmarkType.LandmarkTypeCode)
-        </li>
-        <li>
-            <label>Interval:</label>
-            @Html.DisplayFor(model => model.VisitInterval.VisitIntervalName)
-        </li>
-        <li>
-            <label>Ticket:</label>
-            @Html.DisplayFor(model => model.Ticket)
-        </li>
-        <li>
-            <label>Street Name:</label>
-            @Html.DisplayFor(model => model.StreetName)
-        </li>
-        <li>
-            <label>Street Number:</label>
-            @Html.DisplayFor(model => model.StreetNumber)
-        </li>
-        <li>
-            <label>City:</label>
-            @Html.DisplayFor(model => model.City.CityName)
-        </li>
-        <li>
-            <label>County:</label>
-            @Html.DisplayFor(model => model.County)
-        </li>
-        <li>
-            <label>Country:</label>
-            @Html.DisplayFor(model => model.Country)
-        </li>
-    </ul>
+<h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
+<div id="googleMap" style="width:100%;height:400px;" class="map-container"></div>
+<script>
+    var map;
+    var markers = [];
+    function onLoadView() {
+        var a =  parseFloat(document.getElementById("Latitude").value);
+        var b = parseFloat(document.getElementById("Longitude").value);
+        var startLatLng = { lat: a, lng: b };
+        map = new google.maps.Map(document.getElementById('googleMap'), {
+            zoom: 5,
+            center: startLatLng,
+        });
+        addMarker(startLatLng);
+    }
 
 
+
+    function addMarker(location) {
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+        markers.push(marker);
+    }
+
+
+    function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+
+    function clearMarkers() {
+        setMapOnAll(null);
+    }
+
+
+    function showMarkers() {
+        setMapOnAll(map);
+    }
+
+
+    function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+    }
+
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYlEg-dW1i94xgQ2FC4u9IsLfx1kyFEf8&callback=onLoadView"></script>
+
+<style>
+
+    .left-div {
+        display: inline-block;
+        max-width: 400px;
+        text-align: left;
+        padding: 10px;
+        background-color: #ddd;
+        border-radius: 3px;
+        margin: 5px;
+        vertical-align: top;
+    }
+
+    .right-div {
+        display: inline-block;
+        max-width: 800px;
+        text-align: left;
+        padding: 10px;
+        background-color: #ddd;
+        border-radius: 3px;
+        margin: 5px;
+    }
+</style>
+
+
+<body onload="onLoadView()">
+    <div class="container">
+        <div class="row ">
+            <div class="col-md-12">
+                <div class="left-div">
+                    <ul>
+                        <li>
+                            <label>LandmarkType:</label>
+                            @Html.DisplayFor(model => model.LandmarkType.LandmarkTypeCode)
+                        </li>
+                        <li>
+                            <label>Interval:</label>
+                            @Html.DisplayFor(model => model.VisitInterval.VisitIntervalName)
+                        </li>
+                        <li>
+                            <label>Ticket:</label>
+                            @Html.DisplayFor(model => model.Ticket)
+                        </li>
+                        <li>
+                            <label>Street Name:</label>
+                            @Html.DisplayFor(model => model.StreetName)
+                        </li>
+                        <li>
+                            <label>Street Number:</label>
+                            @Html.DisplayFor(model => model.StreetNumber)
+                        </li>
+                        <li>
+                            <label>City:</label>
+                            @Html.DisplayFor(model => model.City.CityName)
+                        </li>
+                        <li>
+                            <label>County:</label>
+                            @Html.DisplayFor(model => model.County)
+                        </li>
+                        <li>
+                            <label>Country:</label>
+                            @Html.DisplayFor(model => model.Country)
+                        </li>
+                        <li>
+                            <label>Latitude:</label>
+                            @(Html.Kendo().TextBoxFor(model => model.Latitude)
+                                 .HtmlAttributes(new { @id = "Latitude", style = "margin:5px", @readonly = "readonly" })
+                            )
+                        </li>
+                        <li>
+                            <label>Longitude:</label>
+                            @(Html.Kendo().TextBoxFor(model => model.Longitude)
+                                 .HtmlAttributes(new { @id = "Longitude", style = "margin:5px", @readonly = "readonly" })
+                            )
+                        </li>
+                    </ul>
+
+                </div>
+
+            <div class="right-div">
+                <img src="~/@Model.Path" alt="This landmark has no image" />
+                
+            </div>
+
+        </div>
+        </div>
+    </div>
+<input type="button" class="k-primary"
+       value="Add Comment"
+       onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
 </body>
+
+@*<input type="button"
+       value="Add Comment"
+       onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId "/>*@
+
+

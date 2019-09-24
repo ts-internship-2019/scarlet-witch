@@ -4,275 +4,401 @@
     ViewData["Title"] = "AddLandmark";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script>
-
-    @*function addImage() {
-             $.ajax({
-                    type: 'GET',
-                    url: '@Url.Action("SaveImage", "Landmarks")',
-                 success: function (response) {
-                     alert("hai ca merge");
-                    },
-                        error: function (response) {
-                        alert("hai ca nu merge");
-                    }
-                })
-    }*@
-
-    function addImage (){
-    $.ajax({
-        url: '@Url.Action("SaveImage", "Landmarks")',
-        type:'post',
-        data:$('#myForm').serialize(),
-        success:function(){
-            alert("worked");
-        }
-    });
-}
-</script>
 
 <h1>AddLandmark</h1>
+<div id="googleMap" style="width:100%;height:300px;"></div>
 
+<script>
+
+    var map;
+    var markers = [];
+    function myMap() {
+        var startLatLng = { lat: 44.4894, lng: 26.1267 };
+        map = new google.maps.Map(document.getElementById('googleMap'), {
+            zoom: 12,
+            center: startLatLng,
+
+        });
+
+        map.addListener('click', function (event) {
+            clearMarkers();
+            addMarker(event.latLng);
+            document.getElementById("Latitude").value = event.latLng.lat();
+            document.getElementById("Longitude").value = event.latLng.lng();
+        });
+
+        addMarker(startLatLng);
+    }
+
+    function addMarker(location) {
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+        markers.push(marker);
+    }
+
+    function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+    function clearMarkers() {
+        setMapOnAll(null);
+    }
+
+    function showMarkers() {
+        setMapOnAll(map);
+    }
+
+    function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+    }
+
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYlEg-dW1i94xgQ2FC4u9IsLfx1kyFEf8&callback=myMap"></script>
+
+<style>
+    .map-container {
+        position: absolute;
+        bottom: 20%;
+    }
+</style>
 
 <hr />
-<div class="row">
+
+<body onload="onLoadEdit()" class="container">
+
     <div class="col-md-4">
 
-        <ul style="list-style-type:none">
-            <li>
-                <label>Landmark Name</label>
-            </li>
-            <li>
-                @(Html.Kendo().TextBoxFor(model => model.LandmarkDescription)
-                                    .HtmlAttributes(new { @id = "LandmarkName", style = "margin:10px" })
-                )
-            </li>
+            <ul style="list-style-type:none">
+                <li>
+                    <label>Landmark Name</label>
+                </li>
+                <li>
+                    @(Html.Kendo().TextBoxFor(model => model.LandmarkDescription)
+                                        .HtmlAttributes(new { @id = "LandmarkName", style = "margin:10px" })
+                    )
 
-            <p></p>
+                    @(Html.Kendo().TextBoxFor(model => model.LandmarkId)
+                    .HtmlAttributes(new { @id = "LandmarkId", style = "margin:10px" })
+                    )
+                </li>
 
-            <li>
-                <label>Landmark Type</label>
-            </li>
-            <li>
-                @(Html.Kendo().DropDownList()
-                                 .Name("DictionaryLandmarkType")
-                                 .DataTextField("LandmarkTypeCode")
-                                 .DataValueField("LandmarkTypeId")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboType" })
-                                 .DataSource(source =>
-                                 {
-                                     source.Read(read =>
+                <li>
+                    <label>Landmark Type</label>
+                </li>
+                <li>
+                    @(Html.Kendo().DropDownList()
+                                     .Name("DictionaryLandmarkType")
+                                     .DataTextField("LandmarkTypeCode")
+                                     .DataValueField("LandmarkTypeId")
+                                     .HtmlAttributes(new { style = "width: 75%", @id = "comboType" })
+                                     .DataSource(source =>
                                      {
-                                         read.Action("GetAllLandmarkTypes", "Landmarks");
-                                     });
-                                 }))
-            </li>
-
-            <p></p>
+                                         source.Read(read =>
+                                         {
+                                             read.Action("GetAllLandmarkTypes", "Landmarks");
+                                         });
+                                     }))
+                </li>
 
             <li>
                 <label>Landmark has entry ticket?</label>
             </li>
             <li>
-                @(Html.Kendo().RadioButton()
-                    .Name("YesRadioButton")
-                    .Label("Yes")
-                    .HtmlAttributes(new { @id = "yesRB" })
-                    .Checked(true))
 
-                @(Html.Kendo().RadioButton()
-                   .Name("NoRadioButton")
-                   .Label("No")
-                    .HtmlAttributes(new { @id = "noRB" })
-                   .Checked(false))
+                <div class="form-group row">
+                    <form action="">
+                        <input id="yesRB" type="radio" name="gender"> Yes<br>
+                        <input id="noRB" type="radio" name="gender"> No<br>
+                    </form>
+                </div>
             </li>
 
-            <p></p>
-
-            <li>
-                <label>Visit Interval</label>
-            </li>
-            <li>
-                @(Html.Kendo().DropDownList()
-                                 .Name("DictionaryInterval")
-                                 .DataTextField("VisitIntervalName")
-                                 .DataValueField("VisitIntervalId")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboInterval" })
-                                 .DataSource(source =>
-                                 {
-                                     source.Read(read =>
+                <li>
+                    <label>Visit Interval</label>
+                </li>
+                <li>
+                    @(Html.Kendo().DropDownList()
+                                     .Name("DictionaryInterval")
+                                     .DataTextField("VisitIntervalName")
+                                     .DataValueField("VisitIntervalId")
+                                     .HtmlAttributes(new { style = "width: 75%", @id = "comboInterval" })
+                                     .DataSource(source =>
                                      {
-                                         read.Action("GetAllVisitIntervals", "Landmarks");
-                                     });
-                                 }))
-            </li>
+                                         source.Read(read =>
+                                         {
+                                             read.Action("GetAllVisitIntervals", "Landmarks");
+                                         });
+                                     }))
+                </li>
 
-            <p></p>
-
-            <li>
-                <label>Ticket Type</label>
-            </li>
-            <li>
-                @(Html.Kendo().DropDownList()
-                                 .Name("DictionaryTicketType")
-                                 .DataTextField("TicketTypeName")
-                                 .DataValueField("TicketTypeId")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboTicket" })
-                                 .DataSource(source =>
-                                 {
-                                     source.Read(read =>
+                <li>
+                    <label>Ticket</label>
+                </li>
+                <li>
+                    @(Html.Kendo().DropDownList()
+                                     .Name("DictionaryTicketType")
+                                     .DataTextField("TicketTypeName")
+                                     .DataValueField("TicketTypeId")
+                                     .HtmlAttributes(new { style = "width: 75%", @id = "comboTicket" })
+                                     .DataSource(source =>
                                      {
-                                         read.Action("GetAllTicketTypes", "Landmarks");
-                                     });
-                                 }))
-            </li>
+                                         source.Read(read =>
+                                         {
+                                             read.Action("GetAllTicketTypes", "Landmarks");
+                                         });
+                                     }))
+                </li>
 
-            <p></p>
-
-            <li>
-                <label>City</label>
-            </li>
-            <li>
-                @(Html.Kendo().DropDownList()
-                                 .Name("DictionaryCity")
-                                 .DataTextField("Name")
-                                 .DataValueField("Id")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboCity" })
-                                 .DataSource(source =>
-                                 {
-                                     source.Read(read =>
+                <li>
+                    <label>City</label>
+                </li>
+                <li>
+                    @(Html.Kendo().DropDownList()
+                                     .Name("DictionaryCity")
+                                     .DataTextField("Name")
+                                     .DataValueField("Id")
+                                     .HtmlAttributes(new { style = "width: 75%", @id = "comboCity" })
+                                     .DataSource(source =>
                                      {
-                                         read.Action("GetAllCities", "Landmarks");
-                                     });
-                                 }))
-            </li>
+                                         source.Read(read =>
+                                         {
+                                             read.Action("GetAllCities", "Landmarks");
+                                         });
+                                     }))
+                </li>
 
-            <p></p>
+                <li>
+                    <label>Street Name</label>
+                </li>
+                <li>
+                    @(Html.Kendo().TextBoxFor(model => model.StreetName)
+                                        .HtmlAttributes(new { @id = "StreetName", style = "margin:10px" })
+                    )
+                </li>
 
-            <li>
-                <label>Street Name</label>
-            </li>
-            <li>
-                @(Html.Kendo().TextBoxFor(model => model.StreetName)
-                                    .HtmlAttributes(new { @id = "StreetName", style = "margin:10px" })
-                )
-            </li>
+                <li>
+                    <label>Street Number</label>
+                </li>
+                <li>
+                    @(Html.Kendo().TextBoxFor(model => model.StreetNumber)
+                                        .HtmlAttributes(new { @id = "StreetNumber", style = "margin:10px" })
+                    )
+                </li>
 
-            <p></p>
+                <li>
+                    <label>Latitude</label>
+                </li>
+                <li>
+                    @(Html.Kendo().TextBoxFor(model => model.Latitude)
+                                        .HtmlAttributes(new { @id = "Latitude", style = "margin:5px", @readonly = "readonly" })
+                    )
+                </li>
 
-            <li>
-                <label>Street Number</label>
-            </li>
-            <li>
-                @(Html.Kendo().TextBoxFor(model => model.StreetNumber)
-                                    .HtmlAttributes(new { @id = "StreetNumber", style = "margin:10px" })
-                )
-            </li>
+                <p></p>
 
-            <p></p>
+                <li>
+                    <label>Longitude</label>
+                </li>
+                <li>
+                    @(Html.Kendo().TextBoxFor(model => model.Longitude)
+                                        .HtmlAttributes(new { @id = "Longitude", style = "margin:5px", @readonly = "readonly" })
+                    )
+                </li>
+            </ul>
 
-            <li>
-                <label>Latitude</label>
-            </li>
-            <li>
-                @(Html.Kendo().NumericTextBoxFor(model => model.Latitude)
-                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:5px" })
-                )
-            </li>
 
-            <p></p>
+            <iframe hidden name="formSending"></iframe>
 
-            <li>
-                <label>Longitude</label>
-            </li>
-            <li>
-                @(Html.Kendo().NumericTextBoxFor(model => model.Longitude)
-                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:5px" })
-                )
-            </li>
-        </ul>
-        <iframe hidden name="formSending"></iframe>
-        @*<form method="post" id="myForm" target="formSending" action='@Url.Action("SaveImage", "Landmarks")' enctype="multipart/form-data">
-            <div class="demo-section k-content">
-                <input multiple type="file" name="pic" />
-                <input type="submit" value="Upload" class="k-button k-primary" />
-             </div>
-        </form>*@
+            <form method="post" action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
+                <div class="demo-section k-content">
+                    @(Html.Kendo().Upload()
+                        .Name("files")
+                        .HtmlAttributes(new { aria_label = "files", name = "pic", accept = "image/*" })
+                    )
+                    <p style="padding-top: 1em; text-align: right">
+                        <input type="submit" value="Upload" class="k-button k-primary" />
+                    </p>
+                </div>
+            </form>
 
-        <form method="post"  action='@Url.Action("SaveImage", "Landmarks")' target="formSending">
-            <div class="demo-section k-content">
-                @(Html.Kendo().Upload()
-                    .Name("files")
-                    .HtmlAttributes(new { aria_label = "files", name="pic" , accept="image/*"})
-                )
-                <p style="padding-top: 1em; text-align: right">
-                    <input type="submit" value="Upload"  class="k-button k-primary" />
-                </p>
-            </div>
-        </form>
         <div>
+
+            <p style="padding-top: 1em; text-align: right">
+                <input type="submit" value="Upload Image" class="k-button k-primary" />
+            </p>
+
             @(Html.Kendo().Button()
                .Name("primaryTextButton")
-               .HtmlAttributes(new { type = "button", @class = "k-primary" })
-               .Content("Save")
+               .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
+               .Content("Add")
                .Events(ev => ev.Click("add"))
             )
+
+            @(Html.Kendo().Button()
+              .Name("primaryTextButton")
+              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .Content("Add New")
+              .Events(ev => ev.Click("addNew"))
+            )
+
+
         </div>
     </div>
-</div>
+</body>
 
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        <div>
+            <a asp-controller="Landmarks"
+               asp-action="LandmarkList">Back to List</a>
+        </div>
 
 <script type="text/javascript">
 
+        function addImage() {
+            $.ajax({
+                url: '@Url.Action("SaveImage", "Landmarks")',
+                type: 'post',
+                data: $('#myForm').serialize(),
+                success: function () {
+                    alert("Imagine salvata!");
+                },
+                error: function (response) {
+                        alert("Eroare!");
+                    }
+            });
+        }
 
     function add() {
-        var landmarkNameValidation = false;
-        var streetNameValidation = false;
-        var longitudeValidation = false;
-        var streetNumberValidation = false;
-        var latitudeValidation = false;
         if (document.getElementById('yesRB').checked) {
             h = true;
-        } else if (document.getElementById('noRB').checked) {
+        } else {
             h = false;
         }
 
-        $.ajax({
-            type: 'PUT',
-            url: '@Url.Action("SaveLandmark", "Landmarks")',
-            data: {
-                landmarkName: document.getElementById("LandmarkName").value,
-                landmarkTypeId: document.getElementById("comboType").value,
-                hasEntryTicket: h,
-                visitIntervalId: document.getElementById("comboInterval").value,
-                ticketId: document.getElementById("comboTicket").value,
-                streetName: document.getElementById("StreetName").value,
-                streetNumber: document.getElementById("StreetNumber").value,
-                cityId: document.getElementById("comboCity").value,
-                latitude: document.getElementById("Latitude").value,
-                longitude: document.getElementById("Longitude").value
-            },
-            success: function (response) {
-                alert("hai ca merge");
-                $.ajax({
-                    url: '@Url.Action("SaveImagesDB", "Landmarks")',
-                    type: 'put',
-                    success: function () {
-                        alert("hai ca merge");
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("LandmarkId");
+        var landmarkValidation = false;
+
+        if (!document.getElementById("LandmarkName").value ||
+            !document.getElementById("StreetName").value ||
+            !document.getElementById("StreetNumber").value ||
+            !document.getElementById("Latitude").value ||
+            !document.getElementById("Longitude").value ||
+            !document.getElementById("comboType").value) {
+            alert("Campuri necompletate!");
+        } else {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("VerifyLandmark", "Landmarks")',
+                data: {
+                    landmarkName: document.getElementById("LandmarkName").value,
+                    streetName: document.getElementById("StreetName").value,
+                    streetNumber: document.getElementById("StreetNumber").value,
+                    latitude: document.getElementById("Latitude").value,
+                    longitude: document.getElementById("Longitude").value,
+                },
+                success: function (response) {
+                    landmarkValidation = response;
+
+                    if (landmarkValidation == false) {
+
+                        if (id != 0) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("EditLandmark", "Landmarks")',
+                                data: {
+                                    landmarkName: document.getElementById("LandmarkName").value,
+                                    landmarkTypeId: document.getElementById("comboType").value,
+                                    hasEntryTicket: h,
+                                    visitIntervalId: document.getElementById("comboInterval").value,
+                                    ticketId: document.getElementById("comboTicket").value,
+                                    streetName: document.getElementById("StreetName").value,
+                                    streetNumber: document.getElementById("StreetNumber").value,
+                                    cityId: document.getElementById("comboCity").value,
+                                    latitude: document.getElementById("Latitude").value,
+                                    longitude: document.getElementById("Longitude").value,
+                                    landmarkId: document.getElementById("LandmarkId").value
+                                },
+                                success: function (response) {
+                                    alert("Atractie modificata!");
+                                    window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
+                                },
+                                error: function (response) {
+                                    alert("Eroare!");
+                                }
+                            })
+                        }
+                        else {
+                            $.ajax({
+                                type: 'PUT',
+                                url: '@Url.Action("SaveLandmark", "Landmarks")',
+                                data: {
+                                    landmarkName: document.getElementById("LandmarkName").value,
+                                    landmarkTypeId: document.getElementById("comboType").value,
+                                    hasEntryTicket: h,
+                                    visitIntervalId: document.getElementById("comboInterval").value,
+                                    ticketId: document.getElementById("comboTicket").value,
+                                    streetName: document.getElementById("StreetName").value,
+                                    streetNumber: document.getElementById("StreetNumber").value,
+                                    cityId: document.getElementById("comboCity").value,
+                                    latitude: document.getElementById("Latitude").value,
+                                    longitude: document.getElementById("Longitude").value
+                                },
+                                success: function (response) {
+
+                                    if (fromUpdate) {
+                                        document.getElementById("LandmarkName").value = "";
+                                        fromUpdate = false;
+                                    }
+                                    alert("Atractie salvata!");
+                                    $.ajax({
+                                        url: '@Url.Action("SaveImagesDB", "Landmarks")',
+                                        type: 'put',
+                                        success: function () {
+                                            alert("Imagine salvata!");
+                                        }
+                                    });
+
+                                    window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
+                                },
+                                error: function (response) {
+                                    alert("Eroare!");
+                                }
+                            })
+                        }
+                    } else {
+                        alert("Atractie deja existenta!");
                     }
-                });
-                window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
-            },
-            error: function (response) {
-                alert("hai ca nu merge");
-            }
-        })
+                },
+                error: function (response) {
+                    alert("Eroare!");
+                }
+            })
+        }
+    }
+                
+    function onLoadEdit() {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        document.getElementById("LandmarkId").style.visibility = "hidden";
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+            document.getElementById("buttonId").innerText = "Update";
+        }
+    }
+
+    function addNew() {
+        fromUpdate = true;
+        add();
     }
 
 </script>
 
 
+      

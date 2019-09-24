@@ -5,7 +5,6 @@
 
 <h1>Currency</h1>
 
-
 <script type="text/javascript">
 
     function filter(e) {
@@ -41,7 +40,7 @@
     function redirectToEditContext(id)
     {
         window.location.href = 'DictionaryCurrency/CurrencyAdd/?id=' + id;
-        
+
     }
 
 </script>
@@ -51,7 +50,7 @@
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
            .Events(ev => ev.Click("redirectToAddContext"))
-           )
+)
 @(Html.Kendo().TextBox()
 .Name("currencyTextBox")
 .HtmlAttributes(new { @id = "currencyTextBox" })
@@ -75,7 +74,7 @@
         .HtmlAttributes(new { @id = "currencyGrid" })
         .Columns(columns =>
         {
-            columns.Bound(o => o.CurrencyId).Hidden();                       
+            columns.Bound(o => o.CurrencyId).Hidden();
             columns.Bound(o => o.CurrencyCode).Title("Cod Moneda");
             columns.Bound(o => o.CurrencyName).Title("Nume Moneda");
             columns.Bound(o => o.CurrencyExchange).Title("Rata de Schimb");
@@ -92,7 +91,7 @@
             .PageSize(10)
             .Read(read => read.Action("GetDictionaryCurrencyFiltered", "DictionaryCurrency").Data("filter"))
             .Destroy(d => d.Action("DeleteCurrency", "DictionaryCurrency")))
-        )
+)
 )
 
 
