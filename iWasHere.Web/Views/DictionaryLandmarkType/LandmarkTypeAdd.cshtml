@@ -6,7 +6,7 @@
 }
 
 
-<h1>Add a Landmark type</h1>
+<h1 style="margin:50px">Add a Landmark type</h1>
 
 <script>
 
@@ -107,7 +107,7 @@
 </script>
 
 
-<body onload="onLoadEdit()">
+<body class="text-center" onload="onLoadEdit()">
     <div class="form-group">
 
         <ul style="list-style-type:none">
@@ -135,32 +135,38 @@
                 @(Html.Kendo().TextBoxFor(model => model.Description)
              .HtmlAttributes(new { @id = "Description", style = "margin:10px" })
 
-                )
+                            )
+            <li>
                 @(Html.Kendo().TextBoxFor(model => model.LandmarkTypeId)
-                    .HtmlAttributes(new { @id = "landmarkTypeId", style = "margin:10px" })
+                .HtmlAttributes(new { @id = "landmarkTypeId", style = "margin:10px" })
                 )
+            </li>
+                
 
             </li>
 
         </ul>
 
-        <div>
+        <div style="margin-left:10px">
             @(Html.Kendo().Button()
                           .Name("primaryTextButton")
                           .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
                           .Content("Add")
+                          .Icon("k-icon k-i-plus-circle")
                           .Events(ev => ev.Click("AddLandmarkTpy"))
             )
             @(Html.Kendo().Button()
                   .Name("addNewButton")
                   .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonNewId" })
                   .Content("Add New")
+                  .Icon("k-icon k-i-plus")
                   .Events(ev => ev.Click("AddNew"))
             )
             @(Html.Kendo().Button()
                   .Name("cancelButton")
                   .HtmlAttributes(new { type = "button", @class = "k-primary" })
                   .Content("Cancel")
+                  .Icon("cancel")
                   .Events(ev => ev.Click("cancelAdd"))
             )
         </div>
