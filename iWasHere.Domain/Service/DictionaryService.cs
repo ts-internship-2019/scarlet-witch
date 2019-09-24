@@ -438,6 +438,14 @@ namespace iWasHere.Domain.Service
             _dbContext.SaveChanges();
         }
 
+        public bool VerifyCountyName(String name)
+        {
+            if (_dbContext.DictionaryCounty.Any(c => c.CountyName == name))
+                return false;
+            else
+                return true;
+        }
+
         public bool VerifyCityName(String cityName)
         {
 
@@ -446,6 +454,15 @@ namespace iWasHere.Domain.Service
             else
                 return true;
         }
+        public bool VerifyLandmark(String name, double lat, double longitud)
+        {
+            if (_dbContext.Landmark.Any(c => c.LandmarkDescription == name && c.Latitude == lat && c.Longitude == longitud))
+                return true;
+            else
+                return false;
+        }
+
+
         public void DeleteLandmarkType(int id)
         {
             DictionaryLandmarkType landmark = new DictionaryLandmarkType() { LandmarkTypeId = id };
