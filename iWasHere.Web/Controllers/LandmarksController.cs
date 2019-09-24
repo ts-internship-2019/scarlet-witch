@@ -59,8 +59,6 @@ namespace iWasHere.Web.Controllers
             return View(landmark);
         }
 
-
-
         public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
         {
             IQueryable<LandmarkModel> landmarks = _dictionaryService.GetLandmarksFiltered();
