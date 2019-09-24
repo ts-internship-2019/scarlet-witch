@@ -1,6 +1,7 @@
 ﻿
 @{
     ViewData["Title"] = "Landmark Type";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Landmark types</h1>
@@ -22,6 +23,11 @@
         return filter;
     }
 
+    function deleteFilter() {
+        document.getElementById("landmarkTextBox").value = "";
+        refreshGrid();
+    }
+
      function deleteRow(id) {
              $.ajax({
                     type: 'DELETE',
@@ -33,7 +39,7 @@
                         $("#landmarkGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
-                        alert("hai ca nu merge");
+                        alert("This landmark type cannot be deleted because it is being used by a Landmark");
                     }
                 })
     }
@@ -71,6 +77,12 @@
 .Content("Filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
+@(Html.Kendo().Button()
+.Name("filterButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Clear Filters")
+.Events(ev => ev.Click("deleteFilter"))
+)
 
 
 
@@ -102,5 +114,5 @@
              .Destroy(d => d.Action("Delete", "DictionaryLandmarkType")))
 
 )
-)
+
 

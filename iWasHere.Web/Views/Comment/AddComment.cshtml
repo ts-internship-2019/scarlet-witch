@@ -68,7 +68,11 @@
                     }
                 })
 
-    }
+        }
+
+        function Cancel() {
+            window.location.href = '/Landmarks/ViewLandmark/' + document.getElementById("id").value;
+        }
 
         function hideUser() {
             if (document.getElementById("Logged").checked == true) {
@@ -79,6 +83,27 @@
                 document.getElementById("User").value = "anonim";
             }
             
+        }
+
+        function validate() {
+            var isValid = true;
+            if (document.getElementById("Title").value == "") {
+                alert("Title cannot be empty");
+                isValid = false;
+            }
+            if (document.getElementById("Description").value == "") {
+                alert("Description cannot be empty");
+                isValid = false;
+            }
+            if (currentValue==0) {
+                alert("Select a rating");
+                isValid = false;
+            }
+
+            if (isValid == true) {
+                insert();
+            }
+
         }
     </script>
 
@@ -176,14 +201,14 @@
                     .Name("addCommentButton")
                     .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "addCommentButton" })
                     .Content("Save")
-                    .Events(ev => ev.Click("insert"))
+                    .Events(ev => ev.Click("validate"))
         )
-        @*@(Html.Kendo().Button()
+        @(Html.Kendo().Button()
                   .Name("cancelButton")
                   .HtmlAttributes(new { type = "button", @class = "k-primary" })
                   .Content("Cancel")
                   .Events(ev => ev.Click("Cancel"))
-            )*@
+        )
     </div>
 
 

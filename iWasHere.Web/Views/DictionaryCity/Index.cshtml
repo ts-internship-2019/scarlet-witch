@@ -49,7 +49,6 @@
 
     )*@
 
-
 <script type="text/javascript">
 
     function filter(e) {
@@ -67,11 +66,11 @@
                     url: '@Url.Action("Delete", "DictionaryCity")',
                     data: { id: id },
                  success: function (response) {
-                     alert("hai ca merge");
+                     alert("City deleted!");
                      $("#cityGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
-                        alert("hai ca nu merge");
+                        alert("This city cannot be deleted. It contains references on landmarks list");
                     }
                 })
     }
