@@ -166,6 +166,18 @@ namespace iWasHere.Domain.Service
             return dictionaryCurrencyModels;
 
         }
+        public List<DictionaryIntervalModel> GetDictionaryIntervalModels()
+        {
+
+            List<DictionaryIntervalModel> dictionaryIntervalModels = _dbContext.DictionaryInterval.Select(b => new DictionaryIntervalModel()
+            {
+                VisitIntervalId = b.VisitIntervalId,
+                VisitIntervalName = b.VisitIntervalName,
+            }).ToList();
+
+            return dictionaryIntervalModels;
+
+        }
 
         public IQueryable<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypesFiltered(String landmarkTypeName)
         {
@@ -276,6 +288,15 @@ namespace iWasHere.Domain.Service
             DictionaryCurrency currency = new DictionaryCurrency() { CurrencyId = id };
 
             _dbContext.DictionaryCurrency.Remove(currency);
+            _dbContext.SaveChanges();
+
+        }
+
+        public void DeleteInterval(int id)
+        {
+            DictionaryInterval interval = new DictionaryInterval() { VisitIntervalId = id };
+
+            _dbContext.DictionaryInterval.Remove(interval);
             _dbContext.SaveChanges();
 
         }
@@ -417,6 +438,28 @@ namespace iWasHere.Domain.Service
                 return dictionaryCurrency;
             }
         }
+        public IQueryable<DictionaryIntervalModel> GetDictionaryIntervalFiltered(String intervalName)
+        {
+            if (intervalName == null)
+            {
+                IQueryable<DictionaryIntervalModel> dictionaryInterval = _dbContext.DictionaryInterval.Select(c => new DictionaryIntervalModel()
+                {
+                    VisitIntervalId = c.VisitIntervalId,
+                    VisitIntervalName = c.VisitIntervalName
+                });
+                return dictionaryInterval;
+            }
+            else
+            {
+                IQueryable<DictionaryIntervalModel> dictionaryInterval = _dbContext.DictionaryInterval.Select(c => new DictionaryIntervalModel()
+                {
+                    VisitIntervalId = c.VisitIntervalId,
+                    VisitIntervalName = c.VisitIntervalName
+                }
+                ).Where(c => c.VisitIntervalName.Contains(intervalName));
+                return dictionaryInterval;
+            }
+        }
 
         public bool VerifyLanguages(string languageName, string languageCode)
         {
@@ -480,6 +523,15 @@ namespace iWasHere.Domain.Service
                 CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
             }).Where(a => a.CurrencyId == id).FirstOrDefault();
             return currency;
+        }
+        public DictionaryIntervalModel GetIntervalToEdit(int id)
+        {
+            DictionaryIntervalModel interval = _dbContext.DictionaryInterval.Select(c => new DictionaryIntervalModel()
+            {
+                VisitIntervalId = c.VisitIntervalId,
+                VisitIntervalName = c.VisitIntervalName
+            }).Where(a => a.VisitIntervalId == id).FirstOrDefault();
+            return interval;
         }
 
         public List<DictionaryCountryModel> PopulateCountryCombo()

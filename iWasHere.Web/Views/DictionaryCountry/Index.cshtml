@@ -87,7 +87,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         {
             columns.Bound(o => o.CountryId).Hidden();
             columns.Bound(o => o.CountryName);
-            columns.Bound(o => o.LanguageName);
+            columns.Bound(o => o.LanguageName).Hidden();
             columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=CountryId#)\">Delete</button>");
             columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=CountryId#)\"> Edit </button>");
         })

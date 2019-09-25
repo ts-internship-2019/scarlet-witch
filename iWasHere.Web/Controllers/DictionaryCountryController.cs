@@ -135,22 +135,22 @@ namespace iWasHere.Web.Controllers
             return sters;
         }
 
-        //public ActionResult EditCountry(string countryName, int countryId, int languageId)
-        //{
-        //    DictionaryCountry newCountry = new DictionaryCountry();
-        //    newCountry.CountryName = countryName;
-        //    newCountry.CountryId = countryId;
-        //    newCountry.LanguageId = languageId;
+        public ActionResult EditCountry(string countryName, int countryId, int languageId)
+        {
+            DictionaryCountry newCountry = new DictionaryCountry();
+            newCountry.CountryName = countryName;
+            newCountry.CountryId = countryId;
+            newCountry.LanguageId = languageId;
 
-        //    CountryXlanguage cxl = new CountryXlanguage();
-        //    cxl.CountryId = countryId;
-        //    cxl.LanguageId = languageId;
+            //CountryXlanguage cxl = new CountryXlanguage();
+            //cxl.CountryId = countryId;
+            //cxl.LanguageId = languageId;
 
-        //    ScarletWitchContext context = new ScarletWitchContext();
-        //    context.CountryXlanguage.Update(cxl);
-        //    context.DictionaryCountry.Update(newCountry);
-        //    return Json(context.SaveChanges());
-        //}
+            ScarletWitchContext context = new ScarletWitchContext();
+            //context.CountryXlanguage.Update(cxl);
+            context.DictionaryCountry.Update(newCountry);
+            return Json(context.SaveChanges());
+        }
 
         public ActionResult SaveCountry(string countryName, int languageId)
         {
