@@ -3,12 +3,13 @@
     ViewData["Title"] = "County";
 Layout = "~/Views/Shared/_Layout.cshtml";}
 
-<h1>Judete</h1>
+    <h1 class="text-center" style="margin:50px">Counties</h1>
 
 @(Html.Kendo().Button()
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
+           .Icon("k-icon k-i-plus")
            .Events(ev => ev.Click("redirectToAddContext"))
 )
 
@@ -36,6 +37,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         .Name("textButton")
         .HtmlAttributes(new { type = "button" })
         .Content("Filtreaza")
+        .Icon("filter")
         .Events(ev => ev.Click("refreshGrid"))
 )
 

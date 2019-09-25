@@ -4,15 +4,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>LandmarkList</h1>
-<div>
-    @(Html.Kendo().Button()
-      .Name("primaryTextButton")
-      .HtmlAttributes(new { type = "button", @class = "k-primary" })
-      .Content("Add")
-      .Events(ev => ev.Click("redirectToAddContext"))
-    )
-</div>
+<head runat=server>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,700,900|Display+Playfair:200,300,400,700">
+
+
+    <link rel="stylesheet" type="text/css" href="~/fonts/icomoon/style.css" media="screen" runat="server">
+
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css" media="screen" runat="server">
+    <link rel="stylesheet" type="text/css" href="~/css/magnific-popup.css" media="screen" runat="server">
+    <link rel="stylesheet" type="text/css" href="~/css/jquery-ui.css" runat="server">
+    <link rel="stylesheet" type="text/css" href="~/css/owl.carousel.min.css" media="screen" runat="server">
+    <link rel="stylesheet" type="text/css" href="~/css/owl.theme.default.min.css" media="screen" runat="server">
+
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap-datepicker.css" media="screen" runat="server">
+
+    <link rel="stylesheet" type="text/css" href="~/fonts/flaticon/font/flaticon.css" media="screen" runat="server">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/mediaelementplayer.min.css">
+
+
+    <link rel="stylesheet" type="text/css" href="~/css/aos.css" media="screen" runat="server">
+
+    <link rel="stylesheet" type="text/css" href="~/css/style.css" media="screen" runat="server">
+</head>
+
+
 
 <script type="text/javascript">
     function add() {
@@ -29,7 +48,7 @@
     {
         window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+id;
     }
-    
+
     function exportFile(id) {
 
         alert("hai ca exportam daca e");
@@ -41,45 +60,75 @@
 <body>
     <pre id="output"></pre>
 
+    <div class="site-wrap">
+
+        <h1 class="text-center" style="margin:50px">Landmarks list</h1>
 
 
+        <div>
+            @(Html.Kendo().Button()
+              .Name("primaryTextButton")
+              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .Content("Add")
+              .Events(ev => ev.Click("redirectToAddContext"))
+              .Icon("k-icon k-i-plus-circle")
+            )
+        </div>
 
-@(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
-        ()
-        .Name("grid")
-        .HtmlAttributes(new { style = "height: 380px;" })
-        .Scrollable()
-        .Groupable()
-        .Sortable()
-        .Columns(columns =>
-        {
-            columns.Bound(o => o.LandmarkId).Hidden();
-            columns.Bound(o => o.LandmarkDescription).Title("Name");
-            columns.Bound(o => o.StreetName);
-            columns.Bound(o => o.StreetNumber);
-            columns.Bound(o => o.CityName);
-            columns.Bound(o => o.CountyName);
-            columns.Bound(o => o.CountryName);
-            columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkId#)\">Delete</button>");
-            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=LandmarkId#)\"> Edit </button>");
-            columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
-            columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"exportFile(#=LandmarkId#)\">Export</button>");
-        })
-        .NoRecords(true)
-        .Filterable()
-        .HtmlAttributes(new { @id = "landmarkGrid" })
-        .Pageable(pageable => pageable
-        .Refresh(true)
-        .PageSizes(true)
-        .ButtonCount(5))
-        .DataSource(dataSource => dataSource
-        .Ajax()
-        .PageSize(10)
-        .Read(read => read.Action("GetLandmarksFiltered", "Landmarks"))
-        .Destroy(d => d.Action("Delete", "Landmarks"))
+        @(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
+                ()
+                .Name("grid")
+                .HtmlAttributes(new { style = "height: 380px;" })
+                .Scrollable()
+                .Groupable()
+                .Sortable()
+                .Columns(columns =>
+                {
+                    columns.Bound(o => o.LandmarkId).Hidden();
+                    columns.Bound(o => o.LandmarkDescription).Title("Name");
+                    columns.Bound(o => o.StreetName);
+                    columns.Bound(o => o.StreetNumber);
+                    columns.Bound(o => o.CityName);
+                    columns.Bound(o => o.CountyName);
+                    columns.Bound(o => o.CountryName);
+                    columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkId#)\">Delete</button>");
+                    columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=LandmarkId#)\"> Edit </button>");
+                    columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
+                    columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"exportFile(#=LandmarkId#)\">Export</button>");
+                })
+                .NoRecords(true)
+                .Filterable()
+                .HtmlAttributes(new { @id = "landmarkGrid" })
+                .Pageable(pageable => pageable
+                .Refresh(true)
+                .PageSizes(true)
+                .ButtonCount(5))
+                .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(10)
+                .Read(read => read.Action("GetLandmarksFiltered", "Landmarks"))
+                .Destroy(d => d.Action("Delete", "Landmarks"))
+                )
         )
-)
+
+    </div>
+    <script src="~/js/jquery-3.3.1.min.js"></script>
+    <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="~/js/jquery-ui.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/jquery.stellar.min.js"></script>
+    <script src="~/js/jquery.countdown.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/js/aos.js"></script>
+
+    <script src="~/js/main.js"></script>
+
 </body>
+
+
 
 <script type="text/javascript">
     function add() {
@@ -106,7 +155,7 @@
     function openAddLandmarkPage(e) {
         window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
     }
-    
+
     function deleteRow(id) {
         $.ajax({
             type: 'DELETE',

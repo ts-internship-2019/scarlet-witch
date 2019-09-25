@@ -147,7 +147,7 @@
 Layout = "~/Views/Shared/_Layout.cshtml";}
 
 
-<h1>AddLanguage</h1>
+    <h1 class="text-center" style="margin:50px">Add language</h1>
 <script>
     let fromUpdate = false;
 
@@ -265,7 +265,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 </script>
 @model iWasHere.Domain.DTOs.DictionaryLanguageModel;
 
-<body onload="onLoadEdit()">
+<body class="text-center" onload="onLoadEdit()">
 
 
     <ul style="list-style-type:none">
@@ -279,8 +279,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                 .HtmlAttributes(new { @id = "languageCode", style = "margin:10px" })
 
             )
+            
+          
+        </li>
+        <li>
             @(Html.Kendo().TextBoxFor(model => model.LanguageId)
-                .HtmlAttributes(new { @id = "languageId", style = "margin:10px" })
+                          .HtmlAttributes(new { @id = "languageId", style = "margin:10px" })
             )
         </li>
         <li>
@@ -299,23 +303,26 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
 
 
-    <div>
+    <div style="margin:10px">
         @(Html.Kendo().Button()
                   .Name("primaryTextButton")
-                  .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId", style = "margin:10px" })
+                  .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
                   .Content("Add")
+                    .Icon("k-icon k-i-plus-circle")
                   .Events(ev => ev.Click("AddLanguage"))
         )
         @(Html.Kendo().Button()
           .Name("addNewButton")
           .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonIdNew" })
           .Content("Add New")
+          .Icon("k-icon k-i-plus")
           .Events(ev => ev.Click("AddNew"))
         )
         @(Html.Kendo().Button()
               .Name("cancelButton")
               .HtmlAttributes(new { type = "button", @class = "k-primary" })
               .Content("Cancel")
+               .Icon("cancel")
               .Events(ev => ev.Click("cancelAdd"))
         )
     </div>

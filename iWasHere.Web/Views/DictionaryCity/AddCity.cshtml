@@ -1,10 +1,10 @@
-﻿
+﻿    
 @{
     ViewData["Title"] = "AddCity";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>AddCity</h1>
+    <h1 class="text-center" style="margin:50px">Add city</h1>
 <script>
     let fromUpdate = false;
     let nameChanged = false;
@@ -112,7 +112,7 @@
 </script>
 @model  iWasHere.Domain.DTOs.DictionaryCityModel;
 
-<body onload="onLoadEdit()">
+<body class="text-center" onload="onLoadEdit()">
 
         <ul style="list-style-type:none">
             <li>
@@ -123,10 +123,13 @@
                                     .HtmlAttributes(new { @id = "cityName", style = "margin:10px" })
 
                 )
+            <li>
                 @(Html.Kendo().TextBoxFor(model => model.Id)
-                    .HtmlAttributes(new { @id = "cityId", style = "margin:10px" })
+               .HtmlAttributes(new { @id = "cityId", style = "margin:10px" })
                 )
             </li>
+                    </li>
+               
             <li>
                     <label>County</label>
             </li>
@@ -147,23 +150,26 @@
     </ul>
 
 
-        <div>
+        <div style="margin-left:10px">
             @(Html.Kendo().Button()
                       .Name("primaryTextButton")
-                      .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId", style = "margin:10px" })
+                      .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
                       .Content("Add")
+                      .Icon("k-icon k-i-plus-circle")
                       .Events(ev => ev.Click("AddCity"))
             )
             @(Html.Kendo().Button()
               .Name("addNewButton")
               .HtmlAttributes(new { type = "button", @class = "k-primary" , @id="addNewButton"})
               .Content("Add New")
+              .Icon("k-icon k-i-plus")
               .Events(ev => ev.Click("AddNew"))
             )
             @(Html.Kendo().Button()
                   .Name("cancelButton")
                   .HtmlAttributes(new { type = "button", @class = "k-primary" })
                   .Content("Cancel")
+                  .Icon("cancel")
                   .Events(ev => ev.Click("cancelAdd"))
             )
         </div>

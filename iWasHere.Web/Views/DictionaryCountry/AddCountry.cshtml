@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     }
 
-<h1>Add a Country</h1>
+    <h1 class="text-center" style="margin:50px">Add country</h1>
 
 <script>
 
@@ -71,39 +71,58 @@
 
 
 
-<div class="form-group">
+<div class="form-group text-center">
+    <ul style="list-style-type:none">
+        <li>
+            <label>Country name</label>
+        </li>
+        <li>
+            @(Html.Kendo().TextBox()
+                        .Name("CountryName")
+                        .Value("CountryName")
+                        .HtmlAttributes(new { style = "width: 25%; margin:15px; text-align:center" })
+            )
+        </li>
 
-    @(Html.Kendo().TextBox()
-         .Name("CountryName")
-         .Value("CountryName")
-         .HtmlAttributes(new { style = "width: 25%" })
-    )
-
-    @(Html.Kendo().DropDownList()
-          .Name("DictionaryLanguage")
-          .DataTextField("LanguageName")
-          .DataValueField("LanguageId")
-          .DataSource(source =>
+        <li>
+            <label>
+                Language
+            </label>
+        </li>
+        <li>
+            @(Html.Kendo().DropDownList()
+              .Name("DictionaryLanguage")
+              .DataTextField("LanguageName")
+              .DataValueField("LanguageId")
+              .DataSource(source =>
+                      {
+                  source.Read(read =>
                   {
-              source.Read(read =>
-              {
-                  read.Action("GetLanguageAdd", "DictionaryCountry");
-              });
-          })
-          .HtmlAttributes(new { @id = "combo" })
-    )
+                      read.Action("GetLanguageAdd", "DictionaryCountry");
+                  });
+              })
+              .HtmlAttributes(new { @id = "combo", style="width:25%; margin:10px" })
+            )
+        </li>
 
-    @(Html.Kendo().Button()
-           .Name("primaryTextButton")
-           .HtmlAttributes(new { type = "button", @class = "k-primary" })
-           .Content("Save")
-           .Events(ev => ev.Click("add"))
+
+    </ul>
+
+
+    <div style="margin:10px">
+        @(Html.Kendo().Button()
+                       .Name("primaryTextButton")
+                       .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                       .Content("Save")
+                       .Icon("k-icon k-i-plus-circle")
+                       .Events(ev => ev.Click("add"))
         )
 
         @(Html.Kendo().Button()
                .Name("addNewButton")
                .HtmlAttributes(new { type = "button", @class = "k-primary" })
                .Content("Add New")
+               .Icon("k-icon k-i-plus")
                .Events(ev => ev.Click("addNew"))
         )
 
@@ -111,7 +130,12 @@
               .Name("cancelButton")
               .HtmlAttributes(new { type = "button", @class = "k-primary" })
               .Content("Cancel")
+               .Icon("cancel")
               .Events(ev => ev.Click("cancelAdd"))
         )
+    </div>
+
+
+
 </div>
 

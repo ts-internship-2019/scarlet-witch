@@ -2,7 +2,7 @@
     ViewData["Title"] = "Language";
     Layout = "~/Views/Shared/_Layout.cshtml";}
 
-<h1>Languages</h1>
+    <h1 class="text-center" style="margin:50px">Languages</h1>
 
 
 <script type="text/javascript">
@@ -60,6 +60,7 @@
 .Name("textButton")
 .HtmlAttributes(new { type = "button" })
 .Content("Filter")
+.Icon("filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
 
@@ -67,6 +68,7 @@
 .Name("deleteFiltersButton")
 .HtmlAttributes(new { type = "button" })
 .Content("Delete filters")
+.Icon("filter-clear")
 .Events(ev => ev.Click("deleteFilters"))
 )
 
@@ -74,6 +76,7 @@
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
+           .Icon("k-icon k-i-plus")
            .Events(ev => ev.Click("redirectToAddContext"))
 )
 

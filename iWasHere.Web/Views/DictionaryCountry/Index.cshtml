@@ -2,12 +2,13 @@
     ViewData["Title"] = "Countries";
 Layout = "~/Views/Shared/_Layout.cshtml";}
 
-<h1>Countries</h1>
+    <h1 class="text-center" style="margin:50px">Countries</h1>
 
 @(Html.Kendo().Button()
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
+           .Icon("k-icon k-i-plus")
            .Events(ev => ev.Click("redirectToAddContext"))
 )
 
@@ -72,6 +73,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 .Name("textButton")
 .HtmlAttributes(new { type = "button" })
 .Content("Filter")
+.Icon("filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountryModel>()
