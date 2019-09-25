@@ -21,7 +21,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                         $("#currencyGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
-                        alert("hai ca nu merge");
+                        alert("Moneda nu poate fi stearsa pentru ca este folosita pe un ticket");
                     }
                 })
     }
@@ -110,6 +110,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             .Read(read => read.Action("GetDictionaryCurrencyFiltered", "DictionaryCurrency").Data("filter"))
             .Destroy(d => d.Action("DeleteCurrency", "DictionaryCurrency")))
 )
-)
+
 
 

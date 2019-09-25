@@ -13,7 +13,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Drawing.Wordprocessing;
 
 namespace iWasHere.Domain.Service
-    
+
 {
     public class DictionaryService
     {
@@ -48,25 +48,25 @@ namespace iWasHere.Domain.Service
 
         public void SaveLandmark(string landmarkName, int landmarkTypeId, bool hasEntryTicket, int visitIntervalId, int ticketId, string streetName, int streetNumber, int cityId, float latitude, float longitude, int landmarkId)
         {
-            
-               Landmark landmark = new Landmark()
-                {
 
-                    LandmarkTypeId = landmarkTypeId,
-                    HasEntryTicket = hasEntryTicket,
-                    VisitIntervalId = visitIntervalId,
-                    LandmarkDescription = landmarkName,
-                    TicketId = ticketId,
-                    StreetName = streetName,
-                    StreetNumber = streetNumber,
-                    CityId = cityId,
-                    Latitude = latitude,
-                    Longitude = longitude
-                };
+            Landmark landmark = new Landmark()
+            {
+
+                LandmarkTypeId = landmarkTypeId,
+                HasEntryTicket = hasEntryTicket,
+                VisitIntervalId = visitIntervalId,
+                LandmarkDescription = landmarkName,
+                TicketId = ticketId,
+                StreetName = streetName,
+                StreetNumber = streetNumber,
+                CityId = cityId,
+                Latitude = latitude,
+                Longitude = longitude
+            };
 
             _dbContext.Landmark.Add(landmark);
             _dbContext.SaveChanges();
-            }
+        }
 
         public void SaveLandmark(string v1, string landmarkName, int v2, int landmarkTypeId, bool v3, bool hasEntryTicket, int v4, int visitIntervalId, int v5, int ticketId, string v6, string streetName, int v7, int streetNumber, int v8, int cityId, float v9, float latitude, float v10, float longitude, int v11, object landmarkId)
         {
@@ -97,7 +97,7 @@ namespace iWasHere.Domain.Service
                 });
                 return dictionaryCounties;
             }
-            else if(countyName!= null && countryId == 0)
+            else if (countyName != null && countryId == 0)
             {
                 IQueryable<DictionaryCountyModel> dictionaryCounties = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
                 {
@@ -109,7 +109,7 @@ namespace iWasHere.Domain.Service
                 ).Where(c => c.CountyName.Contains(countyName));
                 return dictionaryCounties;
             }
-            else if (countyName ==null && countryId != 0)
+            else if (countyName == null && countryId != 0)
             {
                 IQueryable<DictionaryCountyModel> dictionaryCounties = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
                 {
@@ -247,10 +247,10 @@ namespace iWasHere.Domain.Service
                     Name = a.CityName,
                     County = _dbContext.DictionaryCounty.Where(c => c.CountyId == a.CountyId).Select(c => c.CountyName).FirstOrDefault().ToString()
                 }
-               ).Where(c =>  c.CountyId == countyId);
+               ).Where(c => c.CountyId == countyId);
                 return dictionaryCities;
             }
-            else 
+            else
             {
                 IQueryable<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
                 {
@@ -374,7 +374,8 @@ namespace iWasHere.Domain.Service
             {
                 Id = c.CityId,
                 Name = c.CityName,
-                County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString()
+                CountyId = c.CountyId,
+                County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
 
             }).Where(a => a.Id == id).FirstOrDefault();
             return city;
@@ -400,7 +401,7 @@ namespace iWasHere.Domain.Service
             {
                 LanguageId = c.LanguageId,
                 LanguageName = c.LanguageName,
-                LanguageCode=c.LanguageCode
+                LanguageCode = c.LanguageCode
             }).Where(a => a.LanguageId == id).FirstOrDefault();
             return city;
         }
@@ -427,7 +428,7 @@ namespace iWasHere.Domain.Service
                     CurrencyName = c.CurrencyName,
                     CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
 
-                    
+
                 });
                 return dictionaryCurrency;
             }
@@ -439,7 +440,7 @@ namespace iWasHere.Domain.Service
                     CurrencyCode = c.CurrencyCode,
                     CurrencyName = c.CurrencyName,
                     CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange)
-                    
+
                 }
                 ).Where(c => c.CurrencyName.Contains(currencyName));
                 return dictionaryCurrency;
@@ -470,11 +471,11 @@ namespace iWasHere.Domain.Service
 
         public bool VerifyLanguages(string languageName, string languageCode)
         {
-            int stateName=0, stateCode = 0;
+            int stateName = 0, stateCode = 0;
             if (_dbContext.DictionaryLanguage.Any(c => c.LanguageName == languageName)) stateName = 1;
             if (_dbContext.DictionaryLanguage.Any(c => c.LanguageCode == languageCode)) stateCode = 1;
 
-            if(stateCode==1 || stateName==1)
+            if (stateCode == 1 || stateName == 1)
                 return false;
             else
                 return true;
@@ -576,7 +577,7 @@ namespace iWasHere.Domain.Service
                 Longitude = a.Longitude,
                 StreetName = a.StreetName,
                 StreetNumber = a.StreetNumber,
-                CityName =  _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(x => x.CityName).FirstOrDefault().ToString(),
+                CityName = _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(x => x.CityName).FirstOrDefault().ToString(),
                 CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == a.City.County.Country.CountryId).Select(x => x.CountryName).FirstOrDefault().ToString(),
                 CountyName = _dbContext.DictionaryCounty.Where(d => d.CountyId == a.City.County.CountyId).Select(x => x.CountyName).FirstOrDefault().ToString()
             });
@@ -599,6 +600,8 @@ namespace iWasHere.Domain.Service
                     VisitInterval = c.VisitInterval,
                     TicketId = c.TicketId,
                     Ticket = _dbContext.DictionaryTicketType.Where(d => d.TicketTypeId == c.Ticket.TicketTypeId).Select(a => a.TicketTypeName).FirstOrDefault(),
+                    TicketCost =Convert.ToDecimal(_dbContext.Ticket.Where(d => d.TicketId == c.TicketId).Select(a => a.TicketCost).FirstOrDefault()),
+                    CurrencyRate = Convert.ToDecimal(_dbContext.DictionaryCurrency.Where(d => d.CurrencyId == c.Ticket.CurrencyId).Select(a => a.CurrencyExchange).FirstOrDefault()),
                     LandmarkType = c.LandmarkType,
                     LandmarkTypeId = c.LandmarkTypeId,
                     StreetName = c.StreetName,
@@ -611,7 +614,7 @@ namespace iWasHere.Domain.Service
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
                     CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
                     Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString(),
-                    Path = _dbContext.Images.Where(d => d.LandmarkId == landmarkId).Select(b => new Images() {Path=b.Path }).ToList(),
+                    Path = _dbContext.Images.Where(d => d.LandmarkId == landmarkId).Select(b => new Images() { Path = b.Path }).ToList(),
                     Reviews = _dbContext.Review.Where(d => d.LandmarkId == landmarkId).Select(b => new Review()
                     {
                         Review1 = b.Review1,
@@ -645,12 +648,13 @@ namespace iWasHere.Domain.Service
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
                     CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
                     Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString(),
-                    Reviews =_dbContext.Review.Where(d=>d.LandmarkId==landmarkId).Select(b => new Review()
+                    Reviews = _dbContext.Review.Where(d => d.LandmarkId == landmarkId).Select(b => new Review()
                     {
                         Review1 = b.Review1,
                         Grade = b.Grade,
                         UserName = b.UserName,
-                        Title = b.Title }).ToList()
+                        Title = b.Title
+                    }).ToList()
                 }).Where(a => a.LandmarkId == landmarkId).FirstOrDefault();
                 return city;
             }
@@ -661,11 +665,11 @@ namespace iWasHere.Domain.Service
             List<Review> reviews = _dbContext.Review.Select(b => new Review()
             {
                 Review1 = b.Review1,
-                Grade=b.Grade,
-                UserName=b.UserName,
-                Title=b.Title
+                Grade = b.Grade,
+                UserName = b.UserName,
+                Title = b.Title
 
-            }).Where(a=>a.LandmarkId==landmarkId).ToList();
+            }).Where(a => a.LandmarkId == landmarkId).ToList();
 
             return reviews;
         }
@@ -680,7 +684,7 @@ namespace iWasHere.Domain.Service
                 Path = path,
                 LandmarkId = landmarkId
 
-            }; 
+            };
             _dbContext.Images.Add(img);
             _dbContext.SaveChanges();
         }
@@ -689,7 +693,7 @@ namespace iWasHere.Domain.Service
         {
             ImageModel x = _dbContext.Images.Select(c => new ImageModel()
             {
-                Path=c.Path
+                Path = c.Path
 
             }).Where(a => a.LandmarkId == id).FirstOrDefault();
             return x.Path;
@@ -716,7 +720,7 @@ namespace iWasHere.Domain.Service
                 return sters;
             }
 
-            
+
         }
 
         public int DeleteLandmark(int id)
@@ -730,7 +734,7 @@ namespace iWasHere.Domain.Service
                 sters = 1;
                 return sters;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 sters = 0;
                 return sters;
@@ -764,15 +768,15 @@ namespace iWasHere.Domain.Service
                     Title = b.Title
                 }).ToList()
             }).Where(a => a.LandmarkId == id).FirstOrDefault();
-            if(landmark.Reviews.Count > 0)
+            if (landmark.Reviews.Count > 0)
             {
-                 min = landmark.Reviews.Min(p => p.Grade);
-                 max = landmark.Reviews.Max(p => p.Grade);
-                 minItem = landmark.Reviews.First(a => a.Grade == min);
-                 maxItem = landmark.Reviews.First(a => a.Grade == max);
+                min = landmark.Reviews.Min(p => p.Grade);
+                max = landmark.Reviews.Max(p => p.Grade);
+                minItem = landmark.Reviews.First(a => a.Grade == min);
+                maxItem = landmark.Reviews.First(a => a.Grade == max);
                 noComments = false;
             }
-           
+
             var stream = new MemoryStream();
 
             using (WordprocessingDocument doc = WordprocessingDocument.Create(stream, DocumentFormat.OpenXml.WordprocessingDocumentType.Document, true))
@@ -874,5 +878,138 @@ namespace iWasHere.Domain.Service
             return stream;
         }
 
+        public MemoryStream ExportFileAlice(int id)
+        {
+            bool noComments = true;
+            decimal? min = 0;
+            decimal? max = 0;
+            Review minItem = null;
+            Review maxItem = null;
+            LandmarkModel landmark = _dbContext.Landmark.Select(a => new LandmarkModel()
+            {
+                LandmarkId = a.LandmarkId,
+                LandmarkDescription = a.LandmarkDescription,
+                Latitude = a.Latitude,
+                Longitude = a.Longitude,
+                StreetName = a.StreetName,
+                StreetNumber = a.StreetNumber,
+                CityName = _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(x => x.CityName).FirstOrDefault().ToString(),
+                CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == a.City.County.Country.CountryId).Select(x => x.CountryName).FirstOrDefault().ToString(),
+                CountyName = _dbContext.DictionaryCounty.Where(d => d.CountyId == a.City.County.CountyId).Select(x => x.CountyName).FirstOrDefault().ToString(),
+                Path = _dbContext.Images.Where(d => d.LandmarkId == id).Select(b => new Images() { Path = b.Path }).ToList(),
+                Reviews = _dbContext.Review.Where(d => d.LandmarkId == id).Select(b => new Review()
+                {
+                    Review1 = b.Review1,
+                    Grade = b.Grade,
+                    UserName = b.UserName,
+                    Title = b.Title
+                }).ToList()
+            }).Where(a => a.LandmarkId == id).FirstOrDefault();
+            if (landmark.Reviews.Count > 0)
+            {
+                min = landmark.Reviews.Min(p => p.Grade);
+                max = landmark.Reviews.Max(p => p.Grade);
+                minItem = landmark.Reviews.First(a => a.Grade == min);
+                maxItem = landmark.Reviews.First(a => a.Grade == max);
+                noComments = false;
+            }
+
+            var stream = new MemoryStream();
+
+            using (WordprocessingDocument doc = WordprocessingDocument.Create(stream, DocumentFormat.OpenXml.WordprocessingDocumentType.Document, true))
+            {
+
+                MainDocumentPart mainPart = doc.AddMainDocumentPart();
+
+                new Document(new Body()).Save(mainPart);
+
+                Body body = mainPart.Document.Body;
+                if (noComments == false)
+                {
+                    body.Append(
+                          new Body(
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                            new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Numele obiectivului este: " + landmark.LandmarkDescription))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Adresa obiectivului: "))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Tara - " + landmark.CountryName))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Judet -  " + landmark.CountyName))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Oras - " + landmark.CityName))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Strada - " + landmark.StreetName))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Numar - " + landmark.StreetNumber))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Nota medie: " + landmark.Reviews.Average(a => a.Grade)))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Comentarii: "))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Autor: " + maxItem.UserName))),
+                           new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Titlul: " + maxItem.Title + " Mesaj: " + maxItem.Review1 + " Nota: " + maxItem.Grade + "/10"))),
+                             new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Autor: " + minItem.UserName))),
+                           new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Titlul: " + minItem.Title + " Mesaj: " + minItem.Review1 + " Nota: " + minItem.Grade + "/10")))
+                                  ));
+                }
+                else
+                {
+                    body.Append(
+                          new Body(
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                            new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Numele obiectivului este: " + landmark.LandmarkDescription))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Adresa obiectivului: "))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Tara - " + landmark.CountryName))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Judet -  " + landmark.CountyName))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Oras - " + landmark.CityName))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Strada - " + landmark.StreetName))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Numar - " + landmark.StreetNumber))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Nota medie: " + landmark.Reviews.Average(a => a.Grade)))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Comentarii: "))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Fara comentarii ")))
+                          ));
+                }
+                mainPart.Document.Save();
+            }
+
+            stream.Seek(0, SeekOrigin.Begin);
+            return stream;
+        }
     }
 }

@@ -120,7 +120,7 @@
 
             <li>
                 @(Html.Kendo().TextBoxFor(model => model.LandmarkTypeCode)
-                                       .HtmlAttributes(new { @id = "LandmarkTypeCode", style = "margin:10px" })
+                                       .HtmlAttributes(new { @id = "LandmarkTypeCode", style = "margin:10px", @maxlength = "10" })
 
                 )
 
@@ -134,7 +134,7 @@
 
             <li>
                 @(Html.Kendo().TextBoxFor(model => model.Description)
-             .HtmlAttributes(new { @id = "Description", style = "margin:10px" })
+             .HtmlAttributes(new { @id = "Description", style = "margin:10px", @maxlength = "300"})
 
                             )
             <li>

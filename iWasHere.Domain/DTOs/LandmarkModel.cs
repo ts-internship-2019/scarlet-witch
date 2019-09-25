@@ -24,6 +24,8 @@ namespace iWasHere.Domain.DTOs
         public string LandmarkDescription { get; set; }
         public int? TicketId { get; set; }
         public string Ticket { get; set; }
+        public decimal TicketCost { get; set; }
+        public decimal CurrencyRate { get; set; }
         public string StreetName { get; set; }
         public int? StreetNumber { get; set; }
         public int? CityId { get; set; }
@@ -33,7 +35,7 @@ namespace iWasHere.Domain.DTOs
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public List<Images> Path { get; set; }
-
+        public List<Review> Review { get; set; }
         public string CountyName { get; set; }
 
         public string CityName { get; set; }
