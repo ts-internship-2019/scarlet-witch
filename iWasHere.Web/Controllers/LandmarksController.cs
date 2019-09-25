@@ -190,11 +190,7 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult ExportFile([DataSourceRequest] DataSourceRequest request, int id)
         {
-
-          
             return File(_dictionaryService.ExportFile(id), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Landmark.docx");
-
-           
         }
 
 
@@ -216,6 +212,7 @@ namespace iWasHere.Web.Controllers
 
             return node.InnerText;
         }
+
         public int Delete([DataSourceRequest] DataSourceRequest request, int id)
         {
             int sters = _dictionaryService.DeleteLandmark(id);
@@ -228,7 +225,7 @@ namespace iWasHere.Web.Controllers
             return status;
         }
 
-        public bool SendEmail([DataSourceRequest] DataSourceRequest request, String email)
+        public bool SendEmail([DataSourceRequest] DataSourceRequest request, String email, int id)
         {
             bool sent = false;
 
@@ -237,14 +234,9 @@ namespace iWasHere.Web.Controllers
             const string fromPassword = "ThisIsNotAPassword123";
             const string body = "We've attached the landmark in the email!" +
                 "Thanks :)";
-
-           
-//MemoryStream ms = new MemoryStream(da zta);
-
-
-         //   Attachment data = new Attachment(ms, "example.txt", "text/plain");
-                //("C:\\Users\\adraghici\\Desktop\\TEME\\TEST.docx",                     MediaTypeNames.Application.Octet);
-
+            // MemoryStream ms = _dictionaryService.ExportFileAlice(id);
+            // Attachment data = new Attachment(ms, "Landmark.docx", System.Net.Mime.MediaTypeNames.Text.Plain);
+            Attachment data = new Attachment(_dictionaryService.ExportFileAlice(id), "Landmark.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
             var smtp = new SmtpClient
             {
                 Host = "smtp.gmail.com",
@@ -258,6 +250,7 @@ namespace iWasHere.Web.Controllers
             message.Subject = "Landmark Attachment";
             message.Body = body;
             message.Attachments.Add(data);
+
             {
                 try
                 {
