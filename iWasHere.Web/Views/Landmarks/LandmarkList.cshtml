@@ -30,11 +30,10 @@
         window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+id;
     }
     
-    function exportFile() {
+    function exportFile(id) {
 
         alert("hai ca exportam daca e");
-        window.location.href = '@Url.Action("ExportFile", "Landmarks")';
-
+        window.location.href = '@Url.Action("ExportFile", "Landmarks")/'+id;
     }
 
 
@@ -64,6 +63,7 @@
             columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkId#)\">Delete</button>");
             columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=LandmarkId#)\"> Edit </button>");
             columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
+            columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"exportFile(#=LandmarkId#)\">Export</button>");
         })
         .NoRecords(true)
         .Filterable()
@@ -127,4 +127,3 @@
     }
 
 </script>
-    </body>
