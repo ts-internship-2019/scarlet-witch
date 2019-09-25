@@ -51,6 +51,13 @@
         refreshGrid();
     }
 </script>
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("redirectToAddContext"))
+)
+
 @(Html.Kendo().TextBox()
 .Name("languageTextBox")
 .HtmlAttributes(new { @id = "languageTextBox" })
@@ -70,12 +77,7 @@
 .Events(ev => ev.Click("deleteFilters"))
 )
 
-@(Html.Kendo().Button()
-           .Name("primaryTextButton")
-           .HtmlAttributes(new { type = "button", @class = "k-primary" })
-           .Content("Add")
-           .Events(ev => ev.Click("redirectToAddContext"))
-)
+
 
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLanguageModel>()
         .Name("grid")

@@ -170,8 +170,10 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                 success: function (response) {
                     cityNameValidation = response;
                     alert(cityNameValidation);
+                    document.getElementById("languageName").value = document.getElementById("languageName").value.trim();
+                    document.getElementById("languageCode").value = document.getElementById("languageCode").value.trim();
                     if (id != 0) {
-                        
+                        if (document.getElementById("languageName").value != "" && document.getElementById("languageCode").value != "" && document.getElementById("languageName").value.length != 0 && document.getElementById("languageCode").value.length != 0) {
                             $.ajax({
                                 type: 'POST',
                                 url: '@Url.Action("EditLanguage", "DictionaryLanguage")',
@@ -189,10 +191,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                     //  alert("hai ca nu merge");
                                 }
                             })
-                        
+
+                        }
+                        else { alert("Nu a fost introdus numele sau codul") }
                     }
                     else {
-                        if (!cityNameValidation) {
+                        if (!cityNameValidation && document.getElementById("languageName").value != "" && document.getElementById("languageCode").value != "" && document.getElementById("languageName").value.length != 0 && document.getElementById("languageCode").value.length != 0) {
                             $.ajax({
                                 type: 'PUT',
                                 url: '@Url.Action("SaveLanguage", "DictionaryLanguage")',
