@@ -79,13 +79,6 @@
 .Events(ev => ev.Click("deleteFilters"))
 )
 
-@(Html.Kendo().Button()
-           .Name("primaryTextButton")
-           .HtmlAttributes(new { type = "button", @class = "k-primary" })
-           .Content("Add")
-           .Icon("k-icon k-i-plus")
-           .Events(ev => ev.Click("redirectToAddContext"))
-)
 
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLanguageModel>()
         .Name("grid")
