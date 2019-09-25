@@ -374,7 +374,8 @@ namespace iWasHere.Domain.Service
             {
                 Id = c.CityId,
                 Name = c.CityName,
-                County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString()
+                CountyId = c.CountyId,
+                County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
 
             }).Where(a => a.Id == id).FirstOrDefault();
             return city;
