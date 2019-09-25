@@ -4,12 +4,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
 @model iWasHere.Domain.DTOs.LandmarkModel;
 
 
 <h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
 <div id="googleMap" style="width:100%;height:400px;" class="map-container"></div>
-
 <script>
     var map;
     var markers = [];
@@ -24,6 +25,8 @@
         addMarker(startLatLng);
     }
 
+
+
     function addMarker(location) {
         var marker = new google.maps.Marker({
             position: location,
@@ -32,19 +35,23 @@
         markers.push(marker);
     }
 
+
     function setMapOnAll(map) {
         for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(map);
         }
     }
 
+
     function clearMarkers() {
         setMapOnAll(null);
     }
 
+
     function showMarkers() {
         setMapOnAll(map);
     }
+
 
     function deleteMarkers() {
         clearMarkers();
@@ -62,7 +69,6 @@
         max-width: 400px;
         text-align: left;
         padding: 10px;
-        background-color: #ddd;
         border-radius: 3px;
         margin: 5px;
         vertical-align: top;
@@ -74,14 +80,13 @@
         max-height:350px;
         text-align: left;
         padding: 10px;
-        background-color: #ddd;
         border-radius: 3px;
         margin: 5px;
     }
 </style>
 
 
-<body onload="onLoadView()">
+<body onload="onLoadView()" >
     <div class="container">
         <div class="row ">
             <div class="col-md-12">
@@ -117,7 +122,7 @@
                         </li>
                         <li>
                             <label>Country:</label>
-                            @Html.DisplayFor(model => model.Country)
+                            @Html.ActionLink(Model.CountryName, "LandmarkList", "Landmarks", new {id=Model.Country })
                         </li>
                         <li>
                             <label>Latitude:</label>
@@ -139,7 +144,7 @@
                     @*<img src="~/@Model.Path" alt="This landmark has no image" />*@
                     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
-                            @if (Model.Path != null)
+                            @if (Model.Path.Count > 0)
                             {
 
                                 @foreach (var te in Model.Path)
@@ -157,6 +162,9 @@
                                         </div>}
                                 }
                             }
+                            else {<div class="carousel-item active">
+                                <img class="d-block w-100" src="~/no-image.png" alt="This landmark has no image" style="height:330px; width:500px">
+                            </div> }
                         </div>
                         <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -184,29 +192,29 @@
     </div>
 
     <div>
+
         <h2>Reviews</h2>
         <input type="button" class="k-primary"
                value="Add Review"
                onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
-        @if (Model.Reviews != null)
+        @if (Model.Reviews != null) {
+        @foreach (var item in Model.Reviews)
         {
-            @foreach (var item in Model.Reviews)
-            {
-                <div>
-                    <hr />
-                    <ul style="list-style-type:none;">
-                        <li><h4>@item.Title</h4></li>
-                        <li>@item.UserName</li>
-                        <li>
-                            @for (var i = 0; i < item.Grade; i++)
-                            {<span style="color:darkgoldenrod">&#9733;</span>}
-                            @for (var i = 0; i < 10 - item.Grade; i++)
-                            {<span style="color:darkgoldenrod; opacity: 0.5">&#9733;</span>}
-                        </li>
-                        <li>@item.Review1</li>
-                    </ul>
-                </div>}
-        }
+            <div>
+                <hr />
+                <ul style="list-style-type:none;">
+                    <li><h4>@item.Title</h4></li>
+                    <li>@item.UserName</li>
+                    <li>
+                        @for (var i = 0; i < item.Grade; i++)
+                        {<span style="color:darkgoldenrod">&#9733;</span>}
+                        @for (var i = 0; i < 10-item.Grade; i++)
+                        {<span style="color:darkgoldenrod; opacity: 0.5">&#9733;</span>}
+                    </li>
+                <li>@item.Review1</li>
+            </ul>
+        </div>}
+    }
     </div>
 
     <div id="example">
@@ -233,7 +241,11 @@
 
 
 <style>
-    
+    .carousel-control-next,
+    .carousel-control-prev {
+        filter: invert(100%);
+    }
+
     fieldset, label {
         margin: 0;
         padding: 0;

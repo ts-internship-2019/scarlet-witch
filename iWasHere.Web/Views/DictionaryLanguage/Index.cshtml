@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Language";
-Layout = "~/Views/Shared/_Layout.cshtml";}
+    Layout = "~/Views/Shared/_Layout.cshtml";}
 
 <h1>Languages</h1>
 
@@ -45,6 +45,11 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         window.location.href = 'DictionaryLanguage/LanguageAdd/?id=' + id;
     }
 
+
+    function deleteFilters() {
+        document.getElementById("languageTextBox").value = "";
+        refreshGrid();
+    }
 </script>
 @(Html.Kendo().TextBox()
 .Name("languageTextBox")
@@ -59,11 +64,18 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 )
 
 @(Html.Kendo().Button()
+.Name("deleteFiltersButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Delete filters")
+.Events(ev => ev.Click("deleteFilters"))
+)
+
+@(Html.Kendo().Button()
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
            .Events(ev => ev.Click("redirectToAddContext"))
-           )
+)
 
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLanguageModel>()
         .Name("grid")
@@ -90,4 +102,4 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             .PageSize(10)
             .Read(read => read.Action("GetDictionaryLanguagesFiltered", "DictionaryLanguage").Data("filter"))
             .Destroy(d => d.Action("DeleteLanguage", "DictionaryLanguage")))
-        )
+)
