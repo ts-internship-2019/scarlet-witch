@@ -54,10 +54,15 @@
         alert("hai ca exportam daca e");
         window.location.href = '@Url.Action("ExportFile", "Landmarks")/'+id;
     }
-
+    function onLoadLandmarkList() {
+         var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("idCountry");
+        document.getElementById("combo").value = id;
+    }
 
 </script>
-<body>
+<body onload="onLoadLandmarkList()">
     <pre id="output"></pre>
 
     <div class="site-wrap">
