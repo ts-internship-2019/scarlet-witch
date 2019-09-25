@@ -188,49 +188,15 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
-        public void ExportFile([DataSourceRequest] DataSourceRequest request)
+        public IActionResult ExportFile([DataSourceRequest] DataSourceRequest request, int id)
         {
-            string destinationFile = Path.Combine(Environment.CurrentDirectory, "SampleDocument.docx");
-            string sourceFile = Path.Combine(Environment.CurrentDirectory, "Sample.docx");
-            try
-            {
-                System.IO.File.Copy(sourceFile, destinationFile, true);
-                var logFile = System.IO.File.Create(System.IO.Path.GetTempFileName());
-                using (WordprocessingDocument document = WordprocessingDocument.Open(destinationFile, true))
-                {
-                    document.ChangeDocumentType(DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
 
-                    MainDocumentPart mainPart = document.MainDocumentPart;
+          
+            return File(_dictionaryService.ExportFile(id), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Landmark.docx");
 
-                    DocumentSettingsPart documentSettingPart1 = mainPart.DocumentSettingsPart;
-
-                    // Create a new attachedTemplate and specify a relationship ID
-                    //AttachedTemplate attachedTemplate1 = new AttachedTemplate() { Id = "relationId1" };
-
-                    // Append the attached template to the DocumentSettingsPart
-                    //documentSettingPart1.Settings.Append(attachedTemplate1);
-
-                    // Add an ExternalRelationShip of type AttachedTemplate.
-                    // Specify the path of template and the relationship ID
-                    //documentSettingPart1.AddExternalRelationship("http://schemas.openxmlformats.org/officeDocument/2006/relationships/attachedTemplate", new Uri(sourceFile, UriKind.Absolute), "relationId1");
-
-                    // Save the document
-                    var logWriter = new System.IO.StreamWriter(logFile);
-                    mainPart.Document.Save();
-
-                    Console.WriteLine("Document generated at " + destinationFile);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                Console.WriteLine("\nPress Enter to continue…");
-                Console.ReadLine();
-            }
+           
         }
+
 
         public string parseXMLBnr([DataSourceRequest] DataSourceRequest request)
         {
