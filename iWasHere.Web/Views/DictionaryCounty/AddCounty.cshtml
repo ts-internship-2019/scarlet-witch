@@ -2,13 +2,13 @@
 
 @{
     ViewData["Title"] = "AddCounty";
-Layout = "~/Views/Shared/_Layout.cshtml";}
+    Layout = "~/Views/Shared/_Layout.cshtml";}
 
 
 <h4>Add County</h4>
-
-<body onload="onLoadEdit()">
-
+ 
+<body onload="onLoadEditC()">
+    
     <ul style="list-style-type:none">
         <li>
             <label>County Name</label>
@@ -27,8 +27,9 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             <label>Country</label>
         </li>
         <li>
-            @(Html.Kendo().DropDownList()
-        .Value("Selectati o tara!")
+
+            @(Html.Kendo().ComboBox()
+                             .Value("Select a country!")
                              .Name("DictionaryCountry")
                              .DataTextField("CountryName")
                              .DataValueField("CountryId")
@@ -39,7 +40,8 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                  {
                                      read.Action("GetAllCountries", "DictionaryCounty");
                                  });
-                             }))
+                             })
+                             )
         </li>
     </ul>
 
@@ -79,10 +81,13 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         var url = new URL(url_string);
         var id = url.searchParams.get("CountyId");
         var countyNameValidation = false;
-
-        if (!document.getElementById("CountyName").value ||
+        if (document.getElementById("combo").value == "Select a country!") {
+                alert("Nu ati selectat o tara!");
+            }
+        else if (!document.getElementById("CountyName").value ||
             !document.getElementById("combo").value) {
             alert("Campuri necompletate!");
+            
         } else {
             $.ajax({
                 type: 'GET',
@@ -125,6 +130,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                         document.getElementById("CountyName").value = "";
                                         $("#combo").val("").data("kendoDropDownList").text("");
                                         fromUpdate = false;
+                                        alert("Judet adaugat");
                                         window.location.href = '@Url.Action("Index", "DictionaryCounty")';
                                     }
                                 },
@@ -140,7 +146,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             })
         }
     }
-    function onLoadEdit() {
+    function onLoadEditC() {
         var url_string = window.location.href;
         var url = new URL(url_string);
         document.getElementById("CountyId").style.visibility = "hidden";

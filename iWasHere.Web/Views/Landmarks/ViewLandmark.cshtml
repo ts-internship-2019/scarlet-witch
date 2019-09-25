@@ -305,17 +305,16 @@
 
     function sendEmail() {
         var sent = false;
-        email= document.getElementById("emailTB").value;
+
         $.ajax({
             type: 'GET',
             url: '@Url.Action("SendEmail", "Landmarks")',
             data: {
-                email: document.getElementById("emailTB").value
+                email: document.getElementById("emailTB").value,
+                id: @Model.LandmarkId 
             },
             success: function (response) {
                 sent = response;
-                alert(sent);
-                alert(response);
                 if (response == false) {
                     alert("Email netrimis!");
                 } else {
