@@ -13,8 +13,10 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         var url_string = window.location.href;
         var url = new URL(url_string);
         var id = url.searchParams.get("id");
-        if (id != 0) {
-            if (document.getElementById("currencyName").value != ""|| document.getElementById("currencyCode").value != "") {
+        document.getElementById("currencyName").value = document.getElementById("currencyName").value.trim();
+              document.getElementById("currencyCode").value = document.getElementById("currencyCode").value.trim();
+            if (id != 0) {           
+            if (document.getElementById("currencyName").value != ""  &&  document.getElementById("currencyCode").value != "" &&  document.getElementById("currencyName").value.length !=0 && document.getElementById("currencyCode").value.length !=0) {
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("EditCurrency", "DictionaryCurrency")',
@@ -37,7 +39,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             else { alert("Nu a fost introdus numele sau codul") }
         }
         else {
-            if (document.getElementById("currencyName").value != "" || document.getElementById("currencyCode").value != "") {
+            if (document.getElementById("currencyName").value != "" && document.getElementById("currencyCode").value != "" && document.getElementById("currencyName").value.length !=0 && document.getElementById("currencyCode").value.length !=0 ) {
                 $.ajax({
                     type: 'PUT',
                     url: '@Url.Action("SaveCurrency", "DictionaryCurrency")',
@@ -97,19 +99,17 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
 
 </script>
+
 @model iWasHere.Domain.DTOs.DictionaryCurrencyModel;
 
 <style>
     .txtBoxStyle {
 
         position: absolute;
-            right:60%;
-            
+            right:60%;            
             padding: 10%;
 
-
     }
-
 
 </style>
 
@@ -121,7 +121,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         <li>
             <label>Currency Name</label>
             @(Html.Kendo().TextBoxFor(model => model.CurrencyName)
-                              .HtmlAttributes(new { @id = "currencyName", style = "margin:20px; left:6.5%" })
+                              .HtmlAttributes(new { @id = "currencyName", style = "margin:20px; left:6.5%",@maxlength="250" })
 
             )
 
@@ -129,7 +129,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         <li>
             <label>Currency Code</label>
             @(Html.Kendo().TextBoxFor(model => model.CurrencyCode)
-                    .HtmlAttributes(new { @id = "currencyCode", style = "margin:20px; left:7%" })
+                    .HtmlAttributes(new { @id = "currencyCode", style = "margin:20px; left:7%",@maxlength="100" })
 
             )
 
@@ -137,7 +137,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         <li>
             <label>Currency Exchange</label>
             @(Html.Kendo().NumericTextBoxFor(model => model.CurrencyExchange)
-                    .HtmlAttributes(new { @id = "currencyExchange", style = "margin:10px; left:5%", aria_label = "Currency Exchange " })
+                    .HtmlAttributes(new { @id = "currencyExchange", style = "margin:10px; left:5%", aria_label = "Currency Exchange ",@maxlength="10" })
 
             )
 

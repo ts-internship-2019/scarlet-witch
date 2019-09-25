@@ -15,14 +15,17 @@ using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Net.Mail;
+using System.Net;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Hosting.Server;
 
 namespace iWasHere.Web.Controllers
 {
     public class LandmarksController : Controller
     {
         private readonly DictionaryService _dictionaryService;
-   
+
         private readonly IHostingEnvironment _he;
         public static List<String> imagesPaths;
 
@@ -36,7 +39,7 @@ namespace iWasHere.Web.Controllers
         {
             return View();
         }
-  
+
         public IActionResult AddLandmark(int id)
         {
             if (id != 0)
@@ -127,7 +130,7 @@ namespace iWasHere.Web.Controllers
             foreach (string path in imagesPaths)
             {
                 _dictionaryService.SaveImagesDB(path);
-            }         
+            }
 
         }
 
@@ -185,51 +188,11 @@ namespace iWasHere.Web.Controllers
             return Json(cnts);
         }
 
-        public void ExportFile([DataSourceRequest] DataSourceRequest request)
+        public IActionResult ExportFile([DataSourceRequest] DataSourceRequest request, int id)
         {
-            string destinationFile = Path.Combine(Environment.CurrentDirectory, "SampleDocument.docx");
-            string sourceFile = Path.Combine(Environment.CurrentDirectory, "Sample.docx");
-            try
-            {
-
-
-                System.IO.File.Copy(sourceFile, destinationFile, true);
-                var logFile = System.IO.File.Create(System.IO.Path.GetTempFileName());
-                using (WordprocessingDocument document = WordprocessingDocument.Open(destinationFile, true))
-                {
-                    document.ChangeDocumentType(DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
-
-                    MainDocumentPart mainPart = document.MainDocumentPart;
-
-                    DocumentSettingsPart documentSettingPart1 = mainPart.DocumentSettingsPart;
-
-                    // Create a new attachedTemplate and specify a relationship ID
-                    //AttachedTemplate attachedTemplate1 = new AttachedTemplate() { Id = "relationId1" };
-
-                    // Append the attached template to the DocumentSettingsPart
-                    //documentSettingPart1.Settings.Append(attachedTemplate1);
-
-                    // Add an ExternalRelationShip of type AttachedTemplate.
-                    // Specify the path of template and the relationship ID
-                    //documentSettingPart1.AddExternalRelationship("http://schemas.openxmlformats.org/officeDocument/2006/relationships/attachedTemplate", new Uri(sourceFile, UriKind.Absolute), "relationId1");
-
-                    // Save the document
-                    var logWriter = new System.IO.StreamWriter(logFile);
-                    mainPart.Document.Save();
-
-                    Console.WriteLine("Document generated at " + destinationFile);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                Console.WriteLine("\nPress Enter to continue…");
-                Console.ReadLine();
-            }
+            return File(_dictionaryService.ExportFile(id), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Landmark.docx");
         }
+
 
         public string parseXMLBnr([DataSourceRequest] DataSourceRequest request)
         {
@@ -249,6 +212,7 @@ namespace iWasHere.Web.Controllers
 
             return node.InnerText;
         }
+
         public int Delete([DataSourceRequest] DataSourceRequest request, int id)
         {
             int sters = _dictionaryService.DeleteLandmark(id);
@@ -260,6 +224,46 @@ namespace iWasHere.Web.Controllers
             bool status = _dictionaryService.VerifyLandmark(name, lat, longitud);
             return status;
         }
+
+        public bool SendEmail([DataSourceRequest] DataSourceRequest request, String email, int id)
+        {
+            bool sent = false;
+
+            var fromAddress = new MailAddress("scarlterwitch@gmail.com", "From Scarlet");
+            var toAddress = new MailAddress(email, "To Name");
+            const string fromPassword = "ThisIsNotAPassword123";
+            const string body = "We've attached the landmark in the email!" +
+                "Thanks :)";
+            // MemoryStream ms = _dictionaryService.ExportFileAlice(id);
+            // Attachment data = new Attachment(ms, "Landmark.docx", System.Net.Mime.MediaTypeNames.Text.Plain);
+            Attachment data = new Attachment(_dictionaryService.ExportFileAlice(id), "Landmark.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            };
+            MailMessage message = new MailMessage(fromAddress, toAddress);
+            message.Subject = "Landmark Attachment";
+            message.Body = body;
+            message.Attachments.Add(data);
+
+            {
+                try
+                {
+                    smtp.Send(message);
+                    sent = true;
+                }catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    sent = false;
+                }
+            }
+            return sent;
+        }
     }
 }
-
+            

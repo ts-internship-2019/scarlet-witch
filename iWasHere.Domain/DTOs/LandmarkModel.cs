@@ -35,7 +35,7 @@ namespace iWasHere.Domain.DTOs
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public List<Images> Path { get; set; }
-
+        public List<Review> Review { get; set; }
         public string CountyName { get; set; }
 
         public string CityName { get; set; }

@@ -187,6 +187,16 @@
     </div>
 
     <div>
+        @(Html.Kendo().Button()
+       .Name("showDialogBtn")
+      //.HtmlAttributes(new { style = "display:none;", @class = "hide-on-narrow" })
+      .Content("Send Landmark via Email")
+      .Events(ev => ev.Click("showDialog"))
+        )
+    </div>
+
+    <div>
+
         <h2>Reviews</h2>
         <input type="button" class="k-primary"
                value="Add Review"
@@ -210,12 +220,28 @@
         </div>}
     }
     </div>
+
+    <div id="example">
+        @(Html.Kendo().Dialog()
+            .Name("dialog")
+            .Title("Info Dialog")
+            .Content("Introduceti emailul!" + "<br>  <input id='emailTB' type='text' name='email'><br>")
+            .Width(400)
+            .Modal(false)
+            .HtmlAttributes(new { @id = "dialog" })
+            .Visible(false)
+            .Actions(actions =>
+            {
+                actions.Add().Text("Send").Action("sendEmail");
+            })
+            .Events(ev => ev.Close("onClose").Open("onOpen"))
+        )
+    </div>
 </body>
 
 @*<input type="button"
     value="Add Comment"
     onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId "/>*@
-
 
 
 <style>
@@ -267,3 +293,41 @@
             float: right;
         }
 </style>
+
+<script type="text/javascript">
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+    }
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+    }
+
+    function showDialog() {
+        $('#dialog').data("kendoDialog").open();
+    }
+
+    function sendEmail() {
+        var sent = false;
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("SendEmail", "Landmarks")',
+            data: {
+                email: document.getElementById("emailTB").value,
+                id: @Model.LandmarkId 
+            },
+            success: function (response) {
+                sent = response;
+                if (response == false) {
+                    alert("Email netrimis!");
+                } else {
+                    alert("Email trimis!");
+                }
+            },
+            error: function (response) {
+                alert("Eroare!");
+            }
+        });
+    }
+</script>
