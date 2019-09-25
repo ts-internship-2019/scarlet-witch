@@ -1,6 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+
+
     <head runat=server>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,8 +32,10 @@
     </head>
 <script>
 
+    
+     var a;
         function onLoadFunction() {
-
+           
                $.ajax({
                     type: 'GET',
                     url: '@Url.Action("parseXMLBnr", "Landmarks")',
@@ -40,15 +45,44 @@
                         error: function (response) {
                         alert("hai ca nu merge");
                     }
-                })
+               })
 
+                 $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetTopLandmarks", "Landmarks")',
+                     success: function (response) { 
+                         
+                         a = response;
+                         var imgString = document.getElementById("image1").src = "./"+a[0].Path[0].Path;
+                         document.getElementById("name1").innerText = a[0].LandmarkDescription;
+
+                         var avg = 0.0;
+                         var sum = 0.0;
+                         for (var p=0; p < a[0].Reviews.length;p++)
+                         {
+                             sum = sum + a[0].Reviews[p].Grade;
+                         }
+                         avg = sum / a[0].Reviews.length;
+                         debugger;
+                         document.getElementById("grade1").innerText = avg.toString()+" STARS";
+                         
+                    },
+                        error: function (response) {
+                        alert("hai ca nu merge");
+                    }
+                })  
+
+    }
+
+    function first(){
+       window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+a[0].LandmarkId;
     }
 </script>
 
 
 <body onload="onLoadFunction()" style="background-color:#ffff">
   
-
+    
     <div class="site-wrap">
 
         <div class="site-mobile-menu">
@@ -79,12 +113,12 @@
             <div class="row align-items-center justify-content-center text-center">
                 <h1>Top rated locations</h1>
                 <div class="row">
-                    <div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
+                    <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" onclick="first()">
                         <a href="#" class="unit-1 text-center">
-                            <img src="images/01-greece.jpg" alt="Image" class="img-fluid">
+                            <img src="images/01-greece.jpg" alt="Image" class="img-fluid" id="image1">
                             <div class="unit-1-text">
-                                <strong class="text-primary mb-2 d-block">10 STARS</strong>
-                                <h3 class="unit-1-heading">Santorini, Greece</h3>
+                                <strong class="text-primary mb-2 d-block" id="grade1">Loading</strong>
+                                <h3 class="unit-1-heading" id="name1">Loading</h3>
                             </div>
                         </a>
                     </div>
@@ -93,7 +127,7 @@
                             <img src="images/02-rome.jpg" alt="Image" class="img-fluid">
                             <div class="unit-1-text">
                                 <strong class="text-primary mb-2 d-block">7 STARS</strong>
-                                <h3 class="unit-1-heading">Rome, Italy</h3>
+                                <h3 class="unit-1-heading">Loading</h3>
                             </div>
                         </a>
                     </div>
@@ -102,7 +136,7 @@
                             <img src="images/03-japan.jpg" alt="Image" class="img-fluid">
                             <div class="unit-1-text">
                                 <strong class="text-primary mb-2 d-block">3 STARS</strong>
-                                <h3 class="unit-1-heading">Mount Fuji, Japan</h3>
+                                <h3 class="unit-1-heading">Loading</h3>
                             </div>
                         </a>
                     </div>

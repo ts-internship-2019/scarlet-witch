@@ -878,6 +878,29 @@ namespace iWasHere.Domain.Service
             return stream;
         }
 
+        public IQueryable<TopLandmark> GetTopLandmarks()
+        {
+           
+
+            IQueryable<TopLandmark> landmark = _dbContext.Landmark.Select(a => new TopLandmark()
+            {
+                LandmarkId = a.LandmarkId,
+                LandmarkDescription = a.LandmarkDescription,              
+                Path = _dbContext.Images.Where(d => d.LandmarkId == a.LandmarkId).Select(b => new Images() { Path = b.Path }).ToList(),
+                Reviews = _dbContext.Review.Where(d => d.LandmarkId == a.LandmarkId).Select(b => new Review()
+                {
+                    Review1 = b.Review1,
+                    Grade = b.Grade,
+                    UserName = b.UserName,
+                    Title = b.Title
+                }).ToList()
+
+            });
+
+            IQueryable<TopLandmark> topLandmarks = landmark.OrderByDescending(a => a.Reviews.Average(b => b.Grade)).Take(3);
+            return topLandmarks;
+        }
+
         public MemoryStream ExportFileAlice(int id)
         {
             bool noComments = true;

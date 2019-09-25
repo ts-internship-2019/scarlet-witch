@@ -264,6 +264,11 @@ namespace iWasHere.Web.Controllers
             }
             return sent;
         }
+        public IActionResult GetTopLandmarks()
+        {
+            IQueryable<TopLandmark> landmarks = _dictionaryService.GetTopLandmarks();
+            return Json(landmarks);
+        }
     }
 }
             
