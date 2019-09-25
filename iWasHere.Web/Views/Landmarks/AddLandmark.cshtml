@@ -247,10 +247,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
         </div>
 
-        @*<p style="padding-top: 1em; text-align: right">
-            <input type="submit" value="Send via Email" class="k-button k-primary" onclick="openEmail" />
-        </p>*@
-
     </div>
 </body>
 
@@ -267,20 +263,15 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             type: 'POST',
             data: $('#myForm').serialize(),
             success: function () {
-                alert("Imagine salvata!"); 
+                alert("Saved image!");
             },
             error: function (response) {
-                alert("Eroare!");
+                alert("ERROR!");
             }
         });
     }
     
     function add() {
-        if (document.getElementById('yesRB').checked) {
-            h = true;
-        } else {
-            h = false;
-        }
 
         var url_string = window.location.href;
         var url = new URL(url_string);
@@ -291,11 +282,21 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             !document.getElementById("StreetName").value ||
             !document.getElementById("StreetNumber").value ||
             !document.getElementById("comboType").value) {
-            alert("Campuri necompletate!");
+            alert("Empty fields!");
         } else if (!document.getElementById("Latitude").value ||
             !document.getElementById("Longitude").value) {
-            alert("Plasati un pin pe harta!");
+            alert("Place a pin on the map!");
+        } else if (document.getElementById('yesRB').checked == false && document.getElementById('noRB').checked == false) {
+            alert("Check if the landmark has ticket or not!");
         } else {
+            h = false;
+            if (document.getElementById('yesRB').checked) {
+                h = true;
+            } else if (document.getElementById('noRB').checked) {
+                h = false;
+            } else {
+                alert("Check if the landmark has ticket or not!");
+            }
             $.ajax({
                 type: 'GET',
                 url: '@Url.Action("VerifyLandmark", "Landmarks")',
@@ -327,11 +328,11 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                     landmarkId: document.getElementById("LandmarkId").value
                                 },
                                 success: function (response) {
-                                    alert("Atractie editata!");
+                                    alert("Landmark modified!");
                                     window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
                                 },
                                 error: function (response) {
-                                    alert("Eroare!");
+                                    alert("ERROR!");
                                 }
                             })
                         }
@@ -352,36 +353,32 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                     longitude: document.getElementById("Longitude").value
                                 },
                                 success: function (response) {
-                                    alert("Atractie salvata!");
-                                    //if (fromUpdate) {
-                                    //    document.getElementById("LandmarkName").value = "";
-                                    //    fromUpdate = false;
-                                    //}                                    
+                                    alert("Landmark saved!");
                                     $.ajax({
                                         url: '@Url.Action("SaveImagesDB", "Landmarks")',
                                         type: 'put',
                                         success: function () {
-                                            alert("Imagine salvata!");
+                                            alert("Saved image!");
                                         },
                                         error: function () {
-                                            alert("Eroare imagine!");
+                                            alert("ERROR!");
                                         }
                                     });
                                     window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
                                 },
                                 error: function (response) {
-                                    alert("Eroare!");
+                                    alert("ERROR!");
                                 }
                             })
                         }
                     } else {
-                        alert("Atractie deja existenta!");
+                        alert("This landmark already exists!");
                     }
                 },
                 error: function (response) {
-                    alert("Eroare!");
+                    alert("ERROR!");
                 }
-            })
+            });
         }
     }
 
