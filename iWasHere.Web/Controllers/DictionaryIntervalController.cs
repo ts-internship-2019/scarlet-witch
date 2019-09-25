@@ -101,11 +101,11 @@ namespace iWasHere.Web.Controllers
             }
 
         }
-        public ActionResult EditInterval(int visitIntervalId, string visitIntervalName)
+        public ActionResult EditInterval(int intervalId, string intervalName)
         {
             DictionaryInterval newInterval = new DictionaryInterval();
-            newInterval.VisitIntervalId = visitIntervalId;
-            newInterval.VisitIntervalName = visitIntervalName;
+            newInterval.VisitIntervalId = intervalId;
+            newInterval.VisitIntervalName = intervalName;
             ScarletWitchContext context = new ScarletWitchContext();
 
             context.DictionaryInterval.Update(newInterval);
