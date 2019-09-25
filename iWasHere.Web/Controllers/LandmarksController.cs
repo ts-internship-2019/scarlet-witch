@@ -66,9 +66,9 @@ namespace iWasHere.Web.Controllers
             return View(landmark);
         }
 
-        public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request)
+        public ActionResult GetLandmarksFiltered([DataSourceRequest]DataSourceRequest request, int countryId)
         {
-            IQueryable<LandmarkModel> landmarks = _dictionaryService.GetLandmarksFiltered();
+            IQueryable<LandmarkModel> landmarks = _dictionaryService.GetLandmarksFiltered(countryId);
             landmarks.ToDataSourceResult(request);
             landmarks = landmarks.OrderBy(o => o.LandmarkId);
             var total = landmarks.Count();
@@ -263,6 +263,12 @@ namespace iWasHere.Web.Controllers
                 }
             }
             return sent;
+        }
+
+        public ActionResult PopulateCountryCombo([DataSourceRequest] DataSourceRequest request)
+        {
+            var counties = _dictionaryService.PopulateCountryCombo();
+            return Json(counties);
         }
     }
 }

@@ -368,6 +368,7 @@ namespace iWasHere.Domain.Service
             return dictionaryCurrencyModels;
         }
 
+
         public DictionaryCityModel GetDataToEdit(int id)
         {
             DictionaryCityModel city = _dbContext.DictionaryCity.Select(c => new DictionaryCityModel()
@@ -544,14 +545,14 @@ namespace iWasHere.Domain.Service
 
         public List<DictionaryCountryModel> PopulateCountryCombo()
         {
-            List<DictionaryCountryModel> dictionaryCurrencyModels = _dbContext.DictionaryCountry.Select(b => new DictionaryCountryModel()
+            List<DictionaryCountryModel> dictionaryCountries = _dbContext.DictionaryCountry.Select(b => new DictionaryCountryModel()
             {
                 CountryId = b.CountryId,
                 CountryName = b.CountryName
 
             }).ToList();
 
-            return dictionaryCurrencyModels;
+            return dictionaryCountries;
         }
 
 
@@ -567,21 +568,43 @@ namespace iWasHere.Domain.Service
             return x;
         }
 
-        public IQueryable<LandmarkModel> GetLandmarksFiltered()
+        public IQueryable<LandmarkModel> GetLandmarksFiltered(int countryId)
         {
-            IQueryable<LandmarkModel> landmarks = _dbContext.Landmark.Select(a => new LandmarkModel()
+            if(countryId == 0)
             {
-                LandmarkId = a.LandmarkId,
-                LandmarkDescription = a.LandmarkDescription,
-                Latitude = a.Latitude,
-                Longitude = a.Longitude,
-                StreetName = a.StreetName,
-                StreetNumber = a.StreetNumber,
-                CityName = _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(x => x.CityName).FirstOrDefault().ToString(),
-                CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == a.City.County.Country.CountryId).Select(x => x.CountryName).FirstOrDefault().ToString(),
-                CountyName = _dbContext.DictionaryCounty.Where(d => d.CountyId == a.City.County.CountyId).Select(x => x.CountyName).FirstOrDefault().ToString()
-            });
-            return landmarks;
+                IQueryable<LandmarkModel> landmarks = _dbContext.Landmark.Select(a => new LandmarkModel()
+                {
+                    LandmarkId = a.LandmarkId,
+                    LandmarkDescription = a.LandmarkDescription,
+                    Latitude = a.Latitude,
+                    Longitude = a.Longitude,
+                    StreetName = a.StreetName,
+                    StreetNumber = a.StreetNumber,
+                    CityName = _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(x => x.CityName).FirstOrDefault().ToString(),
+                    CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == a.City.County.Country.CountryId).Select(x => x.CountryName).FirstOrDefault().ToString(),
+                    CountyName = _dbContext.DictionaryCounty.Where(d => d.CountyId == a.City.County.CountyId).Select(x => x.CountyName).FirstOrDefault().ToString()
+                });
+                return landmarks;
+            }
+            else
+            {
+                IQueryable<LandmarkModel> landmarks = _dbContext.Landmark.Select(a => new LandmarkModel()
+                {
+                    LandmarkId = a.LandmarkId,
+                    LandmarkDescription = a.LandmarkDescription,
+                    Latitude = a.Latitude,
+                    Longitude = a.Longitude,
+                    Country = a.City.County.Country.CountryId,
+                    StreetName = a.StreetName,
+                    StreetNumber = a.StreetNumber,
+                    CityName = _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(x => x.CityName).FirstOrDefault().ToString(),
+                    CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == a.City.County.Country.CountryId).Select(x => x.CountryName).FirstOrDefault().ToString(),
+                    CountyName = _dbContext.DictionaryCounty.Where(d => d.CountyId == a.City.County.CountyId).Select(x => x.CountyName).FirstOrDefault().ToString()
+                }).Where(a => a.Country == countryId);
+                return landmarks;
+            }
+        
+           
 
         }
 
@@ -611,7 +634,7 @@ namespace iWasHere.Domain.Service
                     CountyId = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
                     CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
-                    Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString(),
+                    Country = Convert.ToInt32(_dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString()),
                     Path = _dbContext.Images.Where(d => d.LandmarkId == landmarkId).Select(b => new Images() { Path = b.Path }).ToList(),
                     Reviews = _dbContext.Review.Where(d => d.LandmarkId == landmarkId).Select(b => new Review()
                     {
@@ -645,7 +668,7 @@ namespace iWasHere.Domain.Service
                     CountyId = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
                     CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
-                    Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString(),
+                    Country = Convert.ToInt32(_dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString()),
                     Reviews = _dbContext.Review.Where(d => d.LandmarkId == landmarkId).Select(b => new Review()
                     {
                         Review1 = b.Review1,
