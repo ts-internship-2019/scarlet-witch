@@ -1,25 +1,25 @@
 ﻿@{
-    ViewData["Title"] = "Interval";
+    ViewData["Title"] = "Ticket";
     Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
 }
 
-<h1>Interval</h1>
+<h1>Ticket</h1>
 
 <script type="text/javascript">
 
     function filter(e) {
-        var intervalName = document.getElementById("intervalTextBox").value;
+        var ticketName = document.getElementById("ticketTextBox").value;
         var filter = {};
-        filter["intervalName"] = intervalName;
+        filter["ticketName"] = ticketName;
         return filter;
     }
      function deleteRow(id) {
              $.ajax({
                     type: 'DELETE',
-                    url: '@Url.Action("DeleteInterval", "DictionaryInterval")',
+                    url: '@Url.Action("DeleteTicket", "DictionaryTicketType")',
                     data: { id: id },
                  success: function (response) {
-                        $("#intervalGrid").data("kendoGrid").dataSource.read();
+                        $("#ticketGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
                     }
@@ -27,18 +27,18 @@
     }
 
     function refreshGrid() {
-        $("#intervarlGrid").data("kendoGrid").dataSource.read();
-        $("#intervarlGrid").data("kendoGrid").dataSource.page(1);
+        $("#ticketGrid").data("kendoGrid").dataSource.read();
+        $("#ticketGrid").data("kendoGrid").dataSource.page(1);
     }
 
      function redirectToAddContext()
     {
-            window.location.href = 'DictionaryInterval/IntervalAdd/?id=' + 0;
+            window.location.href = 'DictionaryTicketType/TicketAdd/?id=' + 0;
     }
 
     function redirectToEditContext(id)
     {
-        window.location.href = 'DictionaryInterval/IntervalAdd/?id=' + id;
+        window.location.href = 'DictionaryTicketType/TicketAdd/?id=' + id;
 
     }
 
@@ -51,8 +51,8 @@
            .Events(ev => ev.Click("redirectToAddContext"))
 )
 @(Html.Kendo().TextBox()
-.Name("intervalTextBox")
-.HtmlAttributes(new { @id = "intervalTextBox" })
+.Name("ticketTextBox")
+.HtmlAttributes(new { @id = "ticketTextBox" })
 )
 
 @(Html.Kendo().Button()
@@ -61,7 +61,7 @@
 .Content("Filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
-@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryIntervalModel>()
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryTicketModel>()
         .Name("grid")
 
 
@@ -70,13 +70,13 @@
         .Sortable()
         .NoRecords(true)
         .Filterable()
-        .HtmlAttributes(new { @id = "intervalGrid" })
+        .HtmlAttributes(new { @id = "ticketGrid" })
         .Columns(columns =>
         {
-            columns.Bound(o => o.VisitIntervalId).Hidden();
-            columns.Bound(o => o.VisitIntervalName).Title("Tip Interval");
-            columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=VisitIntervalId#)\">Delete</button>");
-            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=VisitIntervalId#)\"> Edit </button>");
+            columns.Bound(o => o.TicketTypeId).Hidden();
+            columns.Bound(o => o.TicketTypeName).Title("Tip Bilet");
+            columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=TicketTypeId#)\">Delete</button>");
+            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=TicketTypeId#)\"> Edit </button>");
 
         })
         .Pageable(pageable => pageable
@@ -86,8 +86,8 @@
         .DataSource(dataSource => dataSource
             .Ajax()
             .PageSize(10)
-            .Read(read => read.Action("GetDictionaryIntervalFiltered", "DictionaryInterval").Data("filter"))
-            .Destroy(d => d.Action("DeleteInterval", "DictionaryInterval")))
+            .Read(read => read.Action("GetDictionaryTicketFiltered", "DictionaryTicketType").Data("filter"))
+            .Destroy(d => d.Action("DeleteTicket", "DictionaryTicketType")))
 )
 )
 

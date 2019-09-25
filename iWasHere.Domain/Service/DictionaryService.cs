@@ -307,6 +307,14 @@ namespace iWasHere.Domain.Service
             _dbContext.SaveChanges();
 
         }
+        public void DeleteTicket(int id)
+        {
+            DictionaryTicketType ticket = new DictionaryTicketType() { TicketTypeId = id };
+
+            _dbContext.DictionaryTicketType.Remove(ticket);
+            _dbContext.SaveChanges();
+
+        }
 
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
         {
@@ -469,6 +477,28 @@ namespace iWasHere.Domain.Service
                 return dictionaryInterval;
             }
         }
+        public IQueryable<DictionaryTicketModel> GetDictionaryTicketFiltered(String ticketName)
+        {
+            if (ticketName == null)
+            {
+                IQueryable<DictionaryTicketModel> dictionaryTicket = _dbContext.DictionaryTicketType.Select(c => new DictionaryTicketModel()
+                {
+                    TicketTypeId = c.TicketTypeId,
+                    TicketTypeName = c.TicketTypeName
+                });
+                return dictionaryTicket;
+            }
+            else
+            {
+                IQueryable<DictionaryTicketModel> dictionaryTicket = _dbContext.DictionaryTicketType.Select(c => new DictionaryTicketModel()
+                {
+                    TicketTypeId = c.TicketTypeId,
+                    TicketTypeName = c.TicketTypeName
+                }
+                ).Where(c => c.TicketTypeName.Contains(ticketName));
+                return dictionaryTicket;
+            }
+        }
 
         public bool VerifyLanguages(string languageName, string languageCode)
         {
@@ -541,6 +571,15 @@ namespace iWasHere.Domain.Service
                 VisitIntervalName = c.VisitIntervalName
             }).Where(a => a.VisitIntervalId == id).FirstOrDefault();
             return interval;
+        }
+        public DictionaryTicketModel GetTicketToEdit(int id)
+        {
+            DictionaryTicketModel ticket = _dbContext.DictionaryTicketType.Select(c => new DictionaryTicketModel()
+            {
+                TicketTypeName = c.TicketTypeName,
+                TicketTypeId = c.TicketTypeId
+            }).Where(a => a.TicketTypeId == id).FirstOrDefault();
+            return ticket;
         }
 
         public List<DictionaryCountryModel> PopulateCountryCombo()
