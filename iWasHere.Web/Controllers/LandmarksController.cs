@@ -19,6 +19,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Hosting.Server;
+using DocumentFormat.OpenXml.ExtendedProperties;
 
 namespace iWasHere.Web.Controllers
 {
@@ -193,7 +194,6 @@ namespace iWasHere.Web.Controllers
             return File(_dictionaryService.ExportFile(id), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Landmark.docx");
         }
 
-
         public string parseXMLBnr([DataSourceRequest] DataSourceRequest request)
         {
             XmlDocument doc = new XmlDocument();
@@ -229,14 +229,18 @@ namespace iWasHere.Web.Controllers
         {
             bool sent = false;
 
-            var fromAddress = new MailAddress("scarlterwitch@gmail.com", "From Scarlet");
+            var fromAddress = new MailAddress("scarlterwitch@gmail.com", "From ScarletWitch Team");
             var toAddress = new MailAddress(email, "To Name");
-            const string fromPassword = "ThisIsNotAPassword123";
+           const string fromPassword = "ThisIsNotAPassword123";
             const string body = "We've attached the landmark in the email!" +
                 "Thanks :)";
-            // MemoryStream ms = _dictionaryService.ExportFileAlice(id);
-            // Attachment data = new Attachment(ms, "Landmark.docx", System.Net.Mime.MediaTypeNames.Text.Plain);
-            Attachment data = new Attachment(_dictionaryService.ExportFileAlice(id), "Landmark.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            
+            Stream x = _dictionaryService.ExportFile(id);
+            x.Position = 0;
+            x.Flush();
+
+            Attachment data = new Attachment(x, "Landmark.docx", MediaTypeNames.Application.Octet);
+
             var smtp = new SmtpClient
             {
                 Host = "smtp.gmail.com",
@@ -250,7 +254,6 @@ namespace iWasHere.Web.Controllers
             message.Subject = "Landmark Attachment";
             message.Body = body;
             message.Attachments.Add(data);
-
             {
                 try
                 {
