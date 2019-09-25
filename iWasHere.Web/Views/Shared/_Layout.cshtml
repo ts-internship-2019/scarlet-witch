@@ -1,11 +1,37 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
+<head runat=server>
+   
+      
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,700,900|Display+Playfair:200,300,400,700">
+        <link rel="stylesheet" href="~/fonts/icomoon/style.css" runat=server>
+
+        <link rel="stylesheet" href="~/css/bootstrap.min.css" runat=server>
+        <link rel="stylesheet" href="~/css/magnific-popup.css" runat=server>
+        <link rel="stylesheet" href="~/css/jquery-ui.css" runat=server>
+        <link rel="stylesheet" href="~/css/owl.carousel.min.css" runat=server>
+        <link rel="stylesheet" href="~/css/owl.theme.default.min.css" runat=server>
+
+        <link rel="stylesheet" href="~/css/bootstrap-datepicker.css" runat=server>
+
+        <link rel="stylesheet" href="~/fonts/flaticon/font/flaticon.css" runat=server>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/mediaelementplayer.min.css">
+
+
+        <link rel="stylesheet" href="~/css/aos.css" runat=server>
+
+        <link rel="stylesheet" href="~/css/style.css" runat=server>
+
+   
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - iWasHere.Web</title>
 
     <environment include="Development">
+
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.common-nova.min.css" />
         <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.nova.min.css" />
@@ -57,72 +83,101 @@
         </script>
     </environment>
 </head>
-<body style="font-family:'Century Gothic'">
-    <header style="background-color:lightblue">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" style="color:#FF434D" asp-area="" asp-controller="Home" asp-action="Index">iWasHere.Web</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
+<body>
+    <header class="site-navbar py-1" role="banner">
 
-                        <li class="nav-item">
-                            <div id="dictionaries">
-                                @(Html.Kendo().Menu()
-                              .Name("Menu")
-                              .HtmlAttributes(new { style="background-color:lightblue" })
-                              .Items(items =>
-                              {
-                                  items.Add().Text("Home").Action("Index", "Home", new { area = "" });
-                                  items.Add().Text("Landmarks").Action("LandmarkList", "Landmarks", new { area = "" });
-                                  items.Add()
-                                          .Text("Dictionaries")
-                                          .Items(children =>
-                                          {
-                                              children.Add().Text("Cities").Action("Index", "DictionaryCity", new { area = "" });
+        <div class="container">
+            <div class="row align-items-center">
 
-                                              children.Add().Text("Counties").Action("Index", "DictionaryCounty", new { area = "" });
-
-                                              children.Add().Text("Countries").Action("Index", "DictionaryCountry", new { area = "" });
-
-                                              children.Add().Text("Landmark Types").Action("Index", "DictionaryLandmarkType", new { area = "" });
-
-                                              children.Add().Text("Languages").Action("Index", "DictionaryLanguage", new { area = "" });
-
-                                              children.Add().Text("Currencies").Action("Index", "DictionaryCurrency", new { area = "" });
-
-                                              children.Add().Text("Ticket Types").Action("Index", "DictionaryTicketType", new { area = "" });
-
-                                              children.Add().Text("Interval Types").Action("Index", "DictionaryInterval", new { area = "" });
-
-                                          });
-                              })
-                                )
-
-                            </div>
-                        </li>
-                    </ul>
+                <div class="col-6 col-xl-2">
+                    <h1 class="mb-0"><a href="index.html" class="text-black h2 mb-0">iWasHere.com</a></h1>
                 </div>
+                <div class="col-10 col-md-8 d-none d-xl-block">
+                    <nav class="site-navigation position-relative text-right text-lg-center" role="navigation">
+
+                        <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
+                            <li>
+                                <a href="@Url.Action("Index", "Home")">Home</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("LandmarkList", "Landmarks")">Landmarks</a>
+                            </li>
+                            <li class="has-children">
+                                <a>Dictionaries</a>
+                                <ul class="dropdown">
+                                    <li><a href="@Url.Action("Index", "DictionaryCity")">Cities</a></li>
+                                    <li><a href="@Url.Action("Index", "DictionaryCounty")">Counties</a></li>
+                                    <li><a href="@Url.Action("Index", "DictionaryCountry")">Countries</a></li>
+                                    <li><a href="@Url.Action("Index", "DictionaryLandmarkType")">Landmark Types</a></li>
+                                    <li><a href="@Url.Action("Index", "Index", "DictionaryLanguage")">Languages</a></li>
+                                    <li><a href="@Url.Action("Index", "DictionaryCurrency")">Currencies</a></li>
+                                    <li><a href="@Url.Action("Index", "DictionaryTicketType")">Ticket types</a></li>
+                                    <li><a href="@Url.Action("Index", "DictionaryInterval")">Interval types</a></li>
+                                </ul>
+                            </li>
+
+
+
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="col-6 col-xl-2 text-right">
+                    <div class="d-none d-xl-inline-block">
+                        <ul class="site-menu js-clone-nav ml-auto list-unstyled d-flex text-right mb-0" data-class="social">
+                            <li>
+                                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                                    <partial name="_LoginPartial" />
+                                    <ul class="navbar-nav flex-grow-1">
+                                    </ul>
+                                </div>
+                            </li>
+
+
+                        </ul>
+                    </div>
+
+                    <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a href="#" class="site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a></div>
+
+                </div>
+
             </div>
-        </nav>
+        </div>
+
     </header>
+
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
+
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted" style="background-color:lightgray">
-        <div class="container">
-            &copy; 2019 - iWasHere.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    <footer class="site-footer">
+        
+            
+            <div class="row pt-1 mt-1 text-center">
+                <div class="col-md-12">
+                    <div class="mb-1">
+                        <a href="https://ro-ro.facebook.com/totalsoft.romania" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
+                        <a href="https://twitter.com/hashtag/totalsoft?src=hash" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
+                        <a href="https://www.instagram.com/?hl=ro" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
+                        <a href="https://ro.linkedin.com/company/totalsoft" class="pl-3 pr-3"><span class="icon-linkedin"></span></a>
+                    </div>
 
+                    <p>
+                   
+                        Copyright &copy;
+                        <script>document.write(new Date().getFullYear());</script> All rights reserved to Sece | This website could not be made without Team Scarlet<i class="icon-heart-o" aria-hidden="true"></i>
+                     
+                    </p>
+                </div>
+
+            </div>
+       
+    </footer>
+ 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
