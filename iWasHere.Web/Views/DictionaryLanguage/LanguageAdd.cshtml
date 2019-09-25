@@ -276,11 +276,11 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         </li>
         <li>
             @(Html.Kendo().TextBoxFor(model => model.LanguageCode)
-                                .HtmlAttributes(new { @id = "languageCode", style = "margin:10px" })
+                                .HtmlAttributes(new { @id = "languageCode", style = "margin:10px", @maxlength = "10" })
 
             )
             @(Html.Kendo().TextBoxFor(model => model.LanguageId)
-                .HtmlAttributes(new { @id = "languageId", style = "margin:10px" })
+                .HtmlAttributes(new { @id = "languageId", style = "margin:10px"})
             )
         </li>
         <li>
@@ -291,7 +291,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         </li>
         <li>
             @(Html.Kendo().TextBoxFor(model => model.LanguageName)
-                .HtmlAttributes(new { @id = "languageName", style = "margin:10px" })
+                .HtmlAttributes(new { @id = "languageName", style = "margin:10px", @maxlength = "40" })
             )
         </li>
     </ul>
