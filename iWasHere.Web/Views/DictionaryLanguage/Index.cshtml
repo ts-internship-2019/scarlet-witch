@@ -2,7 +2,7 @@
     ViewData["Title"] = "Language";
     Layout = "~/Views/Shared/_Layout.cshtml";}
 
-<h1>Languages</h1>
+    <h1 class="text-center" style="margin:50px">Languages</h1>
 
 
 <script type="text/javascript">
@@ -51,6 +51,13 @@
         refreshGrid();
     }
 </script>
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("redirectToAddContext"))
+)
+
 @(Html.Kendo().TextBox()
 .Name("languageTextBox")
 .HtmlAttributes(new { @id = "languageTextBox" })
@@ -60,6 +67,7 @@
 .Name("textButton")
 .HtmlAttributes(new { type = "button" })
 .Content("Filter")
+.Icon("filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
 
@@ -67,15 +75,10 @@
 .Name("deleteFiltersButton")
 .HtmlAttributes(new { type = "button" })
 .Content("Delete filters")
+.Icon("filter-clear")
 .Events(ev => ev.Click("deleteFilters"))
 )
 
-@(Html.Kendo().Button()
-           .Name("primaryTextButton")
-           .HtmlAttributes(new { type = "button", @class = "k-primary" })
-           .Content("Add")
-           .Events(ev => ev.Click("redirectToAddContext"))
-)
 
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLanguageModel>()
         .Name("grid")

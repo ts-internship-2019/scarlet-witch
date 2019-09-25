@@ -1,10 +1,10 @@
-﻿
+﻿    
 @{
     ViewData["Title"] = "AddCity";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>AddCity</h1>
+@model  iWasHere.Domain.DTOs.DictionaryCityModel;
+    <h1 class="text-center" style="margin:50px">Add city</h1>
 <script>
     let fromUpdate = false;
     let nameChanged = false;
@@ -26,7 +26,9 @@
                 cityNameValidation = response;
                 //alert(cityNameValidation);
                 if (id != 0) {
-                       $.ajax({
+                      document.getElementById("cityName").value = document.getElementById("cityName").value.trim();
+                    if (document.getElementById("cityName").value != "" || document.getElementById("cityName").value.length != 0) {
+                        $.ajax({
                             type: 'POST',
                             url: '@Url.Action("EditCity", "DictionaryCity")',
                             data: {
@@ -39,36 +41,46 @@
                                 window.location.href = '@Url.Action("Index", "DictionaryCity")';
                             },
                             error: function (response) {
-                                 alert("This city name already exists");
+                                alert("This city name already exists");
                             }
                         })
+                    }
+                    else {
+                            alert("You must set a city name and pick a county!");
+                    }
          
                 }
                 else {
                     if (cityNameValidation) {
-                        $.ajax({
-                            type: 'PUT',
-                            url: '@Url.Action("SaveCity", "DictionaryCity")',
-                            data: {
-                                cityName: document.getElementById("cityName").value,
-                                countyId: document.getElementById("combo").value,
+                        document.getElementById("cityName").value = document.getElementById("cityName").value.trim();
+                        if (document.getElementById("cityName").value != "" || document.getElementById("cityName").value.length != 0 ) {
+                            $.ajax({
+                                type: 'PUT',
+                                url: '@Url.Action("SaveCity", "DictionaryCity")',
+                                data: {
+                                    cityName: document.getElementById("cityName").value,
+                                    countyId: document.getElementById("combo").value,
 
-                            },
-                            success: function (response) {
-                                if (fromUpdate) {
-                                    document.getElementById("cityName").value = "";
-                                    $("#combo").val("").data("kendoDropDownList").text("");
-                                    fromUpdate = false;
-                                }
-                                else {
-                                    window.location.href = '@Url.Action("Index", "DictionaryCity")';
-                                }
+                                },
+                                success: function (response) {
+                                    if (fromUpdate) {
+                                        document.getElementById("cityName").value = "";
+                                        $("#combo").val("").data("kendoDropDownList").text("");
+                                        fromUpdate = false;
+                                    }
+                                    else {
+                                        window.location.href = '@Url.Action("Index", "DictionaryCity")';
+                                    }
 
-                            },
-                            error: function (response) {
-                                //alert("hai ca nu merge");
-                            }
-                        })
+                                },
+                                error: function (response) {
+                                    //alert("hai ca nu merge");
+                                }
+                            })
+                        }
+                        else {
+                            alert("You must set a city name and pick a county!");
+                        }
                     }
                     else {
                         alert("This city name already exists");
@@ -90,9 +102,9 @@
   
         var id = url.searchParams.get("id");
         if (id != 0) {
-            //alert("din edit");
             document.getElementById("buttonId").innerText = "Update";
-            document.getElementById("addNewButton").style.visibility = "hidden"; 
+            document.getElementById("addNewButton").style.visibility = "hidden";
+            $("#combo").data('kendoDropDownList').value((model) => model.countyId);
         }
         else {
             //alert("din add");
@@ -110,9 +122,9 @@
     }
 
 </script>
-@model  iWasHere.Domain.DTOs.DictionaryCityModel;
 
-<body onload="onLoadEdit()">
+
+<body class="text-center" onload="onLoadEdit()">
 
         <ul style="list-style-type:none">
             <li>
@@ -120,50 +132,57 @@
             </li>
             <li>
                 @(Html.Kendo().TextBoxFor(model => model.Name)
-                                    .HtmlAttributes(new { @id = "cityName", style = "margin:10px" })
+                                    .HtmlAttributes(new { @id = "cityName", style = "margin:10px", @maxlength = "30"})
 
                 )
+            <li>
                 @(Html.Kendo().TextBoxFor(model => model.Id)
-                    .HtmlAttributes(new { @id = "cityId", style = "margin:10px" })
+               .HtmlAttributes(new { @id = "cityId", style = "margin:10px" })
                 )
             </li>
+                    </li>
+               
             <li>
                     <label>County</label>
             </li>
             <li>
-                @(Html.Kendo().DropDownListFor(model => model.County)
-                      .DataTextField("CountyName")
-                      .DataValueField("CountyId")
-                      .DataSource(source =>
-                              {
-                          source.Read(read =>
-                          {
-                              read.Action("PopulateCountyCombo", "DictionaryCity");
-                          });
-                      })
+                @(Html.Kendo().DropDownListFor(model => model.CountyId)
+              .DataTextField("CountyName")
+              .DataValueField("CountyId")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("PopulateCountyCombo", "DictionaryCity");
+                  });
+              })
+                .OptionLabel("select county")
                       .HtmlAttributes(new { @id = "combo", style = "margin:10px" })
                 )
             </li>
     </ul>
 
 
-        <div>
+        <div style="margin-left:10px">
             @(Html.Kendo().Button()
                       .Name("primaryTextButton")
-                      .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId", style = "margin:10px" })
+                      .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
                       .Content("Add")
+                      .Icon("k-icon k-i-plus-circle")
                       .Events(ev => ev.Click("AddCity"))
             )
             @(Html.Kendo().Button()
               .Name("addNewButton")
               .HtmlAttributes(new { type = "button", @class = "k-primary" , @id="addNewButton"})
               .Content("Add New")
+              .Icon("k-icon k-i-plus")
               .Events(ev => ev.Click("AddNew"))
             )
             @(Html.Kendo().Button()
                   .Name("cancelButton")
                   .HtmlAttributes(new { type = "button", @class = "k-primary" })
                   .Content("Cancel")
+                  .Icon("cancel")
                   .Events(ev => ev.Click("cancelAdd"))
             )
         </div>

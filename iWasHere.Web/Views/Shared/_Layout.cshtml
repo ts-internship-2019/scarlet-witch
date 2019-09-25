@@ -55,6 +55,19 @@
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
     <environment include="Development">
+        <script src="~/js/jquery-3.3.1.min.js"></script>
+        <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
+        <script src="~/js/jquery-ui.js"></script>
+        <script src="~/js/popper.min.js"></script>
+        <script src="~/js/bootstrap.min.js"></script>
+        <script src="~/js/owl.carousel.min.js"></script>
+        <script src="~/js/jquery.stellar.min.js"></script>
+        <script src="~/js/jquery.countdown.min.js"></script>
+        <script src="~/js/jquery.magnific-popup.min.js"></script>
+        <script src="~/js/bootstrap-datepicker.min.js"></script>
+        <script src="~/js/aos.js"></script>
+
+        <script src="~/js/main.js"></script>
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <script src="~/lib/kendo-ui/js/kendo.all.min.js"></script>
@@ -90,7 +103,7 @@
             <div class="row align-items-center">
 
                 <div class="col-6 col-xl-2">
-                    <h1 class="mb-0"><a class="text-black h2 mb-0">iWasHere.com</a></h1>
+                    <h1 class="mb-0"><a href="@Url.Action("Index", "Home")" class="text-black h2 mb-0">iWasHere.com</a></h1>
                 </div>
                 <div class="col-10 col-md-8 d-none d-xl-block">
                     <nav class="site-navigation position-relative text-right text-lg-center" role="navigation">
@@ -109,7 +122,7 @@
                                     <li><a href="@Url.Action("Index", "DictionaryCounty")">Counties</a></li>
                                     <li><a href="@Url.Action("Index", "DictionaryCountry")">Countries</a></li>
                                     <li><a href="@Url.Action("Index", "DictionaryLandmarkType")">Landmark Types</a></li>
-                                    <li><a href="@Url.Action("Index", "Index", "DictionaryLanguage")">Languages</a></li>
+                                    <li><a href="@Url.Action("Index", "DictionaryLanguage")">Languages</a></li>
                                     <li><a href="@Url.Action("Index", "DictionaryCurrency")">Currencies</a></li>
                                     <li><a href="@Url.Action("Index", "DictionaryTicketType")">Ticket types</a></li>
                                     <li><a href="@Url.Action("Index", "DictionaryInterval")">Interval types</a></li>
@@ -155,30 +168,44 @@
     </div>
 
     <footer class="site-footer">
-        
-            
-            <div class="row pt-1 mt-1 text-center">
-                <div class="col-md-12">
-                    <div class="mb-1">
-                        <a href="https://ro-ro.facebook.com/totalsoft.romania" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
-                        <a href="https://twitter.com/hashtag/totalsoft?src=hash" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
-                        <a href="https://www.instagram.com/?hl=ro" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
-                        <a href="https://ro.linkedin.com/company/totalsoft" class="pl-3 pr-3"><span class="icon-linkedin"></span></a>
-                    </div>
 
-                    <p>
-                   
-                        Copyright &copy;
-                        <script>document.write(new Date().getFullYear());</script> All rights reserved to Sece | This website could not be made without Team Scarlet<i class="icon-heart-o" aria-hidden="true"></i>
-                     
-                    </p>
+
+        <div class="row pt-1 mt-1 text-center">
+            <div class="col-md-12">
+                <div class="mb-1">
+                    <a href="https://ro-ro.facebook.com/totalsoft.romania" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
+                    <a href="https://twitter.com/hashtag/totalsoft?src=hash" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
+                    <a href="https://www.instagram.com/?hl=ro" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
+                    <a href="https://ro.linkedin.com/company/totalsoft" class="pl-3 pr-3"><span class="icon-linkedin"></span></a>
                 </div>
 
+                <p>
+
+                    Copyright &copy;
+                    <script>document.write(new Date().getFullYear());</script> All rights reserved to Sece | This website could not be made without Team Scarlet<i class="icon-heart-o" aria-hidden="true"></i>
+
+                </p>
             </div>
-       
+
+        </div>
+
     </footer>
- 
+
     <environment include="Development">
+        <script src="~/js/jquery-3.3.1.min.js"></script>
+        <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
+        <script src="~/js/jquery-ui.js"></script>
+        <script src="~/js/popper.min.js"></script>
+        <script src="~/js/bootstrap.min.js"></script>
+        <script src="~/js/owl.carousel.min.js"></script>
+        <script src="~/js/jquery.stellar.min.js"></script>
+        <script src="~/js/jquery.countdown.min.js"></script>
+        <script src="~/js/jquery.magnific-popup.min.js"></script>
+        <script src="~/js/bootstrap-datepicker.min.js"></script>
+        <script src="~/js/aos.js"></script>
+
+        <script src="~/js/main.js"></script>
+
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <script src="~/lib/kendo-ui/js/kendo.all.min.js"></script>
@@ -207,6 +234,7 @@
         </script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
+   
 
     @RenderSection("Scripts", required: false)
 </body>
