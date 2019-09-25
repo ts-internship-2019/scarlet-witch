@@ -240,36 +240,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
               .Events(ev => ev.Click("addNew"))
             )
 
-            <p></p>
-
-            @(Html.Kendo().Button()
-        .Name("showDialogBtn")
-       //.HtmlAttributes(new { style = "display:none;", @class = "hide-on-narrow" })
-       .Content("Send Landmark via Email")
-       .Events(ev => ev.Click("showDialog"))
-            )
         </div>
 
         @*<p style="padding-top: 1em; text-align: right">
             <input type="submit" value="Send via Email" class="k-button k-primary" onclick="openEmail" />
         </p>*@
 
-        <div id="example">
-            @(Html.Kendo().Dialog()
-                .Name("dialog")
-                .Title("Info Dialog")
-                .Content("Introduceti emailul!"+ "<br>  <input id='emailTB' type='text' name='email'><br>" )
-                .Width(400)
-                .Modal(false)
-                .HtmlAttributes(new { @id = "dialog" })
-                .Visible(false)
-                .Actions(actions =>
-                {
-                    actions.Add().Text("Send").Action("sendEmail");
-                })
-                .Events(ev => ev.Close("onClose").Open("onOpen"))
-            )
-        </div>
     </div>
 </body>
 
@@ -280,18 +256,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
 <script type="text/javascript">
     
-    function onClose() {
-        $("#showDialogBtn").fadeIn();
-    }
-
-    function onOpen() {
-        $("#showDialogBtn").fadeOut();
-    }
-
-    function showDialog() {
-        $('#dialog').data("kendoDialog").open();
-    }
-
     function addImage() {
         $.ajax({
             url: '@Url.Action("SaveImage", "Landmarks")',
@@ -305,32 +269,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             }
         });
     }
-
-    function sendEmail() {
-        var sent = false;
-        email= document.getElementById("emailTB").value;
-        alert(email);
-        @*$.ajax({
-            type: 'GET',
-            url: '@Url.Action("SendEmail", "Landmarks")',
-            data: {
-                email: document.getElementById("email").value
-            },
-            success: function (response) {
-                sent = response;
-
-                if (sent == false) {
-                    alert("Email netrimis!");
-                } else {
-                    alert("Email trimis!");
-                }
-            },
-            error: function (response) {
-                alert("Eroare!");
-            }
-        })*@
-    }
-
+    
     function add() {
         if (document.getElementById('yesRB').checked) {
             h = true;
@@ -342,7 +281,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         var url = new URL(url_string);
         var id = url.searchParams.get("id");
         var landmarkValidation = false;
-        alert(id);
+
         if (!document.getElementById("LandmarkName").value ||
             !document.getElementById("StreetName").value ||
             !document.getElementById("StreetNumber").value ||
