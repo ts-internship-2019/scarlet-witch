@@ -28,6 +28,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         </li>
         <li>
             @(Html.Kendo().DropDownList()
+        .Value("Selectati o tara!")
                              .Name("DictionaryCountry")
                              .DataTextField("CountryName")
                              .DataValueField("CountryId")

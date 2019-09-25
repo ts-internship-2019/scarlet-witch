@@ -4,13 +4,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-
 @model iWasHere.Domain.DTOs.LandmarkModel;
 
 
 <h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
 <div id="googleMap" style="width:100%;height:400px;" class="map-container"></div>
+
 <script>
     var map;
     var markers = [];
@@ -25,8 +24,6 @@
         addMarker(startLatLng);
     }
 
-
-
     function addMarker(location) {
         var marker = new google.maps.Marker({
             position: location,
@@ -35,23 +32,19 @@
         markers.push(marker);
     }
 
-
     function setMapOnAll(map) {
         for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(map);
         }
     }
 
-
     function clearMarkers() {
         setMapOnAll(null);
     }
 
-
     function showMarkers() {
         setMapOnAll(map);
     }
-
 
     function deleteMarkers() {
         clearMarkers();
@@ -182,28 +175,55 @@
     </div>
 
     <div>
+        @(Html.Kendo().Button()
+       .Name("showDialogBtn")
+      //.HtmlAttributes(new { style = "display:none;", @class = "hide-on-narrow" })
+      .Content("Send Landmark via Email")
+      .Events(ev => ev.Click("showDialog"))
+        )
+    </div>
+
+    <div>
         <h2>Reviews</h2>
         <input type="button" class="k-primary"
                value="Add Review"
                onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />
-        @if (Model.Reviews != null) {
-        @foreach (var item in Model.Reviews)
+        @if (Model.Reviews != null)
         {
-            <div>
-                <hr />
-                <ul style="list-style-type:none;">
-                    <li><h4>@item.Title</h4></li>
-                    <li>@item.UserName</li>
-                    <li>
-                        @for (var i = 0; i < item.Grade; i++)
-                        {<span style="color:darkgoldenrod">&#9733;</span>}
-                        @for (var i = 0; i < 10-item.Grade; i++)
-                        {<span style="color:darkgoldenrod; opacity: 0.5">&#9733;</span>}
-                    </li>
-                <li>@item.Review1</li>
-            </ul>
-        </div>}
-    }
+            @foreach (var item in Model.Reviews)
+            {
+                <div>
+                    <hr />
+                    <ul style="list-style-type:none;">
+                        <li><h4>@item.Title</h4></li>
+                        <li>@item.UserName</li>
+                        <li>
+                            @for (var i = 0; i < item.Grade; i++)
+                            {<span style="color:darkgoldenrod">&#9733;</span>}
+                            @for (var i = 0; i < 10 - item.Grade; i++)
+                            {<span style="color:darkgoldenrod; opacity: 0.5">&#9733;</span>}
+                        </li>
+                        <li>@item.Review1</li>
+                    </ul>
+                </div>}
+        }
+    </div>
+
+    <div id="example">
+        @(Html.Kendo().Dialog()
+            .Name("dialog")
+            .Title("Info Dialog")
+            .Content("Introduceti emailul!" + "<br>  <input id='emailTB' type='text' name='email'><br>")
+            .Width(400)
+            .Modal(false)
+            .HtmlAttributes(new { @id = "dialog" })
+            .Visible(false)
+            .Actions(actions =>
+            {
+                actions.Add().Text("Send").Action("sendEmail");
+            })
+            .Events(ev => ev.Close("onClose").Open("onOpen"))
+        )
     </div>
 </body>
 
@@ -212,10 +232,8 @@
     onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId "/>*@
 
 
-
 <style>
-
-
+    
     fieldset, label {
         margin: 0;
         padding: 0;
@@ -259,3 +277,42 @@
             float: right;
         }
 </style>
+
+<script type="text/javascript">
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+    }
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+    }
+
+    function showDialog() {
+        $('#dialog').data("kendoDialog").open();
+    }
+
+    function sendEmail() {
+        var sent = false;
+        email= document.getElementById("emailTB").value;
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("SendEmail", "Landmarks")',
+            data: {
+                email: document.getElementById("emailTB").value
+            },
+            success: function (response) {
+                sent = response;
+                alert(sent);
+                alert(response);
+                if (response == false) {
+                    alert("Email netrimis!");
+                } else {
+                    alert("Email trimis!");
+                }
+            },
+            error: function (response) {
+                alert("Eroare!");
+            }
+        });
+    }
+</script>
