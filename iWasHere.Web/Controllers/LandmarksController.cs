@@ -15,14 +15,17 @@ using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Net.Mail;
+using System.Net;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Hosting.Server;
 
 namespace iWasHere.Web.Controllers
 {
     public class LandmarksController : Controller
     {
         private readonly DictionaryService _dictionaryService;
-   
+
         private readonly IHostingEnvironment _he;
         public static List<String> imagesPaths;
 
@@ -36,7 +39,7 @@ namespace iWasHere.Web.Controllers
         {
             return View();
         }
-  
+
         public IActionResult AddLandmark(int id)
         {
             if (id != 0)
@@ -127,7 +130,7 @@ namespace iWasHere.Web.Controllers
             foreach (string path in imagesPaths)
             {
                 _dictionaryService.SaveImagesDB(path);
-            }         
+            }
 
         }
 
@@ -219,11 +222,51 @@ namespace iWasHere.Web.Controllers
             return sters;
         }
 
-        public bool VerifyLandmark([DataSourceRequest] DataSourceRequest request, String name, String street, int number, double lat, double longitud)
+        public bool VerifyLandmark([DataSourceRequest] DataSourceRequest request, String name, double lat, double longitud)
         {
-            bool status = _dictionaryService.VerifyLandmark(name, street, number, lat, longitud);
+            bool status = _dictionaryService.VerifyLandmark(name, lat, longitud);
             return status;
+        }
+
+        public bool SendEmail([DataSourceRequest] DataSourceRequest request, String email)
+        {
+            bool sent = false;
+
+            var fromAddress = new MailAddress("scarlterwitch@gmail.com", "From Scarlet");
+            var toAddress = new MailAddress(email, "To Name");
+            const string fromPassword = "ThisIsNotAPassword123";
+            const string body = "We've attached the landmark in the email!" +
+                "Thanks :)";
+            Attachment data = new Attachment(
+                         "C:\\Users\\adraghici\\Desktop\\TEME\\TEST.docx",
+                         MediaTypeNames.Application.Octet);
+            
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            };
+            MailMessage message = new MailMessage(fromAddress, toAddress);
+            message.Subject = "Landmark Attachment";
+            message.Body = body;
+            message.Attachments.Add(data);
+            {
+                try
+                {
+                    smtp.Send(message);
+                    sent = true;
+                }catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    sent = false;
+                }
+            }
+            return sent;
         }
     }
 }
-
+            

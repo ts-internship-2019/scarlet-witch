@@ -2,8 +2,7 @@
 
 @{
     ViewData["Title"] = "AddCounty";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+Layout = "~/Views/Shared/_Layout.cshtml";}
 
 
 <h4>Add County</h4>
@@ -29,6 +28,7 @@
         </li>
         <li>
             @(Html.Kendo().DropDownList()
+        .Value("Selectati o tara!")
                              .Name("DictionaryCountry")
                              .DataTextField("CountryName")
                              .DataValueField("CountryId")

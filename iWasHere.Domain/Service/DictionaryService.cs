@@ -173,6 +173,18 @@ namespace iWasHere.Domain.Service
             return dictionaryCurrencyModels;
 
         }
+        public List<DictionaryIntervalModel> GetDictionaryIntervalModels()
+        {
+
+            List<DictionaryIntervalModel> dictionaryIntervalModels = _dbContext.DictionaryInterval.Select(b => new DictionaryIntervalModel()
+            {
+                VisitIntervalId = b.VisitIntervalId,
+                VisitIntervalName = b.VisitIntervalName,
+            }).ToList();
+
+            return dictionaryIntervalModels;
+
+        }
 
         public IQueryable<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypesFiltered(String landmarkTypeName)
         {
@@ -283,6 +295,15 @@ namespace iWasHere.Domain.Service
             DictionaryCurrency currency = new DictionaryCurrency() { CurrencyId = id };
 
             _dbContext.DictionaryCurrency.Remove(currency);
+            _dbContext.SaveChanges();
+
+        }
+
+        public void DeleteInterval(int id)
+        {
+            DictionaryInterval interval = new DictionaryInterval() { VisitIntervalId = id };
+
+            _dbContext.DictionaryInterval.Remove(interval);
             _dbContext.SaveChanges();
 
         }
@@ -424,6 +445,28 @@ namespace iWasHere.Domain.Service
                 return dictionaryCurrency;
             }
         }
+        public IQueryable<DictionaryIntervalModel> GetDictionaryIntervalFiltered(String intervalName)
+        {
+            if (intervalName == null)
+            {
+                IQueryable<DictionaryIntervalModel> dictionaryInterval = _dbContext.DictionaryInterval.Select(c => new DictionaryIntervalModel()
+                {
+                    VisitIntervalId = c.VisitIntervalId,
+                    VisitIntervalName = c.VisitIntervalName
+                });
+                return dictionaryInterval;
+            }
+            else
+            {
+                IQueryable<DictionaryIntervalModel> dictionaryInterval = _dbContext.DictionaryInterval.Select(c => new DictionaryIntervalModel()
+                {
+                    VisitIntervalId = c.VisitIntervalId,
+                    VisitIntervalName = c.VisitIntervalName
+                }
+                ).Where(c => c.VisitIntervalName.Contains(intervalName));
+                return dictionaryInterval;
+            }
+        }
 
         public bool VerifyLanguages(string languageName, string languageCode)
         {
@@ -461,13 +504,12 @@ namespace iWasHere.Domain.Service
             else
                 return true;
         }
-        public bool VerifyLandmark(String name, String street, int number, double lat, double longitud)
+        public bool VerifyLandmark(String name, double lat, double longitud)
         {
-            if (_dbContext.Landmark.Any(c => c.LandmarkDescription == name && c.StreetName == street && c.StreetNumber == number
-            && c.Latitude == lat && c.Longitude == longitud))
-                return false;
-            else
+            if (_dbContext.Landmark.Any(c => c.LandmarkDescription == name && c.Latitude == lat && c.Longitude == longitud))
                 return true;
+            else
+                return false;
         }
 
 
@@ -488,6 +530,15 @@ namespace iWasHere.Domain.Service
                 CurrencyExchange = Convert.ToDecimal(c.CurrencyExchange),
             }).Where(a => a.CurrencyId == id).FirstOrDefault();
             return currency;
+        }
+        public DictionaryIntervalModel GetIntervalToEdit(int id)
+        {
+            DictionaryIntervalModel interval = _dbContext.DictionaryInterval.Select(c => new DictionaryIntervalModel()
+            {
+                VisitIntervalId = c.VisitIntervalId,
+                VisitIntervalName = c.VisitIntervalName
+            }).Where(a => a.VisitIntervalId == id).FirstOrDefault();
+            return interval;
         }
 
         public List<DictionaryCountryModel> PopulateCountryCombo()
@@ -558,8 +609,9 @@ namespace iWasHere.Domain.Service
                     Longitude = c.Longitude,
                     CountyId = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
-                    Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
-                    Path = _dbContext.Images.Where(d => d.LandmarkId == landmarkId).Select(b => new Images() { Path = b.Path }).ToList(),
+                    CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
+                    Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString(),
+                    Path = _dbContext.Images.Where(d => d.LandmarkId == landmarkId).Select(b => new Images() {Path=b.Path }).ToList(),
                     Reviews = _dbContext.Review.Where(d => d.LandmarkId == landmarkId).Select(b => new Review()
                     {
                         Review1 = b.Review1,
@@ -591,18 +643,33 @@ namespace iWasHere.Domain.Service
                     Longitude = c.Longitude,
                     CountyId = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
-                    Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
-                    Reviews = _dbContext.Review.Where(d => d.LandmarkId == landmarkId).Select(b => new Review()
+                    CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
+                    Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString(),
+                    Reviews =_dbContext.Review.Where(d=>d.LandmarkId==landmarkId).Select(b => new Review()
                     {
                         Review1 = b.Review1,
                         Grade = b.Grade,
                         UserName = b.UserName,
-                        Title = b.Title
-                    }).ToList()
+                        Title = b.Title }).ToList()
                 }).Where(a => a.LandmarkId == landmarkId).FirstOrDefault();
                 return city;
             }
         }
+
+        public List<Review> GetReviews(int landmarkId)
+        {
+            List<Review> reviews = _dbContext.Review.Select(b => new Review()
+            {
+                Review1 = b.Review1,
+                Grade=b.Grade,
+                UserName=b.UserName,
+                Title=b.Title
+
+            }).Where(a=>a.LandmarkId==landmarkId).ToList();
+
+            return reviews;
+        }
+
 
         public void SaveImagesDB(string path)
         {

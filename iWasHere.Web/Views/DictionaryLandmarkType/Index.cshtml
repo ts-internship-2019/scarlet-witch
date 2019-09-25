@@ -1,9 +1,10 @@
 ﻿
 @{
     ViewData["Title"] = "Landmark Type";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Landmark types</h1>
+<h1 class="text-center" style="margin:50px">Landmark types</h1>
 
 
 <script>
@@ -62,6 +63,7 @@
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
+           .Icon("k-icon k-i-plus")
            .Events(ev => ev.Click("redirectToAddContext"))
 )
 
@@ -74,12 +76,14 @@
 .Name("textButton")
 .HtmlAttributes(new { type = "button" })
 .Content("Filter")
+.Icon("filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
 @(Html.Kendo().Button()
 .Name("filterButton")
 .HtmlAttributes(new { type = "button" })
 .Content("Clear Filters")
+.Icon("filter-clear")
 .Events(ev => ev.Click("deleteFilter"))
 )
 
