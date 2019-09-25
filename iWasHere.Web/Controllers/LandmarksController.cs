@@ -35,8 +35,9 @@ namespace iWasHere.Web.Controllers
             _he = he;
         }
 
-        public IActionResult LandmarkList()
+        public IActionResult LandmarkList(int countryId)
         {
+            int test = countryId;
             return View();
         }
 
