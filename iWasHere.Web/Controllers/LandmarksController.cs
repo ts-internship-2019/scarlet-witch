@@ -271,10 +271,14 @@ namespace iWasHere.Web.Controllers
             const string fromPassword = "ThisIsNotAPassword123";
             const string body = "We've attached the landmark in the email!" +
                 "Thanks :)";
-            Attachment data = new Attachment(
-                         "C:\\Users\\adraghici\\Desktop\\TEME\\TEST.docx",
-                         MediaTypeNames.Application.Octet);
-            
+
+           
+//MemoryStream ms = new MemoryStream(da zta);
+
+
+         //   Attachment data = new Attachment(ms, "example.txt", "text/plain");
+                //("C:\\Users\\adraghici\\Desktop\\TEME\\TEST.docx",                     MediaTypeNames.Application.Octet);
+
             var smtp = new SmtpClient
             {
                 Host = "smtp.gmail.com",
