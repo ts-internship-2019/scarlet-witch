@@ -124,7 +124,7 @@
                         </li>
                         <li>
                             <label>Country:</label>
-                            @Html.DisplayFor(model => model.Country)
+                            @Html.ActionLink(Model.CountryName, "LandmarkList", "Landmarks", new {id=Model.Country })
                         </li>
                         <li>
                             <label>Latitude:</label>
