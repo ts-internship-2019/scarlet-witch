@@ -1,0 +1,151 @@
+﻿
+@{
+
+    ViewData["Title"] = "AddInterval";
+    Layout = "~/Views/Shared/_Layout.cshtml";}
+
+
+<h1>AddInterval</h1>
+<script>
+    let fromUpdate = false;
+
+    function AddInterval() {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+            if (document.getElementById("intervalName").value != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("EditInterval", "DictionaryInterval")',
+                    data: {
+
+                        intervalName: document.getElementById("intervalName").value,
+                        intervalId: document.getElementById("intervalId").value
+                    },
+                    success: function (response) {
+
+                        window.location.href = '@Url.Action("Index", "DictionaryInterval")';
+                    },
+                    error: function (response) {
+                        alert("The interval doesn't exist");
+                    }
+                })
+            }
+            else { alert("The interval name has not been introduced. Please introduce a name.") }
+        }
+        else {
+            if (document.getElementById("intervalName").value != "") {
+                $.ajax({
+                    type: 'PUT',
+                    url: '@Url.Action("SaveInterval", "DictionaryInterval")',
+                    data: {
+                        intervalName: document.getElementById("intervalName").value,
+                        intervalId: document.getElementById("intervalId").value
+                    },
+                    success: function (response) {
+                        if (fromUpdate) {
+                            document.getElementById("intervalName").value = "";
+                            fromUpdate = false;
+                        }
+                        else {
+                            window.location.href = '@Url.Action("Index", "DictionaryInterval")';
+                        }
+
+                    },
+                    error: function (response) {
+                        alert("The Interval already exists.");
+                    }
+                })
+            }
+            else { alert("The interval name has not been introduced. Please introduce a name.");}
+        }
+
+    }
+
+    function onLoadEdit() {
+
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        document.getElementById("intervalId").style.visibility = "hidden";
+
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+
+                  document.getElementById("buttonId").innerText = "Update";
+        }
+
+    }
+
+    function cancelAdd() {
+        window.location.href = '@Url.Action("Index", "DictionaryInterval")';
+    }
+
+
+
+
+    function AddNew() {
+          fromUpdate = true;
+          AddInterval();
+
+    }
+
+
+</script>
+@model iWasHere.Domain.DTOs.DictionaryIntervalModel;
+
+<style>
+    .txtBoxStyle {
+        position: absolute;
+        right: 60%;
+        padding: 10%;
+    }
+</style>
+
+
+<body onload="onLoadEdit()">
+
+
+    <ul style="list-style-type:none">
+        <li>
+            <label>Interval Name</label>
+            @(Html.Kendo().TextBoxFor(model => model.VisitIntervalName)
+                              .HtmlAttributes(new { @id = "intervalName", style = "margin:20px; left:6.5%" })
+
+            )
+
+        </li>
+        <li>
+            @(Html.Kendo().TextBoxFor(model => model.VisitIntervalId)
+                .HtmlAttributes(new { @id = "intervalId", style = "margin:10px" })
+            )
+        </li>
+
+    </ul>
+
+
+
+
+    <div>
+        @(Html.Kendo().Button()
+                  .Name("primaryTextButton")
+                  .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId", style = "margin:10px" })
+                  .Content("Add")
+                  .Events(ev => ev.Click("AddInterval"))
+        )
+        @(Html.Kendo().Button()
+          .Name("addNewButton")
+          .HtmlAttributes(new { type = "button", @class = "k-primary" })
+          .Content("Add New")
+          .Events(ev => ev.Click("AddNew"))
+        )
+        @(Html.Kendo().Button()
+              .Name("cancelButton")
+              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .Content("Cancel")
+              .Events(ev => ev.Click("cancelAdd"))
+        )
+    </div>
+
+
+</body>

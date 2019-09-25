@@ -19,7 +19,7 @@
                     url: '@Url.Action("DeleteInterval", "DictionaryInterval")',
                     data: { id: id },
                  success: function (response) {
-                        $("#intervarlGrid").data("kendoGrid").dataSource.read();
+                        $("#intervalGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
                         alert("hai ca nu merge");

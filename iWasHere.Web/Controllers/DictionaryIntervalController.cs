@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace iWasHere.Web.Controllers
 {
-    public class DictionaryIntervalController
+    public class DictionaryIntervalController : Controller
     {
         private readonly DictionaryService _dictionaryService;
 
@@ -46,13 +46,13 @@ namespace iWasHere.Web.Controllers
 
             return Json(result);
         }
-        public ActionResult SaveInterval(string visitIntervalName)
+        public ActionResult SaveInterval(string intervalName)
         {
             ScarletWitchContext gf = new ScarletWitchContext();
 
             gf.DictionaryInterval.Add(new DictionaryInterval
             {
-                VisitIntervalName = visitIntervalName
+                VisitIntervalName = intervalName
             });
             try
             {
@@ -62,7 +62,6 @@ namespace iWasHere.Web.Controllers
             {
                 return Json("Empty");
             }
-
         }
 
         public ActionResult GetDictionaryIntervalFiltered([DataSourceRequest] DataSourceRequest request, String intervalName)
