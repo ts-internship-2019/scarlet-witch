@@ -307,6 +307,14 @@ namespace iWasHere.Domain.Service
             _dbContext.SaveChanges();
 
         }
+        public void DeleteTicket(int id)
+        {
+            DictionaryTicketType ticket = new DictionaryTicketType() { TicketTypeId = id };
+
+            _dbContext.DictionaryTicketType.Remove(ticket);
+            _dbContext.SaveChanges();
+
+        }
 
         public IQueryable<DictionaryLanguageModel> GetDictionaryLanguagesFiltered(String languageName)
         {
@@ -367,6 +375,7 @@ namespace iWasHere.Domain.Service
             }).ToList();
             return dictionaryCurrencyModels;
         }
+
 
         public DictionaryCityModel GetDataToEdit(int id)
         {
@@ -468,6 +477,28 @@ namespace iWasHere.Domain.Service
                 return dictionaryInterval;
             }
         }
+        public IQueryable<DictionaryTicketModel> GetDictionaryTicketFiltered(String ticketName)
+        {
+            if (ticketName == null)
+            {
+                IQueryable<DictionaryTicketModel> dictionaryTicket = _dbContext.DictionaryTicketType.Select(c => new DictionaryTicketModel()
+                {
+                    TicketTypeId = c.TicketTypeId,
+                    TicketTypeName = c.TicketTypeName
+                });
+                return dictionaryTicket;
+            }
+            else
+            {
+                IQueryable<DictionaryTicketModel> dictionaryTicket = _dbContext.DictionaryTicketType.Select(c => new DictionaryTicketModel()
+                {
+                    TicketTypeId = c.TicketTypeId,
+                    TicketTypeName = c.TicketTypeName
+                }
+                ).Where(c => c.TicketTypeName.Contains(ticketName));
+                return dictionaryTicket;
+            }
+        }
 
         public bool VerifyLanguages(string languageName, string languageCode)
         {
@@ -541,17 +572,26 @@ namespace iWasHere.Domain.Service
             }).Where(a => a.VisitIntervalId == id).FirstOrDefault();
             return interval;
         }
+        public DictionaryTicketModel GetTicketToEdit(int id)
+        {
+            DictionaryTicketModel ticket = _dbContext.DictionaryTicketType.Select(c => new DictionaryTicketModel()
+            {
+                TicketTypeName = c.TicketTypeName,
+                TicketTypeId = c.TicketTypeId
+            }).Where(a => a.TicketTypeId == id).FirstOrDefault();
+            return ticket;
+        }
 
         public List<DictionaryCountryModel> PopulateCountryCombo()
         {
-            List<DictionaryCountryModel> dictionaryCurrencyModels = _dbContext.DictionaryCountry.Select(b => new DictionaryCountryModel()
+            List<DictionaryCountryModel> dictionaryCountries = _dbContext.DictionaryCountry.Select(b => new DictionaryCountryModel()
             {
                 CountryId = b.CountryId,
                 CountryName = b.CountryName
 
             }).ToList();
 
-            return dictionaryCurrencyModels;
+            return dictionaryCountries;
         }
 
 
@@ -567,21 +607,43 @@ namespace iWasHere.Domain.Service
             return x;
         }
 
-        public IQueryable<LandmarkModel> GetLandmarksFiltered()
+        public IQueryable<LandmarkModel> GetLandmarksFiltered(int countryId)
         {
-            IQueryable<LandmarkModel> landmarks = _dbContext.Landmark.Select(a => new LandmarkModel()
+            if(countryId == 0)
             {
-                LandmarkId = a.LandmarkId,
-                LandmarkDescription = a.LandmarkDescription,
-                Latitude = a.Latitude,
-                Longitude = a.Longitude,
-                StreetName = a.StreetName,
-                StreetNumber = a.StreetNumber,
-                CityName = _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(x => x.CityName).FirstOrDefault().ToString(),
-                CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == a.City.County.Country.CountryId).Select(x => x.CountryName).FirstOrDefault().ToString(),
-                CountyName = _dbContext.DictionaryCounty.Where(d => d.CountyId == a.City.County.CountyId).Select(x => x.CountyName).FirstOrDefault().ToString()
-            });
-            return landmarks;
+                IQueryable<LandmarkModel> landmarks = _dbContext.Landmark.Select(a => new LandmarkModel()
+                {
+                    LandmarkId = a.LandmarkId,
+                    LandmarkDescription = a.LandmarkDescription,
+                    Latitude = a.Latitude,
+                    Longitude = a.Longitude,
+                    StreetName = a.StreetName,
+                    StreetNumber = a.StreetNumber,
+                    CityName = _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(x => x.CityName).FirstOrDefault().ToString(),
+                    CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == a.City.County.Country.CountryId).Select(x => x.CountryName).FirstOrDefault().ToString(),
+                    CountyName = _dbContext.DictionaryCounty.Where(d => d.CountyId == a.City.County.CountyId).Select(x => x.CountyName).FirstOrDefault().ToString()
+                });
+                return landmarks;
+            }
+            else
+            {
+                IQueryable<LandmarkModel> landmarks = _dbContext.Landmark.Select(a => new LandmarkModel()
+                {
+                    LandmarkId = a.LandmarkId,
+                    LandmarkDescription = a.LandmarkDescription,
+                    Latitude = a.Latitude,
+                    Longitude = a.Longitude,
+                    Country = a.City.County.Country.CountryId,
+                    StreetName = a.StreetName,
+                    StreetNumber = a.StreetNumber,
+                    CityName = _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(x => x.CityName).FirstOrDefault().ToString(),
+                    CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == a.City.County.Country.CountryId).Select(x => x.CountryName).FirstOrDefault().ToString(),
+                    CountyName = _dbContext.DictionaryCounty.Where(d => d.CountyId == a.City.County.CountyId).Select(x => x.CountyName).FirstOrDefault().ToString()
+                }).Where(a => a.Country == countryId);
+                return landmarks;
+            }
+        
+           
 
         }
 
@@ -613,7 +675,7 @@ namespace iWasHere.Domain.Service
                     CountyId = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
                     CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
-                    Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString(),
+                    Country = Convert.ToInt32(_dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString()),
                     Path = _dbContext.Images.Where(d => d.LandmarkId == landmarkId).Select(b => new Images() { Path = b.Path }).ToList(),
                     Reviews = _dbContext.Review.Where(d => d.LandmarkId == landmarkId).Select(b => new Review()
                     {
@@ -647,7 +709,7 @@ namespace iWasHere.Domain.Service
                     CountyId = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyId).FirstOrDefault(),
                     County = _dbContext.DictionaryCounty.Where(d => d.CountyId == c.City.CountyId).Select(a => a.CountyName).FirstOrDefault().ToString(),
                     CountryName = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryName).FirstOrDefault().ToString(),
-                    Country = _dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString(),
+                    Country = Convert.ToInt32(_dbContext.DictionaryCountry.Where(d => d.CountryId == c.City.County.CountryId).Select(a => a.CountryId).FirstOrDefault().ToString()),
                     Reviews = _dbContext.Review.Where(d => d.LandmarkId == landmarkId).Select(b => new Review()
                     {
                         Review1 = b.Review1,
@@ -776,16 +838,13 @@ namespace iWasHere.Domain.Service
                 maxItem = landmark.Reviews.First(a => a.Grade == max);
                 noComments = false;
             }
-
             var stream = new MemoryStream();
 
             using (WordprocessingDocument doc = WordprocessingDocument.Create(stream, DocumentFormat.OpenXml.WordprocessingDocumentType.Document, true))
             {
 
                 MainDocumentPart mainPart = doc.AddMainDocumentPart();
-
                 new Document(new Body()).Save(mainPart);
-
                 Body body = mainPart.Document.Body;
                 if (noComments == false)
                 {
@@ -830,9 +889,7 @@ namespace iWasHere.Domain.Service
                            new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
                               new DocumentFormat.OpenXml.Wordprocessing.Run(
                               new DocumentFormat.OpenXml.Wordprocessing.Text("Titlul: " + minItem.Title + " Mesaj: " + minItem.Review1 + " Nota: " + minItem.Grade + "/10")))
-
                                   ));
-
                 }
                 else
                 {
@@ -874,7 +931,6 @@ namespace iWasHere.Domain.Service
             }
 
             stream.Seek(0, SeekOrigin.Begin);
-
             return stream;
         }
 

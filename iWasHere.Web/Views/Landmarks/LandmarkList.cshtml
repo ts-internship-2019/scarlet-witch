@@ -54,16 +54,20 @@
         alert("hai ca exportam daca e");
         window.location.href = '@Url.Action("ExportFile", "Landmarks")/'+id;
     }
-
+    function onLoadLandmarkList() {
+         var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("idCountry");
+        document.getElementById("combo").value = id;
+    }
 
 </script>
-<body>
+<body onload="onLoadLandmarkList()">
     <pre id="output"></pre>
 
     <div class="site-wrap">
 
         <h1 class="text-center" style="margin:50px">Landmarks list</h1>
-
 
         <div>
             @(Html.Kendo().Button()
@@ -75,9 +79,30 @@
             )
         </div>
 
+        @(Html.Kendo().DropDownList()
+            .Name("CountryId")
+            .DataTextField("CountryName")
+            .DataValueField("CountryId")
+            .DataSource(source =>
+            {
+                source.Read(read =>
+                {
+                    read.Action("PopulateCountryCombo", "Landmarks");
+                });
+            })
+            .OptionLabel("select country")
+            .HtmlAttributes(new { @id = "combo" })
+        )
+        @(Html.Kendo().Button()
+    .Name("textButton")
+    .HtmlAttributes(new { type = "button" })
+    .Content("Filter")
+    .Events(ev => ev.Click("refreshGrid"))
+        )
+
         @(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
                 ()
-                .Name("grid")
+                .Name("landmarkGrid")
                 .HtmlAttributes(new { style = "height: 380px;" })
                 .Scrollable()
                 .Groupable()
@@ -106,31 +131,25 @@
                 .DataSource(dataSource => dataSource
                 .Ajax()
                 .PageSize(10)
-                .Read(read => read.Action("GetLandmarksFiltered", "Landmarks"))
+                .Read(read => read.Action("GetLandmarksFiltered", "Landmarks").Data("filter"))
                 .Destroy(d => d.Action("Delete", "Landmarks"))
                 )
         )
-
-    </div>
-    <script src="~/js/jquery-3.3.1.min.js"></script>
-    <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
-    <script src="~/js/jquery-ui.js"></script>
-    <script src="~/js/popper.min.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
-    <script src="~/js/owl.carousel.min.js"></script>
-    <script src="~/js/jquery.stellar.min.js"></script>
-    <script src="~/js/jquery.countdown.min.js"></script>
-    <script src="~/js/jquery.magnific-popup.min.js"></script>
-    <script src="~/js/bootstrap-datepicker.min.js"></script>
-    <script src="~/js/aos.js"></script>
-
-    <script src="~/js/main.js"></script>
-
 </body>
 
 
 
 <script type="text/javascript">
+        function filter(e) {
+        var countryId = document.getElementById("combo").value;
+        var filter = {};
+        filter["countryId"] = countryId;
+        return filter;
+    }
+     function refreshGrid() {
+        $("#landmarkGrid").data("kendoGrid").dataSource.read();
+        $("#landmarkGrid").data("kendoGrid").dataSource.page(1);
+    }
     function add() {
         window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
     }

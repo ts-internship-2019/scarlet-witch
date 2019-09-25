@@ -31,7 +31,7 @@ namespace iWasHere.Domain.DTOs
         public int? CityId { get; set; }
         public int CountyId { get; set; }
         public string County { get; set; }
-        public string Country { get; set; }
+        public int Country { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public List<Images> Path { get; set; }

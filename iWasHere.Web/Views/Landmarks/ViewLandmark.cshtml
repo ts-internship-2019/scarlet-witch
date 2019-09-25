@@ -126,7 +126,8 @@
                         </li>
                         <li>
                             <label>Country:</label>
-                            @Html.ActionLink(Model.CountryName, "LandmarkList", "Landmarks", new { id = Model.Country })
+                            @Html.ActionLink(Model.CountryName, "LandmarkList", "Landmarks", new { idCountry = Model.Country })
+                              
                         </li>
                         <li>
                             <label>Latitude:</label>
