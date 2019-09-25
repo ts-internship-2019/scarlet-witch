@@ -69,7 +69,6 @@
         max-width: 400px;
         text-align: left;
         padding: 10px;
-        background-color: #ddd;
         border-radius: 3px;
         margin: 5px;
         vertical-align: top;
@@ -81,14 +80,13 @@
         max-height:350px;
         text-align: left;
         padding: 10px;
-        background-color: #ddd;
         border-radius: 3px;
         margin: 5px;
     }
 </style>
 
 
-<body onload="onLoadView()">
+<body onload="onLoadView()" >
     <div class="container">
         <div class="row ">
             <div class="col-md-12">
@@ -217,7 +215,10 @@
 
 
 <style>
-
+    .carousel-control-next,
+    .carousel-control-prev {
+        filter: invert(100%);
+    }
 
     fieldset, label {
         margin: 0;
