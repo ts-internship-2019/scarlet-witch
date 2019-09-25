@@ -623,6 +623,8 @@ namespace iWasHere.Domain.Service
                     VisitInterval = c.VisitInterval,
                     TicketId = c.TicketId,
                     Ticket = _dbContext.DictionaryTicketType.Where(d => d.TicketTypeId == c.Ticket.TicketTypeId).Select(a => a.TicketTypeName).FirstOrDefault(),
+                    TicketCost =Convert.ToDecimal(_dbContext.Ticket.Where(d => d.TicketId == c.TicketId).Select(a => a.TicketCost).FirstOrDefault()),
+                    CurrencyRate = Convert.ToDecimal(_dbContext.DictionaryCurrency.Where(d => d.CurrencyId == c.Ticket.CurrencyId).Select(a => a.CurrencyExchange).FirstOrDefault()),
                     LandmarkType = c.LandmarkType,
                     LandmarkTypeId = c.LandmarkTypeId,
                     StreetName = c.StreetName,

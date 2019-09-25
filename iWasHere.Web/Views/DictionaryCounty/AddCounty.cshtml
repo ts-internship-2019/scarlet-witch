@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";}
 
 
-<h4>Add County</h4>
+    <h1 class="text-center" style="margin:50px">Add county</h1>
  
-<body onload="onLoadEditC()">
+<body class="text-center" onload="onLoadEditC()">
     
     <ul style="list-style-type:none">
         <li>
@@ -18,10 +18,13 @@
             @(Html.Kendo().TextBoxFor(model => model.CountyName)
                                 .HtmlAttributes(new { @id = "CountyName", style = "margin:10px" })
             )
+        <li>
             @(Html.Kendo().TextBoxFor(model => model.CountyId)
-                .HtmlAttributes(new { @id = "CountyId", style = "margin:10px" })
+            .HtmlAttributes(new { @id = "CountyId", style = "margin:10px" })
             )
         </li>
+            
+        
 
         <li>
             <label>Country</label>
@@ -47,11 +50,12 @@
 
     <p></p>
 
-    <div>
+    <div style="margin-left:10px">
         @(Html.Kendo().Button()
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Save")
+           .Icon("k-icon k-i-plus-circle")
            .Events(ev => ev.Click("add"))
         )
 
@@ -59,6 +63,7 @@
                .Name("addNewButton")
                .HtmlAttributes(new { type = "button", @class = "k-primary" })
                .Content("Add New")
+               .Icon("k-icon k-i-plus")
                .Events(ev => ev.Click("addNew"))
         )
 
@@ -66,6 +71,7 @@
               .Name("cancelButton")
               .HtmlAttributes(new { type = "button", @class = "k-primary" })
               .Content("Cancel")
+              .Icon("cancel")
               .Events(ev => ev.Click("cancelAdd"))
         )
     </div>

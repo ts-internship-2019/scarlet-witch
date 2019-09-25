@@ -4,15 +4,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>LandmarkList</h1>
-<div>
-    @(Html.Kendo().Button()
-      .Name("primaryTextButton")
-      .HtmlAttributes(new { type = "button", @class = "k-primary" })
-      .Content("Add")
-      .Events(ev => ev.Click("redirectToAddContext"))
-    )
-</div>
+<head runat=server>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,700,900|Display+Playfair:200,300,400,700">
+
+
+    <link rel="stylesheet" type="text/css" href="~/fonts/icomoon/style.css" media="screen" runat="server">
+
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css" media="screen" runat="server">
+    <link rel="stylesheet" type="text/css" href="~/css/magnific-popup.css" media="screen" runat="server">
+    <link rel="stylesheet" type="text/css" href="~/css/jquery-ui.css" runat="server">
+    <link rel="stylesheet" type="text/css" href="~/css/owl.carousel.min.css" media="screen" runat="server">
+    <link rel="stylesheet" type="text/css" href="~/css/owl.theme.default.min.css" media="screen" runat="server">
+
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap-datepicker.css" media="screen" runat="server">
+
+    <link rel="stylesheet" type="text/css" href="~/fonts/flaticon/font/flaticon.css" media="screen" runat="server">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/mediaelementplayer.min.css">
+
+
+    <link rel="stylesheet" type="text/css" href="~/css/aos.css" media="screen" runat="server">
+
+    <link rel="stylesheet" type="text/css" href="~/css/style.css" media="screen" runat="server">
+</head>
+
+
 
 <script type="text/javascript">
     function add() {
@@ -29,7 +48,7 @@
     {
         window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+id;
     }
-    
+
     function exportFile(id) {
 
         alert("hai ca exportam daca e");
@@ -41,6 +60,9 @@
 <body>
     <pre id="output"></pre>
 
+    <div class="site-wrap">
+
+        <h1 class="text-center" style="margin:50px">Landmarks list</h1>
 
     @(Html.Kendo().DropDownList()
         .Name("CountryId")
@@ -100,6 +122,8 @@
     )
 </body>
 
+
+
 <script type="text/javascript">
         function filter(e) {
         var countryId = document.getElementById("combo").value;
@@ -135,7 +159,7 @@
     function openAddLandmarkPage(e) {
         window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
     }
-    
+
     function deleteRow(id) {
         $.ajax({
             type: 'DELETE',

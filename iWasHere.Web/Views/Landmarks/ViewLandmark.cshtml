@@ -9,7 +9,7 @@
 @model iWasHere.Domain.DTOs.LandmarkModel;
 
 
-<h1>@Html.DisplayFor(model => model.LandmarkDescription)</h1>
+<h1 class="text-center" style="margin:50px">@Html.DisplayFor(model => model.LandmarkDescription)</h1>
 <div id="googleMap" style="width:100%;height:400px;" class="map-container"></div>
 <script>
     var map;
@@ -105,6 +105,10 @@
                             @Html.DisplayFor(model => model.Ticket)
                         </li>
                         <li>
+                            <label>Ticket Price:</label>
+                            @string.Format("{0:f2}", Model.TicketCost * Model.CurrencyRate)RON
+                        </li>
+                        <li>
                             <label>Street Name:</label>
                             @Html.DisplayFor(model => model.StreetName)
                         </li>
@@ -122,7 +126,7 @@
                         </li>
                         <li>
                             <label>Country:</label>
-                            @Html.ActionLink(Model.CountryName, "LandmarkList", "Landmarks", new {id=Model.Country })
+                            @Html.ActionLink(Model.CountryName, "LandmarkList", "Landmarks", new { id = Model.Country })
                         </li>
                         <li>
                             <label>Latitude:</label>
@@ -182,18 +186,18 @@
         </div>
     </div>
 
-    <div>
+    <div class="text-center">
         @(Html.Kendo().Button()
        .Name("showDialogBtn")
       //.HtmlAttributes(new { style = "display:none;", @class = "hide-on-narrow" })
-      .Content("Send Landmark via Email")
+      .Content("Send Landmark via Email")     
       .Events(ev => ev.Click("showDialog"))
         )
     </div>
 
     <div>
 
-        <h2>Reviews</h2>
+        <h2 style="margin:50px">Reviews</h2>
         <input type="button" class="k-primary"
                value="Add Review"
                onclick="location.href='@Url.Action("AddComment", "Comment")/'+@Model.LandmarkId " />

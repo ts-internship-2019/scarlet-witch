@@ -147,7 +147,7 @@
 Layout = "~/Views/Shared/_Layout.cshtml";}
 
 
-<h1>AddLanguage</h1>
+    <h1 class="text-center" style="margin:50px">Add language</h1>
 <script>
     let fromUpdate = false;
 
@@ -170,8 +170,10 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                 success: function (response) {
                     cityNameValidation = response;
                     alert(cityNameValidation);
+                    document.getElementById("languageName").value = document.getElementById("languageName").value.trim();
+                    document.getElementById("languageCode").value = document.getElementById("languageCode").value.trim();
                     if (id != 0) {
-                        
+                        if (document.getElementById("languageName").value != "" && document.getElementById("languageCode").value != "" && document.getElementById("languageName").value.length != 0 && document.getElementById("languageCode").value.length != 0) {
                             $.ajax({
                                 type: 'POST',
                                 url: '@Url.Action("EditLanguage", "DictionaryLanguage")',
@@ -189,10 +191,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                     //  alert("hai ca nu merge");
                                 }
                             })
-                        
+
+                        }
+                        else { alert("Nu a fost introdus numele sau codul") }
                     }
                     else {
-                        if (!cityNameValidation) {
+                        if (!cityNameValidation && document.getElementById("languageName").value != "" && document.getElementById("languageCode").value != "" && document.getElementById("languageName").value.length != 0 && document.getElementById("languageCode").value.length != 0) {
                             $.ajax({
                                 type: 'PUT',
                                 url: '@Url.Action("SaveLanguage", "DictionaryLanguage")',
@@ -265,7 +269,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 </script>
 @model iWasHere.Domain.DTOs.DictionaryLanguageModel;
 
-<body onload="onLoadEdit()">
+<body class="text-center" onload="onLoadEdit()">
 
 
     <ul style="list-style-type:none">
@@ -276,11 +280,15 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         </li>
         <li>
             @(Html.Kendo().TextBoxFor(model => model.LanguageCode)
-                                .HtmlAttributes(new { @id = "languageCode", style = "margin:10px" })
+                                .HtmlAttributes(new { @id = "languageCode", style = "margin:10px", @maxlength = "10" })
 
             )
+            
+          
+        </li>
+        <li>
             @(Html.Kendo().TextBoxFor(model => model.LanguageId)
-                .HtmlAttributes(new { @id = "languageId", style = "margin:10px" })
+                          .HtmlAttributes(new { @id = "languageId", style = "margin:10px" })
             )
         </li>
         <li>
@@ -291,7 +299,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         </li>
         <li>
             @(Html.Kendo().TextBoxFor(model => model.LanguageName)
-                .HtmlAttributes(new { @id = "languageName", style = "margin:10px" })
+                .HtmlAttributes(new { @id = "languageName", style = "margin:10px", @maxlength = "40" })
             )
         </li>
     </ul>
@@ -299,23 +307,26 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
 
 
-    <div>
+    <div style="margin:10px">
         @(Html.Kendo().Button()
                   .Name("primaryTextButton")
-                  .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId", style = "margin:10px" })
+                  .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
                   .Content("Add")
+                    .Icon("k-icon k-i-plus-circle")
                   .Events(ev => ev.Click("AddLanguage"))
         )
         @(Html.Kendo().Button()
           .Name("addNewButton")
           .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonIdNew" })
           .Content("Add New")
+          .Icon("k-icon k-i-plus")
           .Events(ev => ev.Click("AddNew"))
         )
         @(Html.Kendo().Button()
               .Name("cancelButton")
               .HtmlAttributes(new { type = "button", @class = "k-primary" })
               .Content("Cancel")
+               .Icon("cancel")
               .Events(ev => ev.Click("cancelAdd"))
         )
     </div>

@@ -4,7 +4,7 @@
     ViewData["Title"] = "AddLandmark";
 Layout = "~/Views/Shared/_Layout.cshtml";}
 
-<h1>AddLandmark</h1>
+<h1 style="margin:50px">AddLandmark</h1>
 <div id="googleMap" style="width:100%;height:300px;"></div>
 
 <script>
@@ -69,31 +69,31 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
 <hr />
 
-<body onload="onLoadEdit()" class="container">
+<body class="text-center" onload="onLoadEdit()" style="align-content:center">
 
-    <div class="col-md-4">
+    <div class="text-center">
         @(Html.Kendo().TextBoxFor(model => model.LandmarkId)
-                .HtmlAttributes(new { @id = "LandmarkId", style = "margin:10px" })
+                .HtmlAttributes(new { @id = "LandmarkId", style = "margin:10px; width:50%;" })
         )
         <ul style="list-style-type:none">
             <li>
                 <label>Landmark Name</label>
             </li>
-            <li>
+            <li style="margin-bottom:15px">
                 @(Html.Kendo().TextBoxFor(model => model.LandmarkDescription)
-                                    .HtmlAttributes(new { @id = "LandmarkName", style = "margin:10px" })
+                                    .HtmlAttributes(new { @id = "LandmarkName", style = "margin:10px; width:50%;" })
                 )
             </li>
 
             <li>
                 <label>Landmark Type</label>
             </li>
-            <li>
+            <li style="margin-bottom:15px">
                 @(Html.Kendo().DropDownList()
                                  .Name("DictionaryLandmarkType")
                                  .DataTextField("LandmarkTypeCode")
                                  .DataValueField("LandmarkTypeId")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboType" })
+                                 .HtmlAttributes(new { style = "width: 50%", @id = "comboType" })
                                  .DataSource(source =>
                                  {
                                      source.Read(read =>
@@ -106,7 +106,9 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             <li>
                 <label>Landmark has entry ticket?</label>
             </li>
-            <li>
+            <li style="margin-bottom:15px;display: inline-block;
+    vertical-align: top;
+    margin-right: 3%">
 
                 <div class="form-group row">
                     <form action="">
@@ -119,12 +121,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             <li>
                 <label>Visit Interval</label>
             </li>
-            <li>
+            <li style="margin-bottom:15px">
                 @(Html.Kendo().DropDownList()
                                  .Name("DictionaryInterval")
                                  .DataTextField("VisitIntervalName")
                                  .DataValueField("VisitIntervalId")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboInterval" })
+                                 .HtmlAttributes(new { style = "width: 50%", @id = "comboInterval" })
                                  .DataSource(source =>
                                  {
                                      source.Read(read =>
@@ -137,12 +139,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             <li>
                 <label>Ticket</label>
             </li>
-            <li>
+            <li style="margin-bottom:15px">
                 @(Html.Kendo().DropDownList()
                                  .Name("DictionaryTicketType")
                                  .DataTextField("TicketTypeName")
                                  .DataValueField("TicketTypeId")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboTicket" })
+                                 .HtmlAttributes(new { style = "width: 50%", @id = "comboTicket" })
                                  .DataSource(source =>
                                  {
                                      source.Read(read =>
@@ -155,12 +157,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             <li>
                 <label>City</label>
             </li>
-            <li>
+            <li style="margin-bottom:15px">
                 @(Html.Kendo().DropDownList()
                                  .Name("DictionaryCity")
                                  .DataTextField("Name")
                                  .DataValueField("Id")
-                                 .HtmlAttributes(new { style = "width: 75%", @id = "comboCity" })
+                                 .HtmlAttributes(new { style = "width: 50%", @id = "comboCity" })
                                  .DataSource(source =>
                                  {
                                      source.Read(read =>
@@ -173,27 +175,27 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             <li>
                 <label>Street Name</label>
             </li>
-            <li>
+            <li style="margin-bottom:15px">
                 @(Html.Kendo().TextBoxFor(model => model.StreetName)
-                                    .HtmlAttributes(new { @id = "StreetName", style = "margin:10px" })
+                                    .HtmlAttributes(new { @id = "StreetName", style = "margin:10px; width:50%;" })
                 )
             </li>
 
             <li>
                 <label>Street Number</label>
             </li>
-            <li>
+            <li style="margin-bottom:15px">
                 @(Html.Kendo().TextBoxFor(model => model.StreetNumber)
-                                    .HtmlAttributes(new { @id = "StreetNumber", style = "margin:10px" })
+                                    .HtmlAttributes(new { @id = "StreetNumber", style = "margin:10px; width:50%;" })
                 )
             </li>
 
             <li>
                 <label>Latitude</label>
             </li>
-            <li>
+            <li style="margin-bottom:15px">
                 @(Html.Kendo().TextBoxFor(model => model.Latitude)
-                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:5px", @readonly = "readonly" })
+                                    .HtmlAttributes(new { @id = "Latitude", style = "margin:10px; width:50%;", @readonly = "readonly" })
                 )
             </li>
 
@@ -202,9 +204,9 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             <li>
                 <label>Longitude</label>
             </li>
-            <li>
+            <li style="margin-bottom:15px">
                 @(Html.Kendo().TextBoxFor(model => model.Longitude)
-                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:5px", @readonly = "readonly" })
+                                    .HtmlAttributes(new { @id = "Longitude", style = "margin:10px; width:50%;", @readonly = "readonly" })
                 )
             </li>
         </ul>
@@ -217,6 +219,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                 @(Html.Kendo().Upload()
                     .Name("files")
                     .HtmlAttributes(new { aria_label = "files", name = "pic", accept = "image/*" })
+                    
                 )
                 <p style="padding-top: 1em; text-align: right">
                     <input type="submit" value="Upload Image" class="k-button k-primary" />
@@ -231,6 +234,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId" })
                .Content("Add")
                .Events(ev => ev.Click("add"))
+               .Icon("k-icon k-i-plus-circle")
             )
 
             @(Html.Kendo().Button()
@@ -238,6 +242,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
               .HtmlAttributes(new { type = "button", @class = "k-primary" })
               .Content("Add New")
               .Events(ev => ev.Click("addNew"))
+              .Icon("k-icon k-i-plus-circle")
             )
 
         </div>

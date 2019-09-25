@@ -2,7 +2,7 @@
     ViewData["Title"] = "Currency";
 Layout = "~/Views/Shared/_Layout.cshtml";}
 
-<h1>Currency</h1>
+    <h1 class="text-center" style="margin:50px">Currencies</h1>
 
 <script type="text/javascript">
 
@@ -21,7 +21,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                         $("#currencyGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
-                        alert("hai ca nu merge");
+                        alert("Moneda nu poate fi stearsa pentru ca este folosita pe un ticket");
                     }
                 })
     }
@@ -54,6 +54,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
            .Name("primaryTextButton")
            .HtmlAttributes(new { type = "button", @class = "k-primary" })
            .Content("Add")
+           .Icon("k-icon k-i-plus")
            .Events(ev => ev.Click("redirectToAddContext"))
 )
 
@@ -67,6 +68,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 .Name("textButton")
 .HtmlAttributes(new { type = "button" })
 .Content("Filter")
+.Icon("filter")
 .Events(ev => ev.Click("refreshGrid"))
 )
 
@@ -74,6 +76,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 .Name("filterButton")
 .HtmlAttributes(new { type = "button" })
 .Content("Clear Filter")
+.Icon("filter-clear")
 .Events(ev => ev.Click("clearFilter"))
 )
 
@@ -93,7 +96,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             columns.Bound(o => o.CurrencyCode).Title("Cod Moneda");
             columns.Bound(o => o.CurrencyName).Title("Nume Moneda");
             columns.Bound(o => o.CurrencyExchange).Title("Rata de Schimb");
-            columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=CurrencyId#)\">Delete</button>");
+            columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=CurrencyId#)\">Delete</button>");
             columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=CurrencyId#)\"> Edit </button>");
 
         })
@@ -107,6 +110,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             .Read(read => read.Action("GetDictionaryCurrencyFiltered", "DictionaryCurrency").Data("filter"))
             .Destroy(d => d.Action("DeleteCurrency", "DictionaryCurrency")))
 )
-)
+
 
 
