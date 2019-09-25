@@ -54,72 +54,87 @@
         alert("hai ca exportam daca e");
         window.location.href = '@Url.Action("ExportFile", "Landmarks")/'+id;
     }
-
+    function onLoadLandmarkList() {
+         var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("idCountry");
+        document.getElementById("combo").value = id;
+    }
 
 </script>
-<body>
+<body onload="onLoadLandmarkList()">
     <pre id="output"></pre>
 
     <div class="site-wrap">
 
         <h1 class="text-center" style="margin:50px">Landmarks list</h1>
 
-    @(Html.Kendo().DropDownList()
-        .Name("CountryId")
-        .DataTextField("CountryName")
-        .DataValueField("CountryId")
-        .DataSource(source =>
-        {
-            source.Read(read =>
-            {
-                read.Action("PopulateCountryCombo", "Landmarks");
-            });
-        })
-        .OptionLabel("select country")
-        .HtmlAttributes(new { @id = "combo" })
-    )
-    @(Html.Kendo().Button()
-.Name("textButton")
-.HtmlAttributes(new { type = "button" })
-.Content("Filter")
-.Events(ev => ev.Click("refreshGrid"))
-    )
-
-    @(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
-            ()
-            .Name("landmarkGrid")
-            .HtmlAttributes(new { style = "height: 380px;" })
-            .Scrollable()
-            .Groupable()
-            .Sortable()
-            .Columns(columns =>
-            {
-                columns.Bound(o => o.LandmarkId).Hidden();
-                columns.Bound(o => o.LandmarkDescription).Title("Name");
-                columns.Bound(o => o.StreetName);
-                columns.Bound(o => o.StreetNumber);
-                columns.Bound(o => o.CityName);
-                columns.Bound(o => o.CountyName);
-                columns.Bound(o => o.CountryName);
-                columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkId#)\">Delete</button>");
-                columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=LandmarkId#)\"> Edit </button>");
-                columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
-                columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"exportFile(#=LandmarkId#)\">Export</button>");
-            })
-            .NoRecords(true)
-            .Filterable()
-            .HtmlAttributes(new { @id = "landmarkGrid" })
-            .Pageable(pageable => pageable
-            .Refresh(true)
-            .PageSizes(true)
-            .ButtonCount(5))
-            .DataSource(dataSource => dataSource
-            .Ajax()
-            .PageSize(10)
-            .Read(read => read.Action("GetLandmarksFiltered", "Landmarks").Data("filter"))
-            .Destroy(d => d.Action("Delete", "Landmarks"))
+        <div>
+            @(Html.Kendo().Button()
+              .Name("primaryTextButton")
+              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .Content("Add")
+              .Events(ev => ev.Click("redirectToAddContext"))
+              .Icon("k-icon k-i-plus-circle")
             )
-    )
+        </div>
+
+        @(Html.Kendo().DropDownList()
+            .Name("CountryId")
+            .DataTextField("CountryName")
+            .DataValueField("CountryId")
+            .DataSource(source =>
+            {
+                source.Read(read =>
+                {
+                    read.Action("PopulateCountryCombo", "Landmarks");
+                });
+            })
+            .OptionLabel("select country")
+            .HtmlAttributes(new { @id = "combo" })
+        )
+        @(Html.Kendo().Button()
+    .Name("textButton")
+    .HtmlAttributes(new { type = "button" })
+    .Content("Filter")
+    .Events(ev => ev.Click("refreshGrid"))
+        )
+
+        @(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
+                ()
+                .Name("landmarkGrid")
+                .HtmlAttributes(new { style = "height: 380px;" })
+                .Scrollable()
+                .Groupable()
+                .Sortable()
+                .Columns(columns =>
+                {
+                    columns.Bound(o => o.LandmarkId).Hidden();
+                    columns.Bound(o => o.LandmarkDescription).Title("Name");
+                    columns.Bound(o => o.StreetName);
+                    columns.Bound(o => o.StreetNumber);
+                    columns.Bound(o => o.CityName);
+                    columns.Bound(o => o.CountyName);
+                    columns.Bound(o => o.CountryName);
+                    columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"deleteRow(#=LandmarkId#)\">Delete</button>");
+                    columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=LandmarkId#)\"> Edit </button>");
+                    columns.Template("<button id=\"viewButton\" class=\"k-button\" onclick=\"redirectToViewLandmark(#=LandmarkId#)\"> View </button>");
+                    columns.Template("<button id=\"deleteButton\" class=\"k-button\" onclick=\"exportFile(#=LandmarkId#)\">Export</button>");
+                })
+                .NoRecords(true)
+                .Filterable()
+                .HtmlAttributes(new { @id = "landmarkGrid" })
+                .Pageable(pageable => pageable
+                .Refresh(true)
+                .PageSizes(true)
+                .ButtonCount(5))
+                .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(10)
+                .Read(read => read.Action("GetLandmarksFiltered", "Landmarks").Data("filter"))
+                .Destroy(d => d.Action("Delete", "Landmarks"))
+                )
+        )
 </body>
 
 
