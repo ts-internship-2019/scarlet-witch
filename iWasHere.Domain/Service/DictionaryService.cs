@@ -484,9 +484,9 @@ namespace iWasHere.Domain.Service
         public bool VerifyCountyName(String name)
         {
             if (_dbContext.DictionaryCounty.Any(c => c.CountyName == name))
-                return false;
-            else
                 return true;
+            else
+                return false;
         }
 
         public bool VerifyCityName(String cityName)
