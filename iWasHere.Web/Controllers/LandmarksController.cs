@@ -42,6 +42,14 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
+        public void SaveImagesInEditDB(int id)
+        {
+            foreach (string path in imagesPaths)
+            {
+                _dictionaryService.SaveImagesInEditDB(path, id);
+            }
+        }
+
         public IActionResult AddLandmark(int id)
         {
             if (id != 0)
@@ -273,6 +281,11 @@ namespace iWasHere.Web.Controllers
         {
             var counties = _dictionaryService.PopulateCountryCombo();
             return Json(counties);
+        }
+        public IActionResult GetTopLandmarks()
+        {
+            IQueryable<TopLandmark> landmarks = _dictionaryService.GetTopLandmarks();
+            return Json(landmarks);
         }
     }
 }

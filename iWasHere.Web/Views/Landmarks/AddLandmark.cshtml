@@ -328,6 +328,21 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                     landmarkId: document.getElementById("LandmarkId").value
                                 },
                                 success: function (response) {
+                                    
+                                         let url_string = window.location.href;
+                                         let url = new URL(url_string);
+                                         let id = url.searchParams.get("id");
+                                    $.ajax({
+                                        url: '@Url.Action("SaveImagesInEditDB", "Landmarks")',
+                                        data: { id: id },
+                                        type: 'put',
+                                        success: function () {
+                                            alert("Saved image!");
+                                        },
+                                        error: function () {
+                                            alert("ERROR!");
+                                        }
+                                    });
                                     alert("Landmark modified!");
                                     window.location.href = '@Url.Action("LandmarkList", "Landmarks")';
                                 },

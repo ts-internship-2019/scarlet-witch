@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Ticket";
+    Layout = "~/Views/Shared/_DictionaryLayout.cshtml";
+}
+
+<h1>Ticket</h1>
+
+<script type="text/javascript">
+
+    function filter(e) {
+        var ticketName = document.getElementById("ticketTextBox").value;
+        var filter = {};
+        filter["ticketName"] = ticketName;
+        return filter;
+    }
+     function deleteRow(id) {
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeleteTicket", "DictionaryTicketType")',
+                    data: { id: id },
+                 success: function (response) {
+                        $("#ticketGrid").data("kendoGrid").dataSource.read();
+                    },
+                        error: function (response) {
+                    }
+                })
+    }
+
+    function refreshGrid() {
+        $("#ticketGrid").data("kendoGrid").dataSource.read();
+        $("#ticketGrid").data("kendoGrid").dataSource.page(1);
+    }
+
+     function redirectToAddContext()
+    {
+            window.location.href = 'DictionaryTicketType/TicketAdd/?id=' + 0;
+    }
+
+    function redirectToEditContext(id)
+    {
+        window.location.href = 'DictionaryTicketType/TicketAdd/?id=' + id;
+
+    }
+
+</script>
+
+@(Html.Kendo().Button()
+           .Name("primaryTextButton")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Content("Add")
+           .Events(ev => ev.Click("redirectToAddContext"))
+)
+@(Html.Kendo().TextBox()
+.Name("ticketTextBox")
+.HtmlAttributes(new { @id = "ticketTextBox" })
+)
+
+@(Html.Kendo().Button()
+.Name("textButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Filter")
+.Events(ev => ev.Click("refreshGrid"))
+)
+@(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryTicketModel>()
+        .Name("grid")
+
+
+        .HtmlAttributes(new { style = "height: 380px;" })
+        .Scrollable()
+        .Sortable()
+        .NoRecords(true)
+        .Filterable()
+        .HtmlAttributes(new { @id = "ticketGrid" })
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.TicketTypeId).Hidden();
+            columns.Bound(o => o.TicketTypeName).Title("Tip Bilet");
+            columns.Template("<button id=\"deleteButton\" onclick=\"deleteRow(#=TicketTypeId#)\">Delete</button>");
+            columns.Template("<button id=\"editButton\" class=\"k-button\" onclick=\"redirectToEditContext(#=TicketTypeId#)\"> Edit </button>");
+
+        })
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(10))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .Read(read => read.Action("GetDictionaryTicketFiltered", "DictionaryTicketType").Data("filter"))
+            .Destroy(d => d.Action("DeleteTicket", "DictionaryTicketType")))
+)
+)
+
+

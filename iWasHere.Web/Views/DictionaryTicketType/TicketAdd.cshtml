@@ -1,0 +1,151 @@
+﻿
+@{
+
+    ViewData["Title"] = "AddTicket";
+    Layout = "~/Views/Shared/_Layout.cshtml";}
+
+
+<h1>AddTicket</h1>
+<script>
+    let fromUpdate = false;
+
+    function AddTicket() {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+            if (document.getElementById("ticketName").value != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("EditTicket", "DictionaryTicketType")',
+                    data: {
+
+                        ticketName: document.getElementById("ticketName").value,
+                        ticketId: document.getElementById("ticketId").value
+                    },
+                    success: function (response) {
+
+                        window.location.href = '@Url.Action("Index", "DictionaryTicketType")';
+                    },
+                    error: function (response) {
+                        alert("The ticket doesn't exist");
+                    }
+                })
+            }
+            else { alert("The ticket name has not been introduced. Please introduce a name.") }
+        }
+        else {
+            if (document.getElementById("ticketName").value != "") {
+                $.ajax({
+                    type: 'PUT',
+                    url: '@Url.Action("SaveTicket", "DictionaryTicketType")',
+                    data: {
+                        ticketName: document.getElementById("ticketName").value,
+                        ticketId: document.getElementById("ticketId").value
+                    },
+                    success: function (response) {
+                        if (fromUpdate) {
+                            document.getElementById("ticketName").value = "";
+                            fromUpdate = false;
+                        }
+                        else {
+                            window.location.href = '@Url.Action("Index", "DictionaryTicketType")';
+                        }
+
+                    },
+                    error: function (response) {
+                        alert("The Ticket already exists.");
+                    }
+                })
+            }
+            else { alert("The ticket name has not been introduced. Please introduce a name.");}
+        }
+
+    }
+
+    function onLoadEdit() {
+
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        document.getElementById("ticketId").style.visibility = "hidden";
+
+        var id = url.searchParams.get("id");
+        if (id != 0) {
+
+                  document.getElementById("buttonId").innerText = "Update";
+        }
+
+    }
+
+    function cancelAdd() {
+        window.location.href = '@Url.Action("Index", "DictionaryTicketType")';
+    }
+
+
+
+
+    function AddNew() {
+          fromUpdate = true;
+          AddTicket();
+
+    }
+
+
+</script>
+@model iWasHere.Domain.DTOs.DictionaryTicketModel;
+
+<style>
+    .txtBoxStyle {
+        position: absolute;
+        right: 60%;
+        padding: 10%;
+    }
+</style>
+
+
+<body onload="onLoadEdit()">
+
+
+    <ul style="list-style-type:none">
+        <li>
+            <label>Ticket Name</label>
+            @(Html.Kendo().TextBoxFor(model => model.TicketTypeName)
+                              .HtmlAttributes(new { @id = "ticketName", style = "margin:20px; left:6.5%" })
+
+            )
+
+        </li>
+        <li>
+            @(Html.Kendo().TextBoxFor(model => model.TicketTypeId)
+                .HtmlAttributes(new { @id = "ticketId", style = "margin:10px" })
+            )
+        </li>
+
+    </ul>
+
+
+
+
+    <div>
+        @(Html.Kendo().Button()
+                  .Name("primaryTextButton")
+                  .HtmlAttributes(new { type = "button", @class = "k-primary", @id = "buttonId", style = "margin:10px" })
+                  .Content("Add")
+                  .Events(ev => ev.Click("AddTicket"))
+        )
+        @(Html.Kendo().Button()
+          .Name("addNewButton")
+          .HtmlAttributes(new { type = "button", @class = "k-primary" })
+          .Content("Add New")
+          .Events(ev => ev.Click("AddNew"))
+        )
+        @(Html.Kendo().Button()
+              .Name("cancelButton")
+              .HtmlAttributes(new { type = "button", @class = "k-primary" })
+              .Content("Cancel")
+              .Events(ev => ev.Click("cancelAdd"))
+        )
+    </div>
+
+
+</body>
