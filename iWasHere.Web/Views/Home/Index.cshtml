@@ -64,7 +64,7 @@
                          }
                          avg = sum / a[0].Reviews.length;
                          debugger;
-                         document.getElementById("grade1").innerText = avg.toString() + " STARS";
+                         document.getElementById("grade1").innerText = Math.round(avg * 100) / 100 + " STARS";
 
                          document.getElementById("image2").src = "./"+a[1].Path[0].Path;
                          document.getElementById("name2").innerText = a[1].LandmarkDescription;
@@ -77,7 +77,7 @@
                          }
                          avg = sum / a[1].Reviews.length;
                          debugger;
-                         document.getElementById("grade2").innerText = avg.toString() + " STARS";
+                         document.getElementById("grade2").innerText = Math.round(avg * 100) / 100 + " STARS";
 
  
 
@@ -94,7 +94,7 @@
                          }
                          avg = sum / a[2].Reviews.length;
                          debugger;
-                         document.getElementById("grade3").innerText = avg.toString()+" STARS";
+                         document.getElementById("grade3").innerText = Math.round(avg * 100) / 100+" STARS";
                          
                     },
                         error: function (response) {
