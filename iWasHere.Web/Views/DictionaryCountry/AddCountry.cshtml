@@ -24,11 +24,11 @@
                     languageId: document.getElementById("combo").value
                 },
                 success: function (response) {
-                    alert("hai ca merge");
+                    alert("Modified country!");
                     window.location.href = '@Url.Action("Index", "DictionaryCountry")';
                 },
                 error: function (response) {
-                    alert("hai ca nu merge");
+                    alert("ERROR!");
                 }
             })
         }
@@ -52,7 +52,7 @@
 
                 },
                 error: function (response) {
-                    alert("hai ca nu merge");
+                    alert("ERROR!");
                 }
             })
         }

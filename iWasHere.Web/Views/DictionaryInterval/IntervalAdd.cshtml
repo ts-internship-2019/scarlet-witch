@@ -60,7 +60,6 @@
             }
             else { alert("The interval name has not been introduced. Please introduce a name.");}
         }
-
     }
 
     function onLoadEdit() {
@@ -72,7 +71,7 @@
         var id = url.searchParams.get("id");
         if (id != 0) {
 
-                  document.getElementById("buttonId").innerText = "Update";
+            document.getElementById("buttonId").innerText = "Update";
         }
 
     }
@@ -81,16 +80,10 @@
         window.location.href = '@Url.Action("Index", "DictionaryInterval")';
     }
 
-
-
-
     function AddNew() {
           fromUpdate = true;
           AddInterval();
-
     }
-
-
 </script>
 @model iWasHere.Domain.DTOs.DictionaryIntervalModel;
 
@@ -105,26 +98,19 @@
 
 <body onload="onLoadEdit()">
 
-
     <ul style="list-style-type:none">
         <li>
             <label>Interval Name</label>
             @(Html.Kendo().TextBoxFor(model => model.VisitIntervalName)
                               .HtmlAttributes(new { @id = "intervalName", style = "margin:20px; left:6.5%" })
-
             )
-
         </li>
         <li>
             @(Html.Kendo().TextBoxFor(model => model.VisitIntervalId)
                 .HtmlAttributes(new { @id = "intervalId", style = "margin:10px" })
             )
         </li>
-
     </ul>
-
-
-
 
     <div>
         @(Html.Kendo().Button()
@@ -146,6 +132,5 @@
               .Events(ev => ev.Click("cancelAdd"))
         )
     </div>
-
 
 </body>

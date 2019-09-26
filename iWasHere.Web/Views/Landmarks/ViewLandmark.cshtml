@@ -226,7 +226,7 @@
         @(Html.Kendo().Dialog()
             .Name("dialog")
             .Title("Info Dialog")
-            .Content("Introduceti emailul!" + "<br>  <input id='emailTB' type='text' name='email'><br>")
+            .Content("Type your email!" + "<br>  <input id='emailTB' type='text' name='email'><br>")
             .Width(400)
             .Modal(false)
             .HtmlAttributes(new { @id = "dialog" })
@@ -321,13 +321,13 @@
             success: function (response) {
                 sent = response;
                 if (response == false) {
-                    alert("Email netrimis!");
+                    alert("Email can't be sent!");
                 } else {
-                    alert("Email trimis!");
+                    alert("Sent email!");
                 }
             },
             error: function (response) {
-                alert("Eroare!");
+                alert("ERROR!");
             }
         });
     }

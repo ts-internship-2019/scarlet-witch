@@ -21,7 +21,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                         $("#currencyGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
-                        alert("Moneda nu poate fi stearsa pentru ca este folosita pe un ticket");
+                        alert("Currency can't be deleted because it is used by a ticket!");
                     }
                 })
     }
@@ -42,8 +42,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
     }
 
-    function clearFilter()
-    {
+    function clearFilter() {
         document.getElementById("currencyTextBox").value = " ";
         refreshGrid();
     }

@@ -21,7 +21,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                     type: 'POST',
                     url: '@Url.Action("EditCurrency", "DictionaryCurrency")',
                     data: {
-
                         currencyName: document.getElementById("currencyName").value,
                         currencyCode: document.getElementById("currencyCode").value,
                         currencyExchange: document.getElementById("currencyExchange").value,
@@ -32,11 +31,11 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                         window.location.href = '@Url.Action("Index", "DictionaryCurrency")';
                     },
                     error: function (response) {
-                        alert("Moneda exista deja");
+                        alert("Currency already exists!");
                     }
                 })
             }
-            else { alert("Nu a fost introdus numele sau codul") }
+            else { alert("Currency name or code empty!") }
         }
         else {
             if (document.getElementById("currencyName").value != "" && document.getElementById("currencyCode").value != "" && document.getElementById("currencyName").value.length !=0 && document.getElementById("currencyCode").value.length !=0 ) {
@@ -61,11 +60,11 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
                     },
                     error: function (response) {
-                        alert("Moneda exista deja");
+                        alert("Currency already exists!");
                     }
                 })
             }
-            else { alert("Nu a fost introdus numele sau codul");}
+            else { alert("Currency name or code empty!");}
         }
 
     }
@@ -78,26 +77,19 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
         var id = url.searchParams.get("id");
         if (id != 0) {
-            
-                  document.getElementById("buttonId").innerText = "Update";
+            document.getElementById("buttonId").innerText = "Update";
         }
-
     }
 
     function cancelAdd() {
         window.location.href = '@Url.Action("Index", "DictionaryCurrency")';
     }
 
-
-
-
     function AddNew() {
           fromUpdate = true;
           AddCurrency();
-
     }
-
-
+    
 </script>
 
 @model iWasHere.Domain.DTOs.DictionaryCurrencyModel;
@@ -130,29 +122,20 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             <label>Currency Code</label>
             @(Html.Kendo().TextBoxFor(model => model.CurrencyCode)
                     .HtmlAttributes(new { @id = "currencyCode", style = "margin:20px; left:7%",@maxlength="100" })
-
             )
-
         </li>
         <li>
             <label>Currency Exchange</label>
             @(Html.Kendo().NumericTextBoxFor(model => model.CurrencyExchange)
                     .HtmlAttributes(new { @id = "currencyExchange", style = "margin:10px; left:5%", aria_label = "Currency Exchange ",@maxlength="10" })
-
             )
-
-
         </li>
         <li>
             @(Html.Kendo().TextBoxFor(model => model.CurrencyId)
                 .HtmlAttributes(new { @id = "currencyId", style = "margin:10px" })
             )
         </li>
-
     </ul>
-
-
-
 
     <div>
         @(Html.Kendo().Button()
@@ -177,6 +160,5 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
               .Events(ev => ev.Click("cancelAdd"))
         )
     </div>
-
 
 </body>

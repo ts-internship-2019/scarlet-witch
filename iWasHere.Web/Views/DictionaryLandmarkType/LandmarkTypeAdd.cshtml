@@ -3,7 +3,6 @@
     ViewData["Title"] = "LandmarkTypeAdd";
     Layout = "~/Views/Shared/_Layout.cshtml";
    
-
 }
 
 
@@ -88,22 +87,16 @@
         else {
             //alert("Landmark Type code cannot be empty");
         }
-
     }
 
     function cancelAdd() {
         window.location.href = '@Url.Action("Index", "DictionaryLandmarkType")';
     }
 
-
     function AddNew() {
         fromUpdate = true;
         AddLandmarkTpy();
-
     }
-
-
-
 
 </script>
 
@@ -113,9 +106,7 @@
 
         <ul style="list-style-type:none">
             <li>
-
                 <label>Landmark type code</label>
-
             </li>
 
             <li>
@@ -123,13 +114,10 @@
                                        .HtmlAttributes(new { @id = "LandmarkTypeCode", style = "margin:10px", @maxlength = "10" })
 
                 )
-
             </li>
 
             <li>
-
                 <label>Description</label>
-
             </li>
 
             <li>
@@ -143,9 +131,6 @@
                 )
             </li>
                 
-
-            
-
         </ul>
 
         <div style="margin-left:10px">
@@ -171,7 +156,6 @@
                   .Events(ev => ev.Click("cancelAdd"))
             )
         </div>
-
 
     </div>
 </body>

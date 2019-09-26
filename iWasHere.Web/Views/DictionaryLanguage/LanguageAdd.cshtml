@@ -157,7 +157,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         var id = url.searchParams.get("id");
         var cityNameValidation = false;
         if (document.getElementById("languageName").value == "" || document.getElementById("languageCode").value == "") {
-            alert("Camp gol");
+            alert("Empty field!");
         }
         else {
             $.ajax({
@@ -188,12 +188,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                     window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
                                 },
                                 error: function (response) {
-                                    //  alert("hai ca nu merge");
+                                    alert("ERROR!");
                                 }
                             })
 
                         }
-                        else { alert("Nu a fost introdus numele sau codul") }
+                        else { alert("Name or code fields empty!") }
                     }
                     else {
                         if (!cityNameValidation && document.getElementById("languageName").value != "" && document.getElementById("languageCode").value != "" && document.getElementById("languageName").value.length != 0 && document.getElementById("languageCode").value.length != 0) {
@@ -214,10 +214,9 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                     else {
                                         window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
                                     }
-
                                 },
                                 error: function (response) {
-                                    //  alert("hai ca nu merge");
+                                     alert("ERROR!");
                                 }
                             })
                         } else {
@@ -226,7 +225,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                     }
                 },
                 error: function (response) {
-                    // alert("hai ca nu merge");
+                    alert("ERROR!");
                 }
             })
         }
@@ -240,38 +239,26 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
 
         var id = url.searchParams.get("id");
         if (id != 0) {
-            //alert("din edit");
             document.getElementById("buttonId").innerText = "Update";
             document.getElementById("buttonIdNew").style.visibility = "hidden";
         }
-        else {
-            //alert("din add");
-        }
-
     }
 
     function cancelAdd() {
         window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
     }
 
-
-
-
     function AddNew() {
         fromUpdate = true;
         AddLanguage();
        // window.location.href = 'Url.Action("AddCity", "DictionaryCity")';
-
-
     }
-
 
 </script>
 @model iWasHere.Domain.DTOs.DictionaryLanguageModel;
 
 <body class="text-center" onload="onLoadEdit()">
-
-
+    
     <ul style="list-style-type:none">
         <li>
 
@@ -281,9 +268,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         <li>
             @(Html.Kendo().TextBoxFor(model => model.LanguageCode)
                                 .HtmlAttributes(new { @id = "languageCode", style = "margin:10px", @maxlength = "10" })
-
             )
-            
           
         </li>
         <li>
@@ -330,6 +315,5 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
               .Events(ev => ev.Click("cancelAdd"))
         )
     </div>
-
 
 </body>

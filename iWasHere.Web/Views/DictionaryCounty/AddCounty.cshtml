@@ -92,7 +92,7 @@
             }
         else if (!document.getElementById("CountyName").value ||
             !document.getElementById("combo").value) {
-            alert("Campuri necompletate!");
+            alert("Empty fields!");
             
         } else {
             $.ajax({
@@ -115,11 +115,11 @@
                                     countryId: document.getElementById("combo").value
                                 },
                                 success: function (response) {
-                                    alert("Judet modificat!");
+                                    alert("Modified county!");
                                     window.location.href = '@Url.Action("Index", "DictionaryCounty")';
                                 },
                                 error: function (response) {
-                                    alert("Eroare!");
+                                    alert("ERROR!");
                                 }
                             })
                         }
@@ -136,17 +136,17 @@
                                         document.getElementById("CountyName").value = "";
                                         $("#combo").val("").data("kendoDropDownList").text("");
                                         fromUpdate = false;
-                                        alert("Judet adaugat");
+                                        alert("Saved county!");
                                         window.location.href = '@Url.Action("Index", "DictionaryCounty")';
                                     }
                                 },
                                 error: function (response) {
-                                    alert("Eroare!");
+                                    alert("ERROR!");
                                 }
                             })
                         }
                     } else {
-                        alert("Judet deja existent!");
+                        alert("County already exists!");
                     }
                 }
             })

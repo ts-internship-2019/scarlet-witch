@@ -20,12 +20,12 @@
                     url: '@Url.Action("DeleteLanguage", "DictionaryLanguage")',
                     data: { id: id },
                  success: function (response) {
-                     alert("hai ca merge");
+                     alert("Deleted!");
                      alert(id);
                         $("#languageGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
-                        alert("hai ca nu merge");
+                        alert("ERROR!");
                     }
                 })
     }
@@ -35,16 +35,13 @@
         $("#languageGrid").data("kendoGrid").dataSource.page(1);
     }
 
-     function redirectToAddContext()
-    {
-            window.location.href = 'DictionaryLanguage/LanguageAdd/?id=' + 0;
+    function redirectToAddContext() {
+        window.location.href = 'DictionaryLanguage/LanguageAdd/?id=' + 0;
     }
 
-    function redirectToEditContext(id)
-    {
+    function redirectToEditContext(id) {
         window.location.href = 'DictionaryLanguage/LanguageAdd/?id=' + id;
     }
-
 
     function deleteFilters() {
         document.getElementById("languageTextBox").value = "";

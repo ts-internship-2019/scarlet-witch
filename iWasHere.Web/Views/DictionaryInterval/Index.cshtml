@@ -22,7 +22,7 @@
                         $("#intervalGrid").data("kendoGrid").dataSource.read();
                     },
                         error: function (response) {
-                        alert("hai ca nu merge");
+                        alert("ERROR!");
                     }
                 })
     }
@@ -32,15 +32,12 @@
         $("#intervarlGrid").data("kendoGrid").dataSource.page(1);
     }
 
-     function redirectToAddContext()
-    {
-            window.location.href = 'DictionaryInterval/IntervalAdd/?id=' + 0;
+    function redirectToAddContext() {
+        window.location.href = 'DictionaryInterval/IntervalAdd/?id=' + 0;
     }
 
-    function redirectToEditContext(id)
-    {
+    function redirectToEditContext(id) {
         window.location.href = 'DictionaryInterval/IntervalAdd/?id=' + id;
-
     }
 
 </script>
@@ -64,8 +61,6 @@
 )
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryIntervalModel>()
         .Name("grid")
-
-
         .HtmlAttributes(new { style = "height: 380px;" })
         .Scrollable()
         .Sortable()

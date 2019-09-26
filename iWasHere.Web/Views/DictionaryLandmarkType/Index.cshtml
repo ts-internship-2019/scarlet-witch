@@ -88,7 +88,6 @@
 )
 
 
-
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryLandmarkTypeModel>()
         .Name("grid")
         .Columns(columns =>
@@ -115,7 +114,6 @@
             .PageSize(10)
             .Read(read => read.Action("GetDictionaryLandmarkTypesFiltered", "DictionaryLandmarkType").Data("filter"))
              .Destroy(d => d.Action("Delete", "DictionaryLandmarkType")))
-
 )
 
 

@@ -38,15 +38,15 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             success: function (response) {
                 alert("hai ca merge");
                 if (response == 0) {
-                    alert("Tara nu se poate sterge pentru ca aceasta contine judete");
+                    alert("The country can't be deleted, because it has counties assigned to it.");
                 } else {
-                    alert("Tara stearsa")
+                    alert("Deleted country!")
                     $("#countryGrid").data("kendoGrid").dataSource.read();
                 }
 
             },
             error: function (response) {
-                alert("hai ca nu merge");
+                alert("ERROR!");
             }
         })
     }

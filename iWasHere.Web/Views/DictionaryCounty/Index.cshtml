@@ -1,9 +1,9 @@
 ﻿
 @{
     ViewData["Title"] = "County";
-Layout = "~/Views/Shared/_Layout.cshtml";}
+    Layout = "~/Views/Shared/_Layout.cshtml";}
 
-    <h1 class="text-center" style="margin:50px">Counties</h1>
+<h1 class="text-center" style="margin:50px">Counties</h1>
 
 @(Html.Kendo().Button()
            .Name("primaryTextButton")
@@ -30,15 +30,23 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                      read.Action("GetAllCountries", "DictionaryCounty");
                  });
              })
-             .HtmlAttributes(new { style = "width: 25%", @id ="combo" })
+             .HtmlAttributes(new { style = "width: 25%", @id = "combo" })
 )
 
 @(Html.Kendo().Button()
         .Name("textButton")
         .HtmlAttributes(new { type = "button" })
-        .Content("Filtreaza")
+        .Content("Filter")
         .Icon("filter")
         .Events(ev => ev.Click("refreshGrid"))
+)
+
+@(Html.Kendo().Button()
+.Name("filterButton")
+.HtmlAttributes(new { type = "button" })
+.Content("Clear Filter")
+.Icon("filter-clear")
+.Events(ev => ev.Click("clearFilter"))
 )
 
 @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCountyModel>
@@ -97,17 +105,16 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
             url: '@Url.Action("Delete", "DictionaryCounty")',
             data: { id: id },
             success: function (response) {
-                alert("hai ca merge");
                 alert(response);
                 if (response == 0) {
-                    alert("Judetul nu se poate sterge pt ca contine orase");
+                    alert("The county has cities assigned to it, so it can't be deleted.");
                 } else {
-                    alert("Judet sters");
+                    alert("Deleted county!");
                     $("#countyGrid").data("kendoGrid").dataSource.read();
                 }
             },
             error: function (response) {
-                alert("hai ca nu merge");
+                alert("ERROR!");
             }
         })
     }
@@ -119,4 +126,10 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
     function redirectToEditContext(id) {
         window.location.href = 'DictionaryCounty/AddCounty/?id=' + id;
     }
+
+    function clearFilter() {
+        document.getElementById("countyTextBox").value = " ";
+        refreshGrid();
+    }
+
 </script>
