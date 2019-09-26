@@ -1,81 +1,18 @@
-﻿@*@model iWasHere.Domain.DTOs.DictionaryLanguageModel;
+﻿@{
 
-    @{
-        ViewData["Title"] = "LanguageAdd";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
-
-    <h1>Add Language</h1>
-
-    <script>
-
-        let fromUpdate = false;
-
-        function AddLanguage() {
-            var url_string = window.location.href;
-            var url = new URL(url_string);
-            var id = url.searchParams.get("id");
-            if (id != 0) {
-                $.ajax({
-                type: 'POST',
-                url: '@Url.Action("EditLanguage", "DictionaryLanguage")',
-                    data: {
-                        lgCode: document.getElementById("LanguageCode").value,
-                        lgName: document.getElementById("LanguageName").value,
-                        lgId: document.getElementById("LanguageId").value
-                },
-                success: function (response) {
-
-                     window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
-                },
-                error: function (response) {
-                    //alert("hai ca nu merge");
-                }
-            })
-            }
-            else {
-                $.ajax({
-                type: 'PUT',
-                url: '@Url.Action("SaveLanguage", "DictionaryLanguage")',
-                data: {
-                    lgCode: document.getElementById("LanguageCode").value,
-                    lgName: document.getElementById("LanguageName").value,
-                    lgId: document.getElementById("LanguageId").value
-
-                },
-                    success: function (response) {
-                        if (fromUpdate) {
-                            document.getElementById("LanguageCode").value = "";
-                            document.getElementById("LanguageName").value = "";
-                            document.getElementById("LanguageId").value = "";
-                            fromUpdate = false;
-                        }
-                        else {
-                            window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
-                        }
-
-                },
-                error: function (response) {
-                    //alert("hai ca nu merge");
-                }
-            })
-            }
-
-        }
-
-        function onLoadEdit() {
-
-            var url_string = window.location.href;
-            var url = new URL(url_string);
-            document.getElementById("LanguageId").style.visibility = "hidden";
+ 
 
     ViewData["Title"] = "AddLanguage";
 Layout = "~/Views/Shared/_Layout.cshtml";}
+
+ 
 
 
     <h1 class="text-center" style="margin:50px">Add language</h1>
 <script>
     let fromUpdate = false;
+
+ 
 
     function AddLanguage() {
         var url_string = window.location.href;
@@ -83,7 +20,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         var id = url.searchParams.get("id");
         var cityNameValidation = false;
         if (document.getElementById("languageName").value == "" || document.getElementById("languageCode").value == "") {
-            alert("Empty field!");
+            alert("Camp gol");
         }
         else {
             $.ajax({
@@ -108,18 +45,24 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                     langCode: document.getElementById("languageCode").value,
                                     langId: document.getElementById("languageId").value
 
+ 
+
                                 },
                                 success: function (response) {
+
+ 
 
                                     window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
                                 },
                                 error: function (response) {
-                                    alert("ERROR!");
+                                    //  alert("hai ca nu merge");
                                 }
                             })
 
+ 
+
                         }
-                        else { alert("Name or code fields empty!") }
+                        else { alert("Nu a fost introdus numele sau codul") }
                     }
                     else {
                         if (!cityNameValidation && document.getElementById("languageName").value != "" && document.getElementById("languageCode").value != "" && document.getElementById("languageName").value.length != 0 && document.getElementById("languageCode").value.length != 0) {
@@ -129,6 +72,8 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                 data: {
                                     langName: document.getElementById("languageName").value,
                                     langCode: document.getElementById("languageCode").value,
+
+ 
 
                                 },
                                 success: function (response) {
@@ -140,9 +85,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                                     else {
                                         window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
                                     }
+
+ 
+
                                 },
                                 error: function (response) {
-                                     alert("ERROR!");
+                                    //  alert("hai ca nu merge");
                                 }
                             })
                         } else {
@@ -151,50 +99,89 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
                     }
                 },
                 error: function (response) {
-                    alert("ERROR!");
+                    // alert("hai ca nu merge");
                 }
             })
         }
     }
 
+ 
+
     function onLoadEdit() {
+
+ 
 
         var url_string = window.location.href;
         var url = new URL(url_string);
         document.getElementById("languageId").style.visibility = "hidden";
 
+ 
+
         var id = url.searchParams.get("id");
         if (id != 0) {
+            //alert("din edit");
             document.getElementById("buttonId").innerText = "Update";
             document.getElementById("buttonIdNew").style.visibility = "hidden";
         }
+        else {
+            //alert("din add");
+        }
+
+ 
+
     }
+
+ 
 
     function cancelAdd() {
         window.location.href = '@Url.Action("Index", "DictionaryLanguage")';
     }
 
+ 
+
+ 
+
+
     function AddNew() {
         fromUpdate = true;
         AddLanguage();
-       // window.location.href = 'Url.Action("AddCity", "DictionaryCity")';
+
+ 
+
+
     }
+
+ 
+
 
 </script>
 @model iWasHere.Domain.DTOs.DictionaryLanguageModel;
 
+ 
+
 <body class="text-center" onload="onLoadEdit()">
-    
+
+ 
+
+
     <ul style="list-style-type:none">
         <li>
 
+ 
+
             <label>Language Code</label>
+
+ 
 
         </li>
         <li>
             @(Html.Kendo().TextBoxFor(model => model.LanguageCode)
                                 .HtmlAttributes(new { @id = "languageCode", style = "margin:10px", @maxlength = "10" })
+
+ 
+
             )
+            
           
         </li>
         <li>
@@ -204,7 +191,11 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         </li>
         <li>
 
+ 
+
             <label>Language Name</label>
+
+ 
 
 
         </li>
@@ -215,7 +206,9 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
         </li>
     </ul>
 
+ 
 
+ 
 
 
     <div style="margin:10px">
@@ -241,5 +234,8 @@ Layout = "~/Views/Shared/_Layout.cshtml";}
               .Events(ev => ev.Click("cancelAdd"))
         )
     </div>
+
+ 
+
 
 </body>

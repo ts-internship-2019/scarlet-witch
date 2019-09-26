@@ -100,6 +100,14 @@
     .Events(ev => ev.Click("refreshGrid"))
         )
 
+        @(Html.Kendo().Button()
+ .Name("deleteFilterButton")
+ .HtmlAttributes(new { type = "button", @class = "k-primary" })
+ .Content("Delete filter")
+ .Events(ev => ev.Click("deleteFilters"))
+ .Icon("filter-clear")
+        )
+
         @(Html.Kendo().Grid<iWasHere.Domain.DTOs.LandmarkModel>
                 ()
                 .Name("landmarkGrid")
@@ -140,16 +148,23 @@
 
 
 <script type="text/javascript">
-        function filter(e) {
+    function filter(e) {
         var countryId = document.getElementById("combo").value;
         var filter = {};
         filter["countryId"] = countryId;
         return filter;
     }
+
+    function deleteFilters() {
+        $("#combo").val("").data("kendoDropDownList").text("");
+        refreshGrid();
+    }
+
      function refreshGrid() {
         $("#landmarkGrid").data("kendoGrid").dataSource.read();
         $("#landmarkGrid").data("kendoGrid").dataSource.page(1);
     }
+
     function add() {
         window.location.href = '@Url.Action("AddLandmark", "Landmarks")';
     }
