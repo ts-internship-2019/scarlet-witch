@@ -64,7 +64,37 @@
                          }
                          avg = sum / a[0].Reviews.length;
                          debugger;
-                         document.getElementById("grade1").innerText = avg.toString()+" STARS";
+                         document.getElementById("grade1").innerText = avg.toString() + " STARS";
+
+                         document.getElementById("image2").src = "./"+a[1].Path[0].Path;
+                         document.getElementById("name2").innerText = a[1].LandmarkDescription;
+
+                         var avg = 0.0;
+                         var sum = 0.0;
+                         for (var p=0; p < a[1].Reviews.length;p++)
+                         {
+                             sum = sum + a[1].Reviews[p].Grade;
+                         }
+                         avg = sum / a[1].Reviews.length;
+                         debugger;
+                         document.getElementById("grade2").innerText = avg.toString() + " STARS";
+
+ 
+
+                         document.getElementById("image3").src = "./"+a[2].Path[0].Path;
+                         document.getElementById("name3").innerText = a[2].LandmarkDescription;
+
+ 
+
+                         var avg = 0.0;
+                         var sum = 0.0;
+                         for (var p=0; p < a[2].Reviews.length;p++)
+                         {
+                             sum = sum + a[2].Reviews[p].Grade;
+                         }
+                         avg = sum / a[2].Reviews.length;
+                         debugger;
+                         document.getElementById("grade3").innerText = avg.toString()+" STARS";
                          
                     },
                         error: function (response) {
@@ -76,6 +106,12 @@
 
     function first(){
        window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+a[0].LandmarkId;
+    }
+        function second(){
+       window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+a[1].LandmarkId;
+    }
+        function third(){
+       window.location.href ='@Url.Action("ViewLandmark", "Landmarks")/'+a[2].LandmarkId;
     }
 </script>
 
@@ -122,21 +158,21 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
+                    <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" onclick="second()" >
                         <a href="#" class="unit-1 text-center">
-                            <img src="images/02-rome.jpg" alt="Image" class="img-fluid">
+                            <img src="images/02-rome.jpg" alt="Image" class="img-fluid" id="image2">
                             <div class="unit-1-text">
-                                <strong class="text-primary mb-2 d-block">7 STARS</strong>
-                                <h3 class="unit-1-heading">Loading</h3>
+                                <strong class="text-primary mb-2 d-block" id="grade2">7 STARS</strong>
+                                <h3 class="unit-1-heading" id="name2">Loading</h3>
                             </div>
                         </a>
                     </div>
-                    <div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
+                    <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" onclick="third()">
                         <a href="#" class="unit-1 text-center">
-                            <img src="images/03-japan.jpg" alt="Image" class="img-fluid">
+                            <img src="images/03-japan.jpg" alt="Image" class="img-fluid" id="image3">
                             <div class="unit-1-text">
-                                <strong class="text-primary mb-2 d-block">3 STARS</strong>
-                                <h3 class="unit-1-heading">Loading</h3>
+                                <strong class="text-primary mb-2 d-block" id="grade3">3 STARS</strong>
+                                <h3 class="unit-1-heading" id="name3">Loading</h3>
                             </div>
                         </a>
                     </div>
