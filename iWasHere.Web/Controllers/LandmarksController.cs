@@ -42,6 +42,14 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
+        public void SaveImagesInEditDB(int id)
+        {
+            foreach (string path in imagesPaths)
+            {
+                _dictionaryService.SaveImagesInEditDB(path, id);
+            }
+        }
+
         public IActionResult AddLandmark(int id)
         {
             if (id != 0)

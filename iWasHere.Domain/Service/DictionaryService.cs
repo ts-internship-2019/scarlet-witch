@@ -934,6 +934,21 @@ namespace iWasHere.Domain.Service
             return stream;
         }
 
+        public void SaveImagesInEditDB(string path, int landmarkId)
+        {
+
+
+
+            Images img = new Images()
+            {
+                Path = path,
+                LandmarkId = landmarkId
+
+            };
+            _dbContext.Images.Add(img);
+            _dbContext.SaveChanges();
+        }
+
         public IQueryable<TopLandmark> GetTopLandmarks()
         {
            
